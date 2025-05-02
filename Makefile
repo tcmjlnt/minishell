@@ -26,6 +26,15 @@ LINKER = $(LIB)
 # Info système
 $(info 🖥️ OS détecté : $(OS))
 
+# Bibliothèques système
+ifeq ($(OS), linux)
+	LINKER += -lreadline -L/usr/lib
+	INCLUDE_FLAG += -I/usr/include
+else ifeq ($(OS), darwin)
+	LINKER += -lreadline -L/opt/homebrew/opt/readline/lib
+	INCLUDE_FLAG += -I/opt/homebrew/opt/readline/include
+endif
+
 # Includes
 INCLUDE_DIR = include
 LIB_SUBDIR = $(wildcard $(LIB_DIR)/*)
@@ -48,25 +57,13 @@ SRC_BUILTINS = \
 	builtins/builtin_export.c \
 	builtins/builtin_pwd.c \
 	builtins/builtin_unset.c
-SRC_ENV = \
-	env/env_utils.c \
-	env/export_utils.c
-SRC_EXECUTOR = \
-	executor/exec.c \
-	executor/pipes.c \
-	executor/redirections.c
-SRC_PARSER = \
-	parser/expander.c \
-	parser/lexer.c \
-	parser/parser.c
-SRC_SIGNALS = \
-	signals/signals.c
 SRC_UTILS = \
-	utils/error.c \
-	utils/memory.c \
-	utils/str_utils.c
-SRC_FILES = main.c $(SRC_BUILTINS) $(SRC_ENV) $(SRC_EXECUTOR) \
-			$(SRC_PARSER) $(SRC_SIGNALS) $(SRC_UTILS)
+	utils/error_management.c
+SRC_PROMPT = \
+	prompt/prompt.c \
+
+SRC_FILES = main.c $(SRC_BUILTINS) \
+			$(SRC_UTILS) $(SRC_PROMPT) \
 
 # Chemins complets des sources et objets
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))
@@ -102,7 +99,7 @@ PRINT_LOGO = \
 	echo "      \::::::/    /               /:::/    /            \:::\    \               \:::\    \\:::\    \   /:::/    /               /:::/    /                              \:::\    \               \::::::/    /      "; \
 	echo "       \::::/    /               /:::/    /              \:::\____\               \:::\____\\:::\____\ /:::/    /               /:::/    /                                \:::\____\               \::::/    /       "; \
 	echo "        \::/    /                \::/    /                \::/    /                \::/    / \::/    / \::/    /                \::/    /                                  \::/    /                \::/    /        "; \
-	echo "         \/____/                  \/____/                  \/____/                  \/____/   \/____/   \/____/                  \/____/                                    \/____/                  \/____/         "
+	echo "         \/____/                  \/____/                  \/____/                  \/____/   \/____/   \/____/                  \/____/                                    \/____/                  \/____/         "; \
 	echo "                                           "; \
 	echo "              SHELLMATES                  "; \
 	echo ""; \
