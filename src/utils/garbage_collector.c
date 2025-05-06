@@ -100,7 +100,7 @@ void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type)
 
 	gc = &get_shell()->gc;
 	if (op == GC_ALLOC)
-		return (gc_malloc(gc, size, type));
+		return (gc_alloc(gc, size, type));
 	else if (op == GC_FREE_ONE)
 		return (gc_free_one(gc, ptr), NULL);
 	else if (op == GC_FREE_ALL)
@@ -108,9 +108,49 @@ void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type)
 	return (NULL);
 }
 
-/* Exemple d’utilisation dans le code :
+/* Exemple pour appeler fonctions :
 char *s1 = gc_mem(GC_ALLOC, 100, NULL, GC_TMP);		// alloue 100 octets
 gc_mem(GC_FREE_ONE, 0, s1, 0);						// libère s1
 gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);				// libère tous les GC_CMD
 gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);				// libère tout
- */
+*/
+
+/* int main(void)
+{
+	init_shell();
+
+	// Alloc pour unr str
+	char *str1 = gc_mem(GC_ALLOC, 50, NULL, GC_TMP);
+	if (!str1)
+	{
+		fprintf(stderr, "Echec de alloc pour str1\n");
+		return EXIT_FAILURE;
+	}
+	strcpy(str1, "Coucou Thomas, c'est str1.");
+	printf("str1: %s\n", str1);
+
+	// Alloc pour str2
+	char *str2 = gc_mem(GC_ALLOC, 100, NULL, GC_ENV);
+	if (!str2)
+	{
+		fprintf(stderr, "Echec de alloc pour str2\n");
+		return EXIT_FAILURE;
+	}
+	strcpy(str2, "C'est str2, alloue avec GC_ENV.");
+	printf("str2: %s\n", str2);
+
+	// Free de str1
+	gc_mem(GC_FREE_ONE, 0, str1, 0);
+	printf("str1 a ete libere.\n");
+
+
+	// Free de toutes les alloc type GC_ENV
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_ENV);
+	printf("toutes les allocs type GC_ENV liberes.\n");
+
+	// Free de toutes les alloc restantes
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+	printf("toutes les allocs restantes liberes.\n");
+
+	return EXIT_SUCCESS;
+} */

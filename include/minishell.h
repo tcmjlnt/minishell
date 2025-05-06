@@ -15,9 +15,11 @@
 
 /* ==========================    📚 INCLUDES    ========================== */
 
-# include "../../lib/libft/libft.h"
+# include "../lib/libft/libft.h"
 # include <unistd.h>
 # include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -68,5 +70,6 @@ void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 void	error_exit(const char *message);
 
 t_shell	*get_shell(void);
+void init_shell(void);
 
 #endif

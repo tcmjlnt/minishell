@@ -21,5 +21,7 @@ int	main(void)
 {
 	write(1, "Let's goooooo\n", 15); // a sup
 	ft_prompt();
-	return (0);
+
+	init_shell();
+	
 }

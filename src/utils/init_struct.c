@@ -18,3 +18,11 @@ t_shell	*get_shell(void)
 
 	return (&shell);
 }
+
+void	init_shell(void)
+{
+	t_shell	*shell;
+
+	shell = get_shell();
+	ft_bzero(shell, sizeof(t_shell));
+}

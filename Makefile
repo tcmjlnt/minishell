@@ -58,7 +58,10 @@ SRC_BUILTINS = \
 	builtins/builtin_pwd.c \
 	builtins/builtin_unset.c
 SRC_UTILS = \
-	utils/error_management.c
+	utils/error_management.c \
+	utils/garbage_collector.c \
+	utils/init_struct.c \
+
 SRC_PROMPT = \
 	prompt/prompt.c \
 
