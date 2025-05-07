@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/05 15:08:35 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/07 11:47:11 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ typedef struct s_gc
 typedef struct s_shell
 {
 	t_gc		gc;
-	// etc...
+	char	**envp;
+
 }	t_shell;
 
 /* ===========================    ♻️ PROMPT    =========================== */
@@ -70,6 +71,7 @@ void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 void	error_exit(const char *message);
 
 t_shell	*get_shell(void);
-void init_shell(void);
+void	init_shell(void);
+
 
 #endif
