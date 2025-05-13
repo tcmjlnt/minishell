@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:46:11 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 11:25:29 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:53:18 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	print_env_line(char *line)
 	write(1, "\n\n", 2);
 }
 
-void	print_env_init(t_env *env)
+void	print_env(t_env *env)
 {
 	while (env)
 	{

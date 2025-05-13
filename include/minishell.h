@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 11:25:45 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:45:34 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,8 @@ void	init_shell(void);
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
 void	print_env_line(char *line);
-void	print_env_init(t_env *env);
-t_env	*env_new(char *key, char *value, t_bool equal);
-void	env_add_back(t_env **lst, t_env *new);
-void	env_init(t_shell *shell, char **envp);
+void	print_env(t_env *env);
+void	env_from_envp(t_shell *shell, char **envp);
 char	*get_env_value(t_env *env, const char *key);
 
 /* ===========================    🔧 BUILTINS    ============================ */
