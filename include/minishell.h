@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 09:52:35 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:42:19 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,12 @@ typedef enum e_gc_type
 	GC_TMP
 }	t_gc_type;
 
+typedef enum e_bool
+{
+	false,
+	true
+}	t_bool;
+
 /* ==========================    📦 STRUCTURES    ========================== */
 
 typedef struct s_gc_node
@@ -54,10 +60,18 @@ typedef struct s_gc
 	t_gc_node	*head;
 }	t_gc;
 
+typedef struct s_env
+{
+	char			*key;
+	t_bool			equal;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_shell
 {
 	t_gc		gc;
-	char		**envp;
+	t_env		*envp_cpy;
 }	t_shell;
 
 /* ===========================    ♻️ PROMPT    =========================== */
@@ -73,7 +87,7 @@ void	init_shell(void);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	print_envp(char **envp);
-void	print_env_var(char *env);
+void	print_env_line(char *line);
 
 /* ===========================    🔧 BUILTINS    ============================ */
 

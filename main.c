@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 10:08:33 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:41:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 int main(int ac, char **av, char **envp)
 {
-	t_shell	shell;
+	//t_shell	shell;
 	(void)ac;
 	(void)av;
 
@@ -29,9 +29,9 @@ int main(int ac, char **av, char **envp)
 
 	init_shell();
 
-	shell.envp = envp;
+	//shell.envp = envp;
 
 	//print_envp(shell.envp);
-	// print_env_var(shell.envp[5]);
+	print_env_line(envp[5]);
 
 }
