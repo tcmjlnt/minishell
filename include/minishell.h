@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 10:42:19 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:12:46 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_env
 typedef struct s_shell
 {
 	t_gc		gc;
-	t_env		*envp_cpy;
+	t_env		*env;
 }	t_shell;
 
 /* ===========================    ♻️ PROMPT    =========================== */
@@ -86,8 +86,15 @@ t_shell	*get_shell(void);
 void	init_shell(void);
 
 /* ===========================    🚀 EXECUTION    =========================== */
+
+
+/* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
 void	print_env_line(char *line);
+void	print_env_init(t_env *env);
+t_env	*env_new(char *key, char *value, t_bool equal);
+void	env_add_back(t_env **lst, t_env *new);
+void	env_init(t_shell *shell, char **envp);
 
 /* ===========================    🔧 BUILTINS    ============================ */
 
