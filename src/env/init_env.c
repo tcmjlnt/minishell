@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 11:03:33 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:27:20 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,3 +79,15 @@ void	env_init(t_shell *shell, char **envp)
 	}
 }
 
+char	*get_env_value(t_env *env, const char *key)
+{
+	if (!key)
+		return (NULL);
+	while (env)
+	{
+		if (ft_strcmp(env->key, key) == 0 & env->equal == true)
+			return (env->value);
+		env = env->next;
+	}
+	return (NULL);
+}

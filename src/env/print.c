@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:46:11 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 11:19:39 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:25:29 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	print_envp(char **envp)
 
 	i = 0;
 	while (envp[i] != NULL)
-		ft_printf("%s\n", envp[i++]);
+		printf("%s\n", envp[i++]);
 }
 
 void	print_env_line(char *line)
@@ -39,12 +39,12 @@ void	print_env_init(t_env *env)
 {
 	while (env)
 	{
-		ft_printf("key: %s | equal: %d | value: ", env->key, env->equal);
+		printf("key: %s | equal: %d | value: ", env->key, env->equal);
 		if (env->value)
 			printf("%s", env->value);
 		else
-			ft_printf("(null)");
-		ft_printf("\n");
+			printf("(null)");
+		printf("\n");
 		env = env->next;
 	}
 }
