@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 11:29:27 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:47:17 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_env	*env_new(char *key, char *value, t_bool equal)
 	new->next = NULL;
 	return (new);
 }
+
 void	env_add_back(t_env **lst, t_env *new)
 {
 	t_env	*tmp;
@@ -32,13 +33,14 @@ void	env_add_back(t_env **lst, t_env *new)
 	if (!*lst)
 	{
 		*lst = new;
-		return;
+		return ;
 	}
 	tmp = *lst;
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
 }
+
 void	env_init(t_shell *shell, char **envp)
 {
 	int		i;
@@ -85,7 +87,7 @@ char	*get_env_value(t_env *env, const char *key)
 		return (NULL);
 	while (env)
 	{
-		if (ft_strcmp(env->key, key) == 0 & env->equal == true)
+		if (ft_strcmp(env->key, key) == 0 && env->equal == true)
 			return (env->value);
 		env = env->next;
 	}

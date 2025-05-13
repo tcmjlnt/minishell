@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:25:25 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 10:52:22 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:39:49 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,3 @@ void	init_shell(void)
 	shell = get_shell();
 	ft_bzero(shell, sizeof(t_shell));
 }
-
-

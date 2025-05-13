@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 11:24:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 11:38:29 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int main(int ac, char **av, char **envp)
 
 	env_init(shell, envp);
 
-	print_env_init(shell->env);
+	//print_env_init(shell->env);
 
 	char *val = get_env_value(shell->env, "PATH");
 	if (val)
