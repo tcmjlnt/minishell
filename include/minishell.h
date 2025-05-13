@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/07 11:47:11 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 09:35:03 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ typedef struct s_gc
 typedef struct s_shell
 {
 	t_gc		gc;
-	char	**envp;
-
+	char		**envp;
 }	t_shell;
 
 /* ===========================    ♻️ PROMPT    =========================== */
@@ -67,11 +66,13 @@ void	ft_prompt(void);
 /* ======================     🧹 GARBAGE COLLECTOR    ====================== */
 void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 
-/* ========================    🛠️ UTILS    ============================ */
+/* ===========================    🛠️ UTILS    ============================== */
 void	error_exit(const char *message);
-
 t_shell	*get_shell(void);
 void	init_shell(void);
 
+/* ===========================    🚀 EXECUTION    =========================== */
+
+/* ===========================    🔧 BUILTINS    ============================ */
 
 #endif
