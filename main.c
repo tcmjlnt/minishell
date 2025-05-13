@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/07 12:21:02 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:08:33 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,15 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 
-	write(1, "Let's goooooo\n", 15); // a sup
-	ft_prompt();
+	write(1, "Let's goooooo\n\n\n", 15); // a sup
+
+	// ft_prompt();
 
 	init_shell();
 
 	shell.envp = envp;
 
-	char *path_env = getenv("PATH");
-	char *path;
-	char full_path[1024];
-	char *path_copy;
-	if (path_env == NULL)
-		return (NULL);
-	path_copy = ft_strdup(path_env);
-	
+	//print_envp(shell.envp);
+	// print_env_var(shell.envp[5]);
+
 }
