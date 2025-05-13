@@ -6,7 +6,7 @@
 #    By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 07:11:04 by aumartin          #+#    #+#              #
-#    Updated: 2025/05/13 10:28:07 by aumartin         ###   ########.fr        #
+#    Updated: 2025/05/13 11:33:57 by aumartin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ LIBFT		= libft/ft_atoi.c\
 		libft/ft_strlen.c\
 		libft/ft_strmapi.c\
 		libft/ft_strncmp.c\
+		libft/ft_strcmp.c\
 		libft/ft_strnstr.c\
 		libft/ft_strrchr.c\
 		libft/ft_strtrim.c\
