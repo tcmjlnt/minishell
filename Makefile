@@ -69,9 +69,13 @@ SRC_ENV = \
 	env/print.c \
 	env/env_build.c \
 
+SRC_EXEC = \
+	exec/exec.c \
+
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \
 			$(SRC_ENV) \
+			$(SRC_EXEC) \
 
 # Chemins complets des sources et objets
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))

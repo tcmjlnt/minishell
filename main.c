@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/14 13:08:29 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:47:17 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,10 @@ int main(int ac, char **av, char **envp)
 	shell = get_shell();
 
 	env_from_envp(shell, envp);
-	print_envp(envp);
+	// print_envp(envp);
 	// print_env_line(envp[5]);
 	// print_env(shell->env);
 
-/* 	char *val = get_env_value(shell->env, "PATH");
-	if (val)
-		printf("PATH = %s\n", val);
-	else
-		printf("PATH non trouvé\n"); */
-
+	get_path_from_env(shell->env);
 
 }

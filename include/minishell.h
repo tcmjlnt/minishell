@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/14 16:19:54 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:47:25 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_shell	*get_shell(void);
 void	init_shell(void);
 
 /* ===========================    🚀 EXECUTION    =========================== */
-
+char	*get_path_from_env(t_env *env);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

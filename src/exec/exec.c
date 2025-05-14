@@ -6,16 +6,63 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/14 15:52:54 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:06:42 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../../include/minishell.h"
 
+char	*get_path_from_env(t_env *env)
+{
+	char	*path;
+	char	**paths;
+	int		i;
 
+	path = get_env_value(env, "PATH");
+	if (path)
+		printf("PATH = %s\n", path);
+	else
+		printf("PATH non trouvé\n");
+	paths = ft_split(path, ':');
+	i = 0;
+	while (paths[i])
+	{
+		printf("fonction split_path, PATH = %s\n", paths[i]);
+		i++;
+	}
+	return (*paths);
+}
 
-while (x commandes a faire)
+// EN COURS IMPORTER DEPUIS [PIPEX] A MODIF
+
+char	*find_command_path(char *command, t_env *env)
+{
+	char	*path_env;
+	char	**paths;
+	char	full_path[1024];
+	int		i;
+
+	path_env = get_path_from_env(env);
+	if (path_env == NULL)
+		return (NULL);
+	paths = split_path(path_env);
+	if (paths == NULL)
+		return (perror("split_path"), NULL);
+	i = 0;
+	while (paths[i])
+	{
+		ft_strlcpy(full_path, paths[i], sizeof(full_path));
+		ft_strlcat(full_path, "/", sizeof(full_path));
+		ft_strlcat(full_path, command, sizeof(full_path));
+		if (access(full_path, X_OK) == 0)
+			return (ft_strdup(full_path));
+		i++;
+	}
+	free(paths);
+	return (NULL);
+}
+
+/* while (x commandes a faire)
 {
 	pid = fork();
 	if (pid == 0)
@@ -60,3 +107,4 @@ while (x commandes a faire)
 	}
 	// free a faire
 }
+ */
