@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/14 14:30:56 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:19:54 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_shell
 
 typedef struct s_redir
 {
-	t_token			type;       // IN, OUT, APPEND, HEREDOC
+	//t_token			type;       // IN, OUT, APPEND, HEREDOC
 	char			*file_name; // cible de la redir
 	struct s_redir	*next;
 }	t_redir;
@@ -93,7 +93,6 @@ typedef struct s_cmd
 	struct s_cmd	*next;      // commande suivante (pipeline)
 	struct s_cmd	*prev;
 }	t_cmd;
-
 
 /* ===========================    ♻️ PROMPT    =========================== */
 void	ft_prompt(void);

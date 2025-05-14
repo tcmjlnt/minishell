@@ -67,7 +67,7 @@ SRC_PROMPT = \
 
 SRC_ENV = \
 	env/print.c \
-	env/init_env.c \
+	env/env_build.c \
 
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \
