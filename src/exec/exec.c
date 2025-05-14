@@ -6,14 +6,14 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/07 11:25:37 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/14 15:52:54 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Étape 1 : Préparer les entrées/sorties (pipes, redirs, etc.)
-// in_fd / out_fd sont supposés déjà configurés
 
 #include "../../include/minishell.h"
+
+
 
 while (x commandes a faire)
 {
