@@ -60,6 +60,7 @@ SRC_BUILTINS = \
 SRC_UTILS = \
 	utils/error_management.c \
 	utils/garbage_collector.c \
+	utils/gc_utils.c \
 	utils/init_struct.c \
 
 SRC_PROMPT = \
@@ -71,6 +72,7 @@ SRC_ENV = \
 
 SRC_EXEC = \
 	exec/exec.c \
+	exec/paths.c \
 
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \

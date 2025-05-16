@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/14 16:19:04 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/16 12:02:59 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ static t_env	*parse_env_line(char *line)
 	ft_strlcpy(key, line, ft_strlen(line) + 1);
 	return (env_new(key, NULL, false));
 }
-
 
 void	env_from_envp(t_shell *shell, char **envp)
 {

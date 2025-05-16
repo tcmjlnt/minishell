@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 09:48:51 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/16 11:59:10 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,8 @@ t_shell	*get_shell(void);
 void	init_shell(void);
 
 /* ===========================    🚀 EXECUTION    =========================== */
-char	*get_path_from_env(t_env *env);
+char	*find_command_path(char *cmd, t_env *env);
+void	print_cmd_path_found(char *cmd, t_env *env);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
