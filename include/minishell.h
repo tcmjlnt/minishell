@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/14 17:47:25 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/16 09:48:51 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ void	ft_prompt(void);
 
 /* ======================     🧹 GARBAGE COLLECTOR    ====================== */
 void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
+char	*gc_strdup(const char *src, t_gc_type type);
+char	**gc_split(char *str, char sep, t_gc_type type);
 
 /* ===========================    🛠️ UTILS    ============================== */
 void	error_exit(const char *message);

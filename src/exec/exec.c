@@ -6,53 +6,40 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 09:36:29 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/16 10:57:29 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*get_path_from_env(t_env *env)
-{
-	return (get_env_value(env, "PATH"));
-}
-
-// SI CHEMIN ABSOLU OU RELATIF DONNE ??? AJOUTER CE CAS 
-
-char	*find_command_path(char *command, t_env *env)
+// SI CHEMIN ABSOLU OU RELATIF DONNE ??? AJOUTER CE CAS
+char	*find_command_path(char *cmd, t_env *env)
 {
 	char	*path_env;
 	char	**paths;
 	char	full_path[1024];
 	int		i;
 
-	path_env = get_path_from_env(env);
+	path_env = get_env_value(env, "PATH");
 	if (!path_env)
 		return (NULL);
-	paths = split_path(path_env);
+	paths = gc_split(path_env, ':', GC_CMD);
 	if (!paths)
-		return (perror("split_path"), NULL);
-
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
 		ft_strlcpy(full_path, paths[i], sizeof(full_path));
 		ft_strlcat(full_path, "/", sizeof(full_path));
-		ft_strlcat(full_path, command, sizeof(full_path));
+		ft_strlcat(full_path, cmd, sizeof(full_path));
 		if (access(full_path, X_OK) == 0)
-		{
-			char *res = ft_strdup(full_path);
-			free_strs(paths);
-			return (res);
-		}
+			return (gc_strdup(full_path, GC_CMD));
 		i++;
 	}
-	free_strs(paths);
 	return (NULL);
 }
 
-
-/* while (x commandes a faire)
+/* while (x cmdes a faire)
 {
 	pid = fork();
 	if (pid == 0)
@@ -64,17 +51,17 @@ char	*find_command_path(char *command, t_env *env)
 		|| dup2(out_fd, STDOUT_FILENO) == -1)
 		{
 			perror("dup2");
-			free(command_path);
+			free(cmd_path);
 			exit(EXIT_FAILURE);
 		}
 
 		close(in_fd);
 		close(out_fd);
 
-		char *cmd_path = find_command_path(cmd[0], env);
+		char *cmd_path = find_cmd_path(cmd[0], env);
 		if (!cmd_path)
 		{
-			perror("command not found");
+			perror("cmd not found");
 			exit(127);
 		}
 
