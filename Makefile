@@ -74,10 +74,15 @@ SRC_EXEC = \
 	exec/exec.c \
 	exec/paths.c \
 
+SRC_PARSING = \
+	parsing/parsing.c \
+
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \
 			$(SRC_ENV) \
 			$(SRC_EXEC) \
+			$(SRC_PARSING) \
+
 
 # Chemins complets des sources et objets
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))

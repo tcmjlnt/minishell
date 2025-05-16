@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 11:59:10 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/16 15:54:11 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,15 @@ typedef struct s_cmd
 	struct s_cmd	*prev;
 }	t_cmd;
 
+typedef	struct s_token
+{
+
+	struct s_token	*next;
+}	t_token;
+
+
 /* ===========================    ♻️ PROMPT    =========================== */
-void	ft_prompt(void);
+void	ft_prompt(t_shell *shell);
 
 /* ======================     🧹 GARBAGE COLLECTOR    ====================== */
 void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
@@ -117,6 +124,9 @@ void	print_env_line(char *line);
 void	print_env(t_env *env);
 void	env_from_envp(t_shell *shell, char **envp);
 char	*get_env_value(t_env *env, const char *key);
+
+/* ========================    🦄 PARSING    ======================== */
+int		parsing(char *prompt, t_shell *shell);
 
 /* ===========================    🔧 BUILTINS    ============================ */
 
