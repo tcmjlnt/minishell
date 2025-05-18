@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 11:58:36 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/16 18:06:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
 	(void)ac;
-	// (void)av;
+	(void)av;
 
 	write(1, "Let's goooooo\n\n\n", 15); // a sup
 
@@ -37,7 +37,12 @@ int main(int ac, char **av, char **envp)
 	// print_env(shell->env);
 	// get_path_from_env(shell->env);
 
-	print_cmd_path_found(av[1], shell->env);
+	// print_cmd_path_found(av[1], shell->env);
+/* 	char **env_tab = env_to_env_tab_for_execve(shell->env);
+	print_env_tab(env_tab); */
+
+	//test_export_var1(get_shell());
+
 
 	return (0);
 }

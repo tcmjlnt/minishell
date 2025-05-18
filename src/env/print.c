@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:46:11 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/13 14:53:18 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/16 14:55:15 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,22 @@ void	print_env(t_env *env)
 			printf("(null)");
 		printf("\n");
 		env = env->next;
+	}
+}
+
+void	print_env_tab(char **env_tab)
+{
+	int	i;
+
+	if (!env_tab)
+	{
+		ft_printf("env_tab est NULL\n");
+		return ;
+	}
+	i = 0;
+	while (env_tab[i])
+	{
+		ft_printf("env_tab[%d] = %s\n", i, env_tab[i]);
+		i++;
 	}
 }

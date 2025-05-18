@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 11:59:10 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/16 16:43:08 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 /* ==========================    📚 INCLUDES    ========================== */
 
 # include "../lib/libft/libft.h"
+# include "../lib/ft_printf/ft_printf.h"
+# include "../lib/gnl/get_next_line_bonus.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -115,8 +117,10 @@ void	print_cmd_path_found(char *cmd, t_env *env);
 void	print_envp(char **envp);
 void	print_env_line(char *line);
 void	print_env(t_env *env);
+void	print_env_tab(char **env_tab);
 void	env_from_envp(t_shell *shell, char **envp);
 char	*get_env_value(t_env *env, const char *key);
+char	**env_to_env_tab_for_execve(t_env *env);
 
 /* ===========================    🔧 BUILTINS    ============================ */
 

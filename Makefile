@@ -69,6 +69,7 @@ SRC_PROMPT = \
 SRC_ENV = \
 	env/print.c \
 	env/env_build.c \
+	env/env_tab_build.c \
 
 SRC_EXEC = \
 	exec/exec.c \
@@ -140,7 +141,6 @@ $(NAME): $(OBJS) $(LIB)
 	@$(CC) $(CFLAGS) $(OBJS) $(LINKER) -o $(NAME) \
 	&& echo "✅ $(NAME) a été créé avec succès (✔)" \
 	|| { echo "❌ Erreur : Compilation de $(NAME) échouée (✘)"; exit 1; }
-
 
 # Nettoyage
 clean:
