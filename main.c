@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 18:06:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:36:09 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // Libérer toutes les ressources à la fin (gc_free_all avec GC_NONE)
 
 #include "include/minishell.h"
+#include "tests/tests.h"
 
 int main(int ac, char **av, char **envp)
 {
@@ -38,10 +39,11 @@ int main(int ac, char **av, char **envp)
 	// get_path_from_env(shell->env);
 
 	// print_cmd_path_found(av[1], shell->env);
+
 /* 	char **env_tab = env_to_env_tab_for_execve(shell->env);
 	print_env_tab(env_tab); */
 
-	//test_export_var1(get_shell());
+	test_export_var2(shell);
 
 
 	return (0);

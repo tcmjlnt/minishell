@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:28:58 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 16:38:50 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/20 15:16:44 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ void	debug_env_tab(t_shell *shell)
 	char	**env_tab;
 
 	env_tab = env_to_env_tab_for_execve(shell->env);
-	ft_printf("📦 DEBUG: Tableau env_tab (pour execve)\n");
+	ft_printf("📦 DEBUG: Tableau env_tab pour execve\n");
 	print_env_tab(env_tab);
 }
 
 void	debug_path_for(char *cmd, t_shell *shell)
 {
-	ft_printf("🔍 Recherche du path pour commande : %s\n", cmd);
+	ft_printf("📦 DEBUG: Recherche du path pour cmd : %s\n", cmd);
 	print_cmd_path_found(cmd, shell->env);
 }
