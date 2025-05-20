@@ -11,7 +11,7 @@ NAME = minishell
 
 # Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 OS = $(shell uname | tr '[:upper:]' '[:lower:]')
 
 MAKE = make -sC
@@ -62,6 +62,7 @@ SRC_UTILS = \
 	utils/garbage_collector.c \
 	utils/gc_utils.c \
 	utils/init_struct.c \
+	utils/functions_utils.c \
 
 SRC_PROMPT = \
 	prompt/prompt.c \

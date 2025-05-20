@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 15:54:11 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:10:28 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,25 @@ typedef enum e_bool
 	false,
 	true
 }	t_bool;
+
+typedef enum e_token_type
+{
+	TOKEN_WORD,				// mot (commande ou argument)
+	TOKEN_PIPE,				// |
+	TOKEN_REDIRECT_IN,		// <
+	TOKEN_REDIRECT_OUT,		// >
+	TOKEN_REDIRECT_APPEND,	// >>
+	TOKEN_REDIRECT_HEREDOC,	// <<
+	TOKEN_EOF				// fin de la ligne/commande
+}	t_token_type;
+
+typedef enum	e_parsing_type
+{
+	OPERATOR,
+	LITERAL_STRING,
+	CMD,
+
+}	t_parsing_type;
 
 /* ==========================    📦 STRUCTURES    ========================== */
 
@@ -96,7 +115,10 @@ typedef struct s_cmd
 
 typedef	struct s_token
 {
-
+	int				type;
+	char			*value;
+	int				node_num;
+	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
 
@@ -109,10 +131,17 @@ void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 char	*gc_strdup(const char *src, t_gc_type type);
 char	**gc_split(char *str, char sep, t_gc_type type);
 
-/* ===========================    🛠️ UTILS    ============================== */
-void	error_exit(const char *message);
+/* ===========================    🥾 INIT    ============================== */
 t_shell	*get_shell(void);
 void	init_shell(void);
+void	init_token(t_token *token);
+
+/* ===========================    🛠️ UTILS    ============================== */
+void	error_exit(const char *message);
+char	*ft_strndup(char *src, size_t n);
+t_token	*ft_lstnew_token(char *value, int type, int node_num);
+void	print_token(t_token	*token);
+
 
 /* ===========================    🚀 EXECUTION    =========================== */
 char	*find_command_path(char *cmd, t_env *env);

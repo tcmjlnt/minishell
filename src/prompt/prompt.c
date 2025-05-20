@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 15:40:01 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/19 14:05:15 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ft_prompt(t_shell *shell)
 			add_history(prompt);
 			int x;
 			x = parsing(prompt, shell);
-			printf("%d\n", x);
+			// printf("%d\n", x);
 			// printf("Tu as tapé : %s\n", prompt); // a sup
 		}
 		free(prompt);
