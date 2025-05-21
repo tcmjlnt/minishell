@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 16:43:08 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:18:57 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <errno.h>
 
 /* ===========================    🔷 ENUMS    =========================== */
 
@@ -74,25 +75,21 @@ typedef struct s_shell
 {
 	t_gc		gc;
 	t_env		*env;
+	char		**paths;
+	t_cmd		*cmds;
+	int			cmd_count;
+	t_bool		is_cmd;
+	t_bool		is_builtin;
 }	t_shell;
 
-typedef struct s_redir
-{
-	//t_token			type;       // IN, OUT, APPEND, HEREDOC
-	char			*file_name; // cible de la redir
-	struct s_redir	*next;
-}	t_redir;
 
 typedef struct s_cmd
 {
-	char			*cmd;       // nom de la commande ("ls")
-	char			**args;     // tableau args {"ls", "-l", NULL}
-	t_redir			*redir;     // liste chainee des redir
-	int				pipe[2];    // pipe[0] = read, pipe[1] = write
-	pid_t			pid;        // PID si forke
-	t_bool			is_builtin; // pour traitement a part
-	int				exit_code;  // code retour
-	struct s_cmd	*next;      // commande suivante (pipeline)
+	char			*cmd;
+	char			**args;
+	int				input;
+	int				output;
+	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }	t_cmd;
 
