@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:38:06 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 17:52:55 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:18:03 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,3 +44,24 @@ void	test_export_var2(t_shell *shell)
 	ft_printf("\nDEBUG : env_tab (pour execve)\n");
 	print_env_tab(env_to_env_tab_for_execve(shell->env));
 }
+
+void	test_exec_echo(void)
+{
+	t_cmd	cmd;
+
+	cmd.cmd = "echo";
+	cmd.args = (char *[]){"echo", "bonjour", NULL};
+	cmd.pid = 0;
+	cmd.is_builtin = false;
+	cmd.next = NULL;
+	cmd.prev = NULL;
+
+	pid_t pid = fork();
+	if (pid == -1)
+		error_exit("fork failed");
+	if (pid == 0)
+		exec_cmd(&cmd, get_shell()->env);
+	else
+		waitpid(pid, NULL, 0);
+}
+

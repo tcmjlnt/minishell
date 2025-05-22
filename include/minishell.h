@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/21 15:18:57 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:19:59 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,10 @@ typedef struct s_shell
 	t_gc		gc;
 	t_env		*env;
 	char		**paths;
-	t_cmd		*cmds;
+	//t_cmd		*cmd;
 	int			cmd_count;
 	t_bool		is_cmd;
-	t_bool		is_builtin;
 }	t_shell;
-
 
 typedef struct s_cmd
 {
@@ -89,6 +87,8 @@ typedef struct s_cmd
 	char			**args;
 	int				input;
 	int				output;
+	int				pid;
+	t_bool			is_builtin;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }	t_cmd;
@@ -109,6 +109,7 @@ void	init_shell(void);
 /* ===========================    🚀 EXECUTION    =========================== */
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
+void	exec_cmd(t_cmd *cmd, t_env *env);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

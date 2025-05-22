@@ -6,13 +6,13 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/21 16:05:51 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/22 11:21:56 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exec_command(t_cmd *cmds, t_env *env, t_shell *shell)
+/* void	exec_command(t_cmd *cmds, t_env *env, t_shell *shell)
 {
 	char	*command_path;
 	char	**env_tab;
@@ -23,7 +23,7 @@ void	exec_command(t_cmd *cmds, t_env *env, t_shell *shell)
 
 	if (shell->is_cmd == true)
 	{
-
+		;
 	}
 
 	command_path = find_command_path(cmds->args[0], env_tab);
@@ -59,7 +59,46 @@ void	exec_command(t_cmd *cmds, t_env *env, t_shell *shell)
 		perror("fork");
 		error_exit("fork");
 	}
+} */
+
+
+/* t_cmd cmd = {
+	.cmd = "echo",
+	.args = (char *[]){"echo", "bonjour", NULL},
+	.redir = NULL,
+	.pipe = {-1, -1},
+	.pid = 0,
+	.is_builtin = false,
+	.exit_code = 0,
+	.next = NULL,
+	.prev = NULL
+} */
+
+
+void	exec_cmd(t_cmd *cmd, t_env *env)
+{
+	char	*path;
+	char	**env_tab;
+
+	if (!cmd || !cmd->cmd)
+		error_exit("exec_command_simple: commande vide");
+
+	path = find_command_path(cmd->cmd, env);
+	if (!path)
+	{
+		ft_printf("minishell: %s: command not found\n", cmd->cmd);
+		exit(127);
+	}
+	env_tab = env_to_env_tab_for_execve(env);
+
+	if (execve(path, cmd->args, env_tab) == -1)
+	{
+		perror("execve");
+		exit(126);
+	}
 }
+
+
 
 /* while (x cmdes a faire)
 {
