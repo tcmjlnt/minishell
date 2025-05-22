@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/22 11:19:59 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:29:47 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 /* ===========================    🔷 ENUMS    =========================== */
 
@@ -76,7 +78,6 @@ typedef struct s_shell
 	t_gc		gc;
 	t_env		*env;
 	char		**paths;
-	//t_cmd		*cmd;
 	int			cmd_count;
 	t_bool		is_cmd;
 }	t_shell;

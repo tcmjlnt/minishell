@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/22 16:20:53 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/22 15:57:36 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 // parsing, exécution
 // Libérer toutes les ressources à la fin (gc_free_all avec GC_NONE)
 
-#include "include/minishell.h"
-#include "tests/tests.h"
+#include "../include/minishell.h"
+#include "tests.h"
 
 int main(int ac, char **av, char **envp)
 {
@@ -44,4 +44,7 @@ int main(int ac, char **av, char **envp)
 	print_env_tab(env_tab); */
 
 	// test_export_var2(shell);
+	test_exec_echo();
+
+	return (0);
 }

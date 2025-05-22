@@ -4,9 +4,8 @@ NAME = minishell_tests
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC_TESTS = test.c debug.c
+SRC_TESTS = test.c debug.c main.c
 SRC_MAIN = \
-	../main.c \
 	../src/prompt/prompt.c \
 	../src/env/env_build.c \
 	../src/env/env_tab_build.c \

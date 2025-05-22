@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:38:06 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/22 11:18:03 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:18:58 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,9 @@ void	test_exec_echo(void)
 	if (pid == -1)
 		error_exit("fork failed");
 	if (pid == 0)
+	{
 		exec_cmd(&cmd, get_shell()->env);
+	}
 	else
 		waitpid(pid, NULL, 0);
 }

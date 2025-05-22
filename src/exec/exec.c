@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/22 11:21:56 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:27:09 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,42 @@ void	exec_cmd(t_cmd *cmd, t_env *env)
 		perror("execve");
 		exit(126);
 	}
+	free(path);
 }
 
+void	exec_cmds(t_cmd *cmds, t_env *env)
+{
+	pid_t	pid;
+	int		status;
+	int		in_fd;
+	int		out_fd;
 
+	if (!cmds)
+		return ;
+
+	in_fd = dup(STDIN_FILENO);
+	out_fd = dup(STDOUT_FILENO);
+
+	while (cmds)
+	{
+		if (cmds->is_builtin)
+			exec_cmd(cmds, env);
+		else
+		{
+			pid = fork();
+			if (pid == 0)
+				exec_cmd(cmds, env);
+			else if (pid > 0)
+				waitpid(pid, &status, 0);
+			else
+				perror("fork");
+		}
+		cmds = cmds->next;
+	}
+
+	close(in_fd);
+	close(out_fd);
+}
 
 /* while (x cmdes a faire)
 {
