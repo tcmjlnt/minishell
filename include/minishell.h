@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/20 18:10:28 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/21 15:46:40 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ typedef enum e_bool
 typedef enum e_token_type
 {
 	TOKEN_WORD,				// mot (commande ou argument)
+	TOKEN_BLANK,			// SPACE OR TAB
+	TOKEN_D_QUOTES,			// "
+	TOKEN_S_QUOTES,			// '
 	TOKEN_PIPE,				// |
 	TOKEN_REDIRECT_IN,		// <
 	TOKEN_REDIRECT_OUT,		// >

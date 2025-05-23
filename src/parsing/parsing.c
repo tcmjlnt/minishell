@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/20 18:12:08 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/21 16:15:27 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	lexer(char *prompt, t_token *token)
 	size_t	i;
 	size_t	j;
 	size_t	n_dup;
+	char	*value;
 
 	i = 0;
 	while (prompt[i])
@@ -43,7 +44,8 @@ int	lexer(char *prompt, t_token *token)
 				j++;
 			}
 			n_dup = j - i;
-			token->value = ft_strndup(prompt + i, n_dup);
+			value = ft_strndup(prompt + i, n_dup);
+			token = ft_lstnew_token(value, TOKEN_WORD, 2);
 		}
 
 		if (is_blank(prompt[i]))
@@ -61,8 +63,8 @@ int	parsing(char *prompt, t_shell *shell)
 	t_token	*token;
 
 	token = NULL;
-	char *content = ft_strdup("bonjour");
-	token = ft_lstnew_token(content, 2, 3);
+	// char *content = ft_strdup("bonjour");
+	// token = ft_lstnew_token(content, 2, 3);
 	// printf("%s\n", prompt);
 	lexer(prompt, token);
 	print_token(token);

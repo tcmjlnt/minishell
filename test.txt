@@ -1,4 +1,5 @@
-test
-
-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./minishell
-
+bonjour
+bonjourbonjourbonjourbonjourbonjour
+bonjour
+bonjour
+bonjourbonjour
