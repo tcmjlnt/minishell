@@ -6,11 +6,12 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/19 14:05:15 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:49:47 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
 
 void	ft_prompt(t_shell *shell)
 {
@@ -26,8 +27,12 @@ void	ft_prompt(t_shell *shell)
 		if (*prompt)
 		{
 			add_history(prompt);
-			int x;
-			x = parsing(prompt, shell);
+
+			if (!parsing(prompt, shell))
+			{
+				free(prompt);
+				continue ;
+			}
 			// printf("%d\n", x);
 			// printf("Tu as tapé : %s\n", prompt); // a sup
 		}

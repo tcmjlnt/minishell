@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 15:38:52 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:30:42 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // Libérer toutes les ressources à la fin (gc_free_all avec GC_NONE)
 
 #include "include/minishell.h"
+
 
 int main(int ac, char **av, char **envp)
 {

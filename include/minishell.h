@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/21 15:46:40 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/27 20:38:04 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+// # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -121,6 +122,7 @@ typedef	struct s_token
 	int				type;
 	char			*value;
 	int				node_num;
+	char **args;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
