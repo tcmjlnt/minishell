@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/22 16:29:47 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/05/28 11:38:17 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_shell
 	char		**paths;
 	int			cmd_count;
 	t_bool		is_cmd;
+	int			exit_status;
 }	t_shell;
 
 typedef struct s_cmd
