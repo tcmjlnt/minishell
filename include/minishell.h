@@ -6,12 +6,14 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/27 20:38:04 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:50:30 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define MAX_ARGS 255
 
 /* ==========================    📚 INCLUDES    ========================== */
 
@@ -122,7 +124,7 @@ typedef	struct s_token
 	int				type;
 	char			*value;
 	int				node_num;
-	char **args;
+	char	**args;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
