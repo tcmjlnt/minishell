@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/29 14:06:54 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/29 20:44:16 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,49 +169,16 @@ void	print_args(t_cmd *cmd)
 
 // void	first_lexing
 
-
-int	parsing(char *prompt, t_shell *shell)
+void	old_first_parse(char *prompt)
 {
-	(void)	shell;
 	t_cmd	*cmd;
 
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
-		return(false);
+		return;
 	cmd->next = NULL;
 	cmd->prev = NULL;
 	cmd->args = malloc(sizeof(char*) * 256);
-	if(!cmd->args)
-		return(false);
-	if (!first_syntax_check(prompt))
-	{
-		return (false);
-	}
-	// char *content = ft_strdup("bonjour");
-	// token = ft_lstnew_token(content, 2, 3);
-	// int i = 0;
-	// int start = 0;
-	// while (prompt[i])
-	// {
-	// 	while (prompt[i] && is_blank(prompt[i]))
-	// 		i++;
-	// 	if (!prompt[i])
-	// 		break ;
-	// 	if (prompt[i] == '\"')
-	// 	{
-	// 		i++;
-	// 		start = i;
-	// 		while (prompt[i] && prompt[i] != '\"')
-	// 			i++;
-	// 		if (prompt[i] == '\"')
-	// 			i++;
-	// 		char *arg = ft_strndup(prompt + start, i - start);
-	// 		token->value = start -> i;
-	// 	}
-	// 	else if(prompt[i] = '\'')
-
-
-	// }
 	char **first_split = ft_split(prompt, ' ');
 	int i = 0;
 	int j = 0;
@@ -225,7 +192,7 @@ int	parsing(char *prompt, t_shell *shell)
 			// Create new command node
 			cmd->next = malloc(sizeof(t_cmd));
 			if (!cmd->next)
-				return (false);
+				return ;
 			cmd->next->prev = cmd;
 			cmd->next->next = NULL;
 			cmd->next->args = malloc(sizeof(char*) * (MAX_ARGS + 1));
@@ -237,18 +204,106 @@ int	parsing(char *prompt, t_shell *shell)
 			continue;
 		}
 			cmd->args[j] = ft_strdup(first_split[i]);
+
 			i++;
 			j++;
 			if (j >= MAX_ARGS)
 			{
 				printf("Error: too many arguments (max 255)\n");
-				return (false);
+				return ;
 			}
 
 	}
 	cmd->args[j] = NULL;
-	//printf("%s\n", prompt);
 	print_args(cmd);
+
+}
+
+int	parsing(char *prompt, t_shell *shell)
+{
+	(void)	shell;
+	t_cmd	*cmd;
+
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return(false);
+	cmd->next = NULL;
+	cmd->prev = NULL;
+	cmd->args = malloc(sizeof(char*) * 256);
+
+	if(!cmd->args)
+		return(false);
+	if (!first_syntax_check(prompt))
+	{
+		return (false);
+	}
+	// char *content = ft_strdup("bonjour");
+	// token = ft_lstnew_token(content, 2, 3);
+	// old_first_parse(prompt);
+	int i = 0;
+	int j = 0;
+	int start = 0;
+	char *arg = NULL;
+	while (prompt[i])
+	{
+		while (prompt[i] && is_blank(prompt[i])) // skip blanks (' ' || '\t')
+			i++;
+		if (!prompt[i])
+			break ;
+		if (prompt[i] == '\"') // D_QUOTE word
+		{
+			while (prompt[i] == '\"')
+				i++;
+			start = i;
+
+			while (prompt[i] && prompt[i] != '\"')
+				i++;
+			arg = ft_strndup(prompt + start, i - start);
+
+			while (prompt[i] == '\"')
+				i++;
+
+			// token->value = start -> i;
+		}
+		else if (prompt[i] == '\'') // S_QUOTE word
+		{
+			while (prompt[i] == '\'')
+				i++;
+			start = i;
+
+			while (prompt[i] && prompt[i] != '\'')
+				i++;
+			arg = ft_strndup(prompt + start, i - start);
+
+			while (prompt[i] == '\'')
+				i++;
+
+			// token->value = start -> i;
+		}
+		else if(prompt[i] == '|') // ca va pas marcher comme ca, besoin de traiter les listes chainees
+		{
+			start = i;
+			arg = ft_strndup(prompt + start, 1);
+			i++;
+		}
+		else // standard word
+		{
+			start = i;
+			while (prompt[i] && !is_blank(prompt[i]) && prompt[i] != '\"'
+				&&  prompt[i] != '\'')
+				i++;
+			arg = ft_strndup(prompt + start, i - start);
+		}
+		cmd->args[j] = arg;
+		printf("arg[%d]: %s\n", j, arg);
+		// print_args(cmd);
+		j++;
+
+		// else if(prompt[i] = '\'')
+
+	}
+
+	//printf("%s\n", prompt);
 	// lexer(prompt, token);
 	// print_token(token);
 	return (1);

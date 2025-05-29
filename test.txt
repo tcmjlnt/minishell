@@ -1,14 +1,1 @@
-coucou
-dos.txt
-echo
-include
-lib
-main.c
-Makefile
-minishell
-objs
-src
-subject
-t
-test.sh
-test.txt
+echo	ceci

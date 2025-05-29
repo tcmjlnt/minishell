@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/28 17:50:30 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:26:51 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,10 @@ typedef struct s_cmd
 
 typedef	struct s_token
 {
-	int				type;
-	char			*value;
+	int				token_type;
+	char			*token_value;
+	// char			**args;
 	int				node_num;
-	char	**args;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;

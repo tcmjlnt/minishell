@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/28 17:16:15 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:53:29 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_prompt(t_shell *shell)
 
 	while (1)
 	{
-		prompt = readline("Je dis a minishell >");
+		prompt = readline("minishell: ");
 		if (!prompt)
 		{
 			error_exit("readline");

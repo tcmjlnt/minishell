@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/21 11:56:03 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:40:50 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ t_token	*ft_lstnew_token(char *value, int type, int node_num)
 	new = malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
-	new->type = type;
-	new->value = value;
+	new->token_type = type;
+	new->token_value = value;
 	new->node_num = node_num;
 	new->next = NULL;
 	new->prev = NULL;
@@ -53,7 +53,7 @@ void	print_token(t_token	*token)
 	temp = token;
 	while (temp)
 	{
-		printf("%d\n%s\n%d\n", token->type, token->value, token->node_num);
+		printf("%d\n%s\n%d\n", token->token_type, token->token_value, token->node_num);
 		temp = temp->next;
 	}
 }
