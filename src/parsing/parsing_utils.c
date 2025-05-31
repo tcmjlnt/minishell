@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/31 19:11:09 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/31 20:55:26 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,29 @@ t_token	*ft_lstlast_token(t_token *token)
 	return (token);
 }
 
+
+// void	ft_lstadd_back_token(t_token **token, t_token *new)
+// {
+// 	if (!token || !new)
+// 		return ;
+// 	if (*token)
+// 		ft_lstlast_token(*token)->next = new;
+// 	else
+// 		*token = new;
+// }
+
 void	ft_lstadd_back_token(t_token **token, t_token *new)
 {
-	if (!token || !new)
+	t_token	*temp;
+
+	if (token == NULL || new == NULL)
 		return ;
-	if (*token)
-		ft_lstlast_token(*token)->next = new;
-	else
+	if (*token == NULL)
 		*token = new;
+	else
+	{
+		temp = ft_lstlast_token(*token);
+		new->prev = temp;
+		temp->next = new;
+	}
 }

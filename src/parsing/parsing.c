@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/31 19:19:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/31 20:54:08 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ int	parsing(char *prompt, t_shell *shell)
 	(void)	shell;
 	// t_cmd	*cmd;
 	t_token	*token;
-	t_token **token_list;
+	t_token *token_list;
 
 	token_list = NULL;
 	// cmd = malloc(sizeof(t_cmd));
@@ -311,7 +311,7 @@ int	parsing(char *prompt, t_shell *shell)
 			if (!token)
 				return (false);
 		}
-		ft_lstadd_back_token(token_list, token);
+		ft_lstadd_back_token(&token_list, token);
 
 		// cmd->args[j] = arg;
 		// printf("arg[%d]: %s\n", j, arg);
@@ -324,7 +324,7 @@ int	parsing(char *prompt, t_shell *shell)
 
 	//printf("%s\n", prompt);
 	// lexer(prompt, token);
-	print_token(token);
+	print_token(token_list);
 	return (1);
 }
 
