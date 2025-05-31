@@ -6,13 +6,21 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/29 20:44:16 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/31 19:19:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	quotes_closed(char *prompt)
+int	is_separator(char c)
+{
+	if (c == '\'' || c == '\"' || c == '|' || c == '<' || c == '>')
+		return (true);
+	else
+		return (false);
+}
+
+int	closed_quotes(char *prompt)
 {
 	int i = 0;
 	int in_single = 0;
@@ -41,14 +49,14 @@ int first_syntax_check(char *prompt)
 {
 
 	int i = 0;
-	if (!quotes_closed(prompt))
+	if (!closed_quotes(prompt))
 	{
 		printf("Unclosed quotes\n");
 		return (false);
 	}
 	// while(prompt[i])
 	// {
-	// 	if (!quotes_closed(prompt))
+	// 	if (!closed_quotes(prompt))
 	// 		return (false);
 	// 	if(prompt[i] = '\'')
 	// 	{
@@ -139,8 +147,6 @@ int	lexer(char *prompt, t_token *token)
 
 }
 
-
-
 void	print_args(t_cmd *cmd)
 {
 	int i = 0;
@@ -219,20 +225,25 @@ void	old_first_parse(char *prompt)
 
 }
 
+
+
 int	parsing(char *prompt, t_shell *shell)
 {
 	(void)	shell;
-	t_cmd	*cmd;
+	// t_cmd	*cmd;
+	t_token	*token;
+	t_token **token_list;
 
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return(false);
-	cmd->next = NULL;
-	cmd->prev = NULL;
-	cmd->args = malloc(sizeof(char*) * 256);
+	token_list = NULL;
+	// cmd = malloc(sizeof(t_cmd));
+	// if (!cmd)
+	// 	return(false);
+	// cmd->next = NULL;
+	// cmd->prev = NULL;
+	// cmd->args = malloc(sizeof(char*) * 256);
+	// if(!cmd->args)
+	// 	return(false);
 
-	if(!cmd->args)
-		return(false);
 	if (!first_syntax_check(prompt))
 	{
 		return (false);
@@ -241,9 +252,9 @@ int	parsing(char *prompt, t_shell *shell)
 	// token = ft_lstnew_token(content, 2, 3);
 	// old_first_parse(prompt);
 	int i = 0;
-	int j = 0;
+	// int j = 0;
 	int start = 0;
-	char *arg = NULL;
+	// char *arg = NULL;
 	while (prompt[i])
 	{
 		while (prompt[i] && is_blank(prompt[i])) // skip blanks (' ' || '\t')
@@ -258,12 +269,12 @@ int	parsing(char *prompt, t_shell *shell)
 
 			while (prompt[i] && prompt[i] != '\"')
 				i++;
-			arg = ft_strndup(prompt + start, i - start);
-
+			// arg = ft_strndup(prompt + start, i - start);
+			token = ft_lstnewtoken(prompt + start, i - start, TOKEN_D_QUOTES);
+			if (!token)
+				return (false);
 			while (prompt[i] == '\"')
 				i++;
-
-			// token->value = start -> i;
 		}
 		else if (prompt[i] == '\'') // S_QUOTE word
 		{
@@ -273,31 +284,39 @@ int	parsing(char *prompt, t_shell *shell)
 
 			while (prompt[i] && prompt[i] != '\'')
 				i++;
-			arg = ft_strndup(prompt + start, i - start);
-
+			// arg = ft_strndup(prompt + start, i - start);
+			token = ft_lstnewtoken(prompt + start, i - start, TOKEN_S_QUOTES);
+			if (!token)
+				return (false);
 			while (prompt[i] == '\'')
 				i++;
-
 			// token->value = start -> i;
 		}
 		else if(prompt[i] == '|') // ca va pas marcher comme ca, besoin de traiter les listes chainees
 		{
 			start = i;
-			arg = ft_strndup(prompt + start, 1);
+			token = ft_lstnewtoken(prompt + start, 1, TOKEN_PIPE);
+			if (!token)
+				return (false);
+			// arg = ft_strndup(prompt + start, 1);
 			i++;
 		}
 		else // standard word
 		{
 			start = i;
-			while (prompt[i] && !is_blank(prompt[i]) && prompt[i] != '\"'
-				&&  prompt[i] != '\'')
+			while (prompt[i] && !is_blank(prompt[i]) && !is_separator(prompt[i]))
 				i++;
-			arg = ft_strndup(prompt + start, i - start);
+			// arg = ft_strndup(prompt + start, i - start);
+			token = ft_lstnewtoken(prompt + start, i - start, TOKEN_WORD);
+			if (!token)
+				return (false);
 		}
-		cmd->args[j] = arg;
-		printf("arg[%d]: %s\n", j, arg);
-		// print_args(cmd);
-		j++;
+		ft_lstadd_back_token(token_list, token);
+
+		// cmd->args[j] = arg;
+		// printf("arg[%d]: %s\n", j, arg);
+
+		// j++;
 
 		// else if(prompt[i] = '\'')
 
@@ -305,7 +324,7 @@ int	parsing(char *prompt, t_shell *shell)
 
 	//printf("%s\n", prompt);
 	// lexer(prompt, token);
-	// print_token(token);
+	print_token(token);
 	return (1);
 }
 

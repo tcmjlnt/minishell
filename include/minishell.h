@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/29 16:26:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/31 19:05:44 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,11 @@ char	*get_env_value(t_env *env, const char *key);
 
 /* ========================    🦄 PARSING    ======================== */
 int		parsing(char *prompt, t_shell *shell);
+t_token	*ft_lstlast_token(t_token *token);
+void	ft_lstadd_back_token(t_token **token, t_token *new);
+t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
+
+
 
 /* ===========================    🔧 BUILTINS    ============================ */
 

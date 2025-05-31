@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/29 16:40:50 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/05/31 19:14:32 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,15 @@ void	print_token(t_token	*token)
 {
 	t_token	*temp;
 
+
 	temp = token;
+	while(temp->prev)
+	{
+		temp = temp->prev;
+	}
 	while (temp)
 	{
-		printf("%d\n%s\n%d\n", token->token_type, token->token_value, token->node_num);
+		printf("%d\n%s\n%d\n", temp->token_type, temp->token_value, temp->node_num);
 		temp = temp->next;
 	}
 }
