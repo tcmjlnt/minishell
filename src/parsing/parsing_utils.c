@@ -6,11 +6,32 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/31 20:55:26 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:27:37 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+void	print_token(t_token	*token)
+{
+	t_token	*temp;
+
+
+	if (!token)
+		return ;
+	temp = token;
+	while(temp->prev)
+	{
+		temp = temp->prev;
+	}
+	int i = 0;
+	while (temp)
+	{
+		printf("arg[%d]: %s ; token_type: %d\n", i, temp->token_value, temp->token_type);
+		i++;
+		temp = temp->next;
+	}
+}
 
 t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type)
 {

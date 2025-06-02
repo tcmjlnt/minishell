@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/31 20:54:08 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:47:44 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,72 @@ int	closed_quotes(char *prompt)
 // 	else if (c == "\"")
 // 		return ("\"");
 // }
+static int	is_inside_quotes(char *prompt, int pos)
+{
+	int i = 0;
+	int in_single = 0;
+	int in_double = 0;
+
+	while (i < pos && prompt[i])
+	{
+		if (prompt[i] == '\'' && !in_double)
+			in_single = !in_single; // toggle in_single state
+		else if (prompt[i] == '\"' && !in_single)
+			in_double = !in_double; // toggle in_double state
+		i++;
+	}
+	return (in_single || in_double);
+}
+
+static int	is_blank(int c)
+{
+	if (c == ' ' || c == '\t')
+		return (1);
+	return (0);
+}
+
+int	pipes_check(char *prompt)
+{
+	int	i;
+
+	i = 0;
+	while (prompt[i] && is_blank(prompt[i]))
+		i++;
+	if (prompt[i] == '|' && !is_inside_quotes(prompt, i))
+	{
+		printf("minishell: syntax error near unexpected token begin `|'\n");
+		return false;
+	}
+	i = 0;
+	while (prompt[i])
+	{
+		if (prompt[i] == '|' && !is_inside_quotes(prompt, i))
+		{
+			if (prompt[i + 1] && prompt[i + 1] == '|')
+			{
+				printf("minishell: syntax error near unexpected token `|'\n");
+				return false;
+			}
+			i++;
+			while (prompt[i] && is_blank(prompt[i]))
+				i++;
+			if (prompt[i] == '|')
+			{
+				printf("Syntax error %c\n", prompt[i]);
+				return false;
+			}
+			if (!prompt[i])
+			{
+				printf("Syntax error: pipe at the end\n");
+				return false;
+			}
+			continue ;
+		}
+		i++;
+	}
+
+	return (true);
+}
 
 int first_syntax_check(char *prompt)
 {
@@ -54,47 +120,22 @@ int first_syntax_check(char *prompt)
 		printf("Unclosed quotes\n");
 		return (false);
 	}
+
+	if (!pipes_check(prompt))
+		return (false);
+	i = 0;
 	// while(prompt[i])
 	// {
-	// 	if (!closed_quotes(prompt))
-	// 		return (false);
-	// 	if(prompt[i] = '\'')
+	// 	if(prompt[i + 1] && (prompt[i] == '&' && prompt[i + 1] == '&'))
 	// 	{
 	// 		printf("Syntax error %c\n", prompt[i]);
 	// 		return false;
 	// 	}
 	// 	i++;
 	// }
-
-	i = 0;
-	while(prompt[i])
-	{
-		if(prompt[i + 1] && (prompt[i] == '|' && prompt[i + 1] == '|'))
-		{
-			printf("Syntax error %c\n", prompt[i]);
-			return false;
-		}
-		i++;
-	}
-	i = 0;
-	while(prompt[i])
-	{
-		if(prompt[i + 1] && (prompt[i] == '&' && prompt[i + 1] == '&'))
-		{
-			printf("Syntax error %c\n", prompt[i]);
-			return false;
-		}
-		i++;
-	}
 	return (true);
 }
 
-static int	is_blank(int c)
-{
-	if (c == ' ' || c == '\t')
-		return (1);
-	return (0);
-}
 
 // static int	is_operator(int c)
 // {
@@ -301,6 +342,38 @@ int	parsing(char *prompt, t_shell *shell)
 			// arg = ft_strndup(prompt + start, 1);
 			i++;
 		}
+		else if(prompt[i] == '<' && prompt[i + 1] && prompt[i + 1] == '<')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 2, TOKEN_REDIRECT_HEREDOC);
+			if (!token)
+				return (false);
+			i += 2;
+		}
+		else if(prompt[i] == '>' && prompt[i + 1] && prompt[i + 1] == '>')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 2, TOKEN_REDIRECT_APPEND);
+			if (!token)
+				return (false);
+			i += 2;
+		}
+		else if(prompt[i] == '>')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 1, TOKEN_REDIRECT_OUT);
+			if (!token)
+				return (false);
+			i++;
+		}
+		else if(prompt[i] == '<')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 1, TOKEN_REDIRECT_IN);
+			if (!token)
+				return (false);
+			i++;
+		}
 		else // standard word
 		{
 			start = i;
@@ -321,6 +394,12 @@ int	parsing(char *prompt, t_shell *shell)
 		// else if(prompt[i] = '\'')
 
 	}
+
+	if (!check_token(token_list))
+	{
+		return (false);
+	}
+
 
 	//printf("%s\n", prompt);
 	// lexer(prompt, token);

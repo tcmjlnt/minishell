@@ -78,6 +78,7 @@ SRC_EXEC = \
 SRC_PARSING = \
 	parsing/parsing.c \
 	parsing/parsing_utils.c \
+	parsing/token_utils.c \
 
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \
