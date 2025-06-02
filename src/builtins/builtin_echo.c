@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:12:48 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/02 12:43:38 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:32:40 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,42 @@ Mets à jour shell->exit_status = 0. */
 
 #include "../../include/minishell.h"
 
-void	ft_echo(t_shell *shell, char **args)
+t_bool	is_option_n(char *arg)
 {
 	int	i;
 
-	i = 1;
-	while (args[i])
+	if (!arg || arg[0] != '-' || arg[1] != 'n')
+		return (false);
+	i = 2;
+	while (arg[i])
 	{
-		printf("%s", args[i]);
-		if (args[i + 1])
-			printf(" ");
+		if (arg[i] != 'n')
+			return (false);
 		i++;
 	}
-	printf("\n");
+	return (true);
+}
+
+void	ft_echo(t_shell *shell, char **args, int fd)
+{
+	int		i;
+	t_bool	no_newline;
+
+	i = 1;
+	no_newline = false;
+	while (args[i] && is_option_n(args[i]))
+	{
+		no_newline = true;
+		i++;
+	}
+	while (args[i])
+	{
+		ft_putstr_fd(args[i], fd);
+		if (args[i + 1])
+			ft_putstr_fd(" ", fd);
+		i++;
+	}
+	if (!no_newline)
+		ft_putstr_fd("\n", fd);
 	shell->exit_status = 0;
 }

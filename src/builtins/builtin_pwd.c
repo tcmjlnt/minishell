@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:52:10 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/02 12:12:17 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:31:42 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,14 @@ Gère les erreurs si getcwd() échoue (ex : dossier supprimé). */
 
 #include "../../include/minishell.h"
 
-void	ft_pwd(t_shell *shell)
+void	ft_pwd(t_shell *shell, int fd)
 {
 	char	buf[PATH_MAX];
 
 	if (getcwd(buf, PATH_MAX))
 	{
-		printf("%s\n", buf);
+		ft_putstr_fd(buf, fd);
+		ft_putstr_fd("\n", fd);
 		shell->exit_status = 0;
 	}
 	else
