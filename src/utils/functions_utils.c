@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/31 20:56:08 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/01 17:30:18 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ void	print_token(t_token	*token)
 	{
 		temp = temp->prev;
 	}
+	int i = 0;
 	while (temp)
 	{
-		printf("%d\n%s\n", temp->token_type, temp->token_value);
+		printf("arg[%d]: %s ; token_type: %d\n", i, temp->token_value, temp->token_type);
+		i++;
 		temp = temp->next;
 	}
 }
