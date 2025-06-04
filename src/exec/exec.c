@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/22 16:27:09 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 13:37:18 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@
 	.prev = NULL
 } */
 
-
 void	exec_cmd(t_cmd *cmd, t_env *env)
 {
 	char	*path;
@@ -82,6 +81,21 @@ void	exec_cmd(t_cmd *cmd, t_env *env)
 
 	if (!cmd || !cmd->cmd)
 		error_exit("exec_command_simple: commande vide");
+
+	// Redirection in
+	if (cmd->fd_in != STDIN_FILENO)
+	{
+		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+			error_exit("dup2 fd_in");
+		close(cmd->fd_in);
+	}
+	// Redirection out
+	if (cmd->fd_out != STDOUT_FILENO)
+	{
+		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+			error_exit("dup2 fd_out");
+		close(cmd->fd_out);
+	}
 
 	path = find_command_path(cmd->cmd, env);
 	if (!path)
@@ -96,7 +110,6 @@ void	exec_cmd(t_cmd *cmd, t_env *env)
 		perror("execve");
 		exit(126);
 	}
-	free(path);
 }
 
 void	exec_cmds(t_cmd *cmds, t_env *env)
@@ -115,7 +128,7 @@ void	exec_cmds(t_cmd *cmds, t_env *env)
 	while (cmds)
 	{
 		if (cmds->is_builtin)
-			exec_cmd(cmds, env);
+			handle_builtin(get_shell(), cmds, cmds->fd_out);
 		else
 		{
 			pid = fork();
@@ -129,6 +142,8 @@ void	exec_cmds(t_cmd *cmds, t_env *env)
 		cmds = cmds->next;
 	}
 
+	dup2(in_fd, STDIN_FILENO);
+	dup2(out_fd, STDOUT_FILENO);
 	close(in_fd);
 	close(out_fd);
 }

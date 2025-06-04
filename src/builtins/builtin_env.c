@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:37:06 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 09:47:37 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 13:43:25 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ Les variables créées via VAR=value sans export ne sont pas visibles dans env.
 
 #include "../../include/minishell.h"
 
-int	ft_env(t_shell *shell, int fd)
+int	ft_env(t_shell *shell, t_cmd *cmd, int fd)
 {
 	t_env	*curr;
 
+	(void) cmd;
 	curr = shell->env;
 	while (curr)
 	{

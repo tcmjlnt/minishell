@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 09:45:48 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:34:57 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,11 @@ typedef struct s_shell
 	char		**paths;
 	int			cmd_count;
 	t_bool		is_cmd;
-	t_cmd		*current_cmd;
 	int			exit_status;
 }	t_shell;
 
 /* typedef de pointeur de fonction. */
-typedef int	(*t_builtin_func)(t_shell *, int);
+typedef int	(*t_builtin_func)(t_shell *, t_cmd *, int);
 
 typedef struct s_builtin
 {
@@ -134,9 +133,9 @@ char	*get_env_value(t_env *env, const char *key);
 char	**env_to_env_tab_for_execve(t_env *env);
 
 /* ===========================    🔧 BUILTINS    ============================ */
-int		ft_pwd(t_shell *shell, int fd);
-int		ft_env(t_shell *shell, int fd);
-int		ft_echo(t_shell *shell, int fd);
-int		handle_builtin(t_shell *shell, int fd);
+int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
+int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
+int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
+int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
 
 #endif

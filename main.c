@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/22 16:20:53 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 14:36:19 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,4 @@ int main(int ac, char **av, char **envp)
 /* 	char **env_tab = env_to_env_tab_for_execve(shell->env);
 	print_env_tab(env_tab); */
 
-	// test_export_var2(shell);
 }

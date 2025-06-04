@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:12:48 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 09:51:37 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 13:13:16 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,15 @@ t_bool	is_option_n(char *arg)
 	return (true);
 }
 
-int	ft_echo(t_shell *shell, int fd)
+int	ft_echo(t_shell *shell, t_cmd *cmd, int fd)
 {
 	int		i;
 	t_bool	no_newline;
 	char	**args;
 
-	if (!shell || !shell->current_cmd || !shell->current_cmd->args)
+	if (!shell || !cmd || !cmd->args)
 		return (1);
-	args = shell->current_cmd->args;
+	args = cmd->args;
 	i = 1;
 	no_newline = false;
 	while (args[i] && is_option_n(args[i]))

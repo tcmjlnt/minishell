@@ -1,8 +1,9 @@
-# tests/Makefile
+tests/Makefile
 
 NAME = minishell_tests
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
+# -fsanitize=address
 
 SRC_TESTS = test.c debug.c main.c test_builtins.c
 SRC_MAIN = \
