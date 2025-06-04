@@ -6,15 +6,15 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/02 19:47:44 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/04 19:05:35 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	is_separator(char c)
+int	is_operator(char c)
 {
-	if (c == '\'' || c == '\"' || c == '|' || c == '<' || c == '>')
+	if (c == '|' || c == '<' || c == '>')
 		return (true);
 	else
 		return (false);
@@ -59,6 +59,20 @@ static int	is_inside_quotes(char *prompt, int pos)
 		i++;
 	}
 	return (in_single || in_double);
+}
+char	which_quote(char c)
+{
+	if (c == '\'')
+		return ('\'');
+	else if (c == '\"')
+		return ('\"');
+	else
+		return (0);
+}
+
+int	is_quote(char c)
+{
+	return (c == '\'' || c == '\"');
 }
 
 static int	is_blank(int c)
@@ -114,7 +128,6 @@ int	pipes_check(char *prompt)
 int first_syntax_check(char *prompt)
 {
 
-	int i = 0;
 	if (!closed_quotes(prompt))
 	{
 		printf("Unclosed quotes\n");
@@ -123,7 +136,7 @@ int first_syntax_check(char *prompt)
 
 	if (!pipes_check(prompt))
 		return (false);
-	i = 0;
+	// i = 0;
 	// while(prompt[i])
 	// {
 	// 	if(prompt[i + 1] && (prompt[i] == '&' && prompt[i + 1] == '&'))
@@ -265,7 +278,10 @@ void	old_first_parse(char *prompt)
 	print_args(cmd);
 
 }
+char	*token_wordtpye(char *prompt, int *i)
+{
 
+}
 
 
 int	parsing(char *prompt, t_shell *shell)
@@ -310,7 +326,6 @@ int	parsing(char *prompt, t_shell *shell)
 
 			while (prompt[i] && prompt[i] != '\"')
 				i++;
-			// arg = ft_strndup(prompt + start, i - start);
 			token = ft_lstnewtoken(prompt + start, i - start, TOKEN_D_QUOTES);
 			if (!token)
 				return (false);
@@ -325,24 +340,21 @@ int	parsing(char *prompt, t_shell *shell)
 
 			while (prompt[i] && prompt[i] != '\'')
 				i++;
-			// arg = ft_strndup(prompt + start, i - start);
 			token = ft_lstnewtoken(prompt + start, i - start, TOKEN_S_QUOTES);
 			if (!token)
 				return (false);
 			while (prompt[i] == '\'')
 				i++;
-			// token->value = start -> i;
 		}
-		else if(prompt[i] == '|') // ca va pas marcher comme ca, besoin de traiter les listes chainees
+		else if(prompt[i] == '|') // PIPE
 		{
 			start = i;
 			token = ft_lstnewtoken(prompt + start, 1, TOKEN_PIPE);
 			if (!token)
 				return (false);
-			// arg = ft_strndup(prompt + start, 1);
 			i++;
 		}
-		else if(prompt[i] == '<' && prompt[i + 1] && prompt[i + 1] == '<')
+		else if(prompt[i] == '<' && prompt[i + 1] && prompt[i + 1] == '<') // RED_HEREDOC
 		{
 			start = i;
 			token = ft_lstnewtoken(prompt + start, 2, TOKEN_REDIRECT_HEREDOC);
@@ -350,7 +362,7 @@ int	parsing(char *prompt, t_shell *shell)
 				return (false);
 			i += 2;
 		}
-		else if(prompt[i] == '>' && prompt[i + 1] && prompt[i + 1] == '>')
+		else if(prompt[i] == '>' && prompt[i + 1] && prompt[i + 1] == '>') // RED_APPEND
 		{
 			start = i;
 			token = ft_lstnewtoken(prompt + start, 2, TOKEN_REDIRECT_APPEND);
@@ -358,7 +370,7 @@ int	parsing(char *prompt, t_shell *shell)
 				return (false);
 			i += 2;
 		}
-		else if(prompt[i] == '>')
+		else if(prompt[i] == '>') // RED_OUT
 		{
 			start = i;
 			token = ft_lstnewtoken(prompt + start, 1, TOKEN_REDIRECT_OUT);
@@ -366,7 +378,7 @@ int	parsing(char *prompt, t_shell *shell)
 				return (false);
 			i++;
 		}
-		else if(prompt[i] == '<')
+		else if(prompt[i] == '<') // RED_IN
 		{
 			start = i;
 			token = ft_lstnewtoken(prompt + start, 1, TOKEN_REDIRECT_IN);
@@ -376,10 +388,13 @@ int	parsing(char *prompt, t_shell *shell)
 		}
 		else // standard word
 		{
+			// option 1: garder 3 tokens pour hell"o   w"orld, concatener ensuite par exemple
+			//				variable dans le t_token du type char_before/after_quote
+			// option 2: reussir a avoir 1 seul token, garder la valeur raw du token avec les quotes
+			//
 			start = i;
-			while (prompt[i] && !is_blank(prompt[i]) && !is_separator(prompt[i]))
+			while (prompt[i] && !is_blank(prompt[i]) && !is_operator(prompt[i]))
 				i++;
-			// arg = ft_strndup(prompt + start, i - start);
 			token = ft_lstnewtoken(prompt + start, i - start, TOKEN_WORD);
 			if (!token)
 				return (false);

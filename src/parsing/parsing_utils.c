@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/02 18:27:37 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:05:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_token(t_token	*token)
 	int i = 0;
 	while (temp)
 	{
-		printf("arg[%d]: %s ; token_type: %d\n", i, temp->token_value, temp->token_type);
+		printf("arg[%d]: \"%s\" ; token_type: %d\n", i, temp->token_value, temp->token_type);
 		i++;
 		temp = temp->next;
 	}
