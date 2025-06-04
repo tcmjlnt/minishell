@@ -1,0 +1,11 @@
+total 88
+-rw-r--r-- 1 aumartin 2024_paris  1400 Jun  4 10:18 debug.c
+-rw-r--r-- 1 aumartin 2024_paris  1620 Jun  4 15:42 main.c
+-rw-r--r-- 1 aumartin 2024_paris   915 Jun  4 15:15 Makefile
+-rwxr-xr-x 1 aumartin 2024_paris 59936 Jun  4 16:18 minishell_tests
+-rw-r--r-- 1 aumartin 2024_paris  2076 Jun  4 13:53 test_builtins.c
+-rw-r--r-- 1 aumartin 2024_paris  1785 Jun  4 10:13 test.c
+-rw-r--r-- 1 aumartin 2024_paris  1852 Jun  4 15:55 test_exec.c
+-rw-r--r-- 1 aumartin 2024_paris     0 Jun  4 16:18 test_output.txt
+-rw-r--r-- 1 aumartin 2024_paris  1409 Jun  4 15:43 tests.h
+/home/aumartin/Documents/minishell/tests

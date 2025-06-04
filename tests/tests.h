@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:33:25 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 13:55:20 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:43:03 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ void	test_builtin_pwd(t_shell *shell, t_cmd *cmd);
 void	test_builtin_env(t_shell *shell, t_cmd *cmd);
 void	test_builtin_echo(t_shell *shell, t_cmd *cmd);
 void	test_handle_builtin(t_shell *shell, t_cmd *cmd);
+void	test_exec_cmd(t_shell *shell);
 
 #endif

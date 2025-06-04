@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 13:42:37 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:32:09 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	handle_builtin(t_shell *shell, t_cmd *cmd, int fd)
 	while (g_builtins[i].name)
 	{
 		if (ft_strcmp(args[0], g_builtins[i].name) == 0)
+		{
+			printf("handle_builtin: calling %s\n", args[0]);
 			return (g_builtins[i].func(shell, cmd, fd));
+		}
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 13:37:18 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:12:31 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,12 @@ void	exec_cmd(t_cmd *cmd, t_env *env)
 	char	*path;
 	char	**env_tab;
 
+	// a supprimer
+	printf("exec_cmd: cmd->cmd = %s\n", cmd->cmd);
+	printf("exec_cmd: cmd->args[0] = %s\n", cmd->args[0]);
+	printf("exec_cmd: cmd->args[1] = %s\n", cmd->args[1]);
+
+
 	if (!cmd || !cmd->cmd)
 		error_exit("exec_command_simple: commande vide");
 
@@ -121,14 +127,22 @@ void	exec_cmds(t_cmd *cmds, t_env *env)
 
 	if (!cmds)
 		return ;
-
+	if (cmds->next == NULL && cmds->is_builtin)
+	{
+		printf("exec_cmds: executing single builtin\n");
+		handle_builtin(get_shell(), cmds, cmds->fd_out);
+		return ;
+	}
 	in_fd = dup(STDIN_FILENO);
 	out_fd = dup(STDOUT_FILENO);
 
 	while (cmds)
 	{
 		if (cmds->is_builtin)
+		{
+			printf("exec_cmds: calling handle_builtin\n"); // a sup
 			handle_builtin(get_shell(), cmds, cmds->fd_out);
+		}
 		else
 		{
 			pid = fork();

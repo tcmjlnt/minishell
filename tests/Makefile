@@ -1,11 +1,8 @@
-tests/Makefile
-
 NAME = minishell_tests
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
-# -fsanitize=address
 
-SRC_TESTS = test.c debug.c main.c test_builtins.c
+SRC_TESTS = test.c debug.c main.c test_builtins.c test_exec.c
 SRC_MAIN = \
 	../src/prompt/prompt.c \
 	../src/env/env_build.c \
@@ -21,6 +18,7 @@ SRC_MAIN = \
 	../src/builtins/builtin_echo.c \
 	../src/builtins/builtin_env.c \
 	../src/builtins/builtin_pwd.c \
+	../src/exec/create_cmd.c \
 
 LIB_DIR = ../lib
 LIB = $(LIB_DIR)/lib.a

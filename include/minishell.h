@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 14:34:57 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:16:12 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ typedef struct s_shell
 	t_gc		gc;
 	t_env		*env;
 	char		**paths;
-	int			cmd_count;
 	t_bool		is_cmd;
 	int			exit_status;
 }	t_shell;
@@ -122,6 +121,7 @@ void	init_shell(void);
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
 void	exec_cmd(t_cmd *cmd, t_env *env);
+void	exec_cmds(t_cmd *cmds, t_env *env);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
@@ -137,5 +137,8 @@ int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
+
+t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_bool is_builtin);
+void	add_cmd(t_cmd **head, t_cmd *new_cmd);
 
 #endif
