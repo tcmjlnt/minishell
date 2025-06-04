@@ -4,7 +4,7 @@ NAME = minishell_tests
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC_TESTS = test.c debug.c main.c
+SRC_TESTS = test.c debug.c main.c test_builtins.c
 SRC_MAIN = \
 	../src/prompt/prompt.c \
 	../src/env/env_build.c \
@@ -16,7 +16,10 @@ SRC_MAIN = \
 	../src/utils/init_struct.c \
 	../src/utils/garbage_collector.c \
 	../src/utils/error_management.c \
-
+	../src/builtins/handle_builtins.c \
+	../src/builtins/builtin_echo.c \
+	../src/builtins/builtin_env.c \
+	../src/builtins/builtin_pwd.c \
 
 LIB_DIR = ../lib
 LIB = $(LIB_DIR)/lib.a
