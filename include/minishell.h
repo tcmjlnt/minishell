@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 16:16:12 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:58:38 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,9 @@ int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
+t_bool	is_builtin(char *cmd_name);
 
-t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_bool is_builtin);
+t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out);
 void	add_cmd(t_cmd **head, t_cmd *new_cmd);
 
 #endif

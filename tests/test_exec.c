@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:58:59 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 16:44:26 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 19:12:05 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 void	test_exec_cmd(t_shell *shell, t_cmd *cmd)
 {
+	(void) cmd;
 	t_cmd	*cmd1;
 	t_cmd	*cmd2;
 	t_cmd	*cmd3;
@@ -28,9 +29,9 @@ void	test_exec_cmd(t_shell *shell, t_cmd *cmd)
 	char	*args3[] = {"echo", "-n", "hello AURORE", NULL};
 
 	// cree les commandes avec create_cmd
-	cmd1 = create_cmd("ls", args1, STDIN_FILENO, STDOUT_FILENO, false);
-	cmd2 = create_cmd("pwd", args2, STDIN_FILENO, STDOUT_FILENO, false);
-	cmd3 = create_cmd("echo", args3, STDIN_FILENO, STDOUT_FILENO, false);
+	cmd1 = create_cmd("ls", args1, STDIN_FILENO, STDOUT_FILENO);
+	cmd2 = create_cmd("pwd", args2, STDIN_FILENO, STDOUT_FILENO);
+	cmd3 = create_cmd("echo", args3, STDIN_FILENO, STDOUT_FILENO);
 
 	// chaine les cmds
 	cmd1->next = cmd2;
@@ -53,5 +54,5 @@ void	test_exec_cmd(t_shell *shell, t_cmd *cmd)
 	// free
 	free(cmd1);
 	free(cmd2);
-
+	free(cmd3);
 }
