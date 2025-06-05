@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:52:57 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 18:58:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/04 20:40:56 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,15 @@ void	add_cmd(t_cmd **head, t_cmd *new_cmd)
         current = current->next;
     current->next = new_cmd;
     new_cmd->prev = current;
+}
+
+int count_cmds(t_cmd *cmds)
+{
+	int count = 0;
+	while (cmds)
+	{
+		count++;
+		cmds = cmds->next;
+	}
+	return (count);
 }
