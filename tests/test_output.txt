@@ -1,14 +1,14 @@
-total 92
+total 96
 -rw-r--r-- 1 aumartin 2024_paris  1400 Jun  4 10:18 debug.c
 -rw-r--r-- 1 aumartin 2024_paris  1267 Jun  5 10:37 funcptr.c
 -rw-r--r-- 1 aumartin 2024_paris  1625 Jun  5 09:10 main.c
 -rw-r--r-- 1 aumartin 2024_paris   915 Jun  4 15:15 Makefile
--rwxr-xr-x 1 aumartin 2024_paris 60920 Jun  5 11:25 minishell_tests
+-rwxr-xr-x 1 aumartin 2024_paris 62264 Jun  5 13:25 minishell_tests
 drwxr-xr-x 3 aumartin 2024_paris    22 Jun  5 09:10 minishell_tests.dSYM
 -rw-r--r-- 1 aumartin 2024_paris  2076 Jun  4 13:53 test_builtins.c
 -rw-r--r-- 1 aumartin 2024_paris  1785 Jun  4 10:13 test.c
 -rw-r--r-- 1 aumartin 2024_paris  2046 Jun  5 11:25 test_exec.c
--rw-r--r-- 1 aumartin 2024_paris     0 Jun  5 11:25 test_output.txt
+-rw-r--r-- 1 aumartin 2024_paris     0 Jun  5 13:25 test_output.txt
 -rw-r--r-- 1 aumartin 2024_paris  1421 Jun  5 09:10 tests.h
 /home/aumartin/Documents/minishell/tests
 hello AURORE

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 19:24:39 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 10:53:10 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:25:05 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ pid_t	*alloc_pids(int cmd_count)
 {
 	pid_t	*pids;
 
-	pids = gc_malloc(sizeof(pid_t) * cmd_count, GC_CMD);
+	gc_mem(GC_ALLOC, sizeof(pid_t) * cmd_count, NULL, GC_CMD);
 	if (!pids)
 		error_exit("malloc pids");
 	return (pids);
@@ -63,10 +63,10 @@ void	exec_child(t_cmd *cmd, int in_fd, t_shell *shell)
 
 void	exec_pipes(t_cmd *cmds, t_shell *shell)
 {
-	int	in_fd;
-	int	cmd_count;
-	pid_t *pids;
-	int	i;
+	int		in_fd;
+	int		cmd_count;
+	pid_t	*pids;
+	int		i;
 
 	in_fd = STDIN_FILENO;
 	cmd_count = count_cmds(cmds);

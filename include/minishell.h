@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 10:45:59 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:09:29 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ typedef struct s_shell
 	t_gc		gc;
 	t_env		*env;
 	char		**paths;
+	int			(*builtin[7])(struct s_cmd *cmd,
+			struct s_shell *shell, int fd);
 	t_bool		is_cmd;
 	int			exit_status;
 }	t_shell;

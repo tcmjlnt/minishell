@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 11:23:43 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:28:43 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 
 t_builtin	*get_builtins(void)
 {
-	static t_builtin	*builtins;
+	t_builtin	*builtins;
 
-	builtins = (t_builtin []){
-	{"pwd", ft_pwd},
-	{"env", ft_env},
-	{"echo", ft_echo},
-	{NULL, NULL}
-	};
+	builtins = gc_mem(GC_ALLOC, sizeof(t_builtin) * 4, NULL, GC_CMD);
+	if (!builtins)
+		return (NULL);
+	builtins[0] = (t_builtin){"pwd", ft_pwd};
+	builtins[1] = (t_builtin){"env", ft_env};
+	builtins[2] = (t_builtin){"echo", ft_echo};
+	builtins[3] = (t_builtin){NULL, NULL};
 	return (builtins);
 }
 
