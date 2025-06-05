@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 13:09:29 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:22:15 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,8 @@ typedef struct s_cmd
 	struct s_cmd	*prev;
 }	t_cmd;
 
-typedef struct s_shell
-{
-	t_gc		gc;
-	t_env		*env;
-	char		**paths;
-	int			(*builtin[7])(struct s_cmd *cmd,
-			struct s_shell *shell, int fd);
-	t_bool		is_cmd;
-	int			exit_status;
-}	t_shell;
+typedef struct s_shell t_shell;
+typedef struct s_cmd t_cmd;
 
 /* typedef de pointeur de fonction. */
 typedef int	(*t_builtin_func)(t_shell *, t_cmd *, int);
@@ -106,6 +98,16 @@ typedef struct s_builtin
 	char			*name;
 	t_builtin_func	func;
 }	t_builtin;
+
+typedef struct s_shell
+{
+	t_gc		gc;
+	t_env		*env;
+	char		**paths;
+	t_bool		is_cmd;
+	t_builtin	builtins[8];
+	int			exit_status;
+}	t_shell;
 
 /* ===========================    ♻️ PROMPT    =========================== */
 void	ft_prompt(void);
@@ -125,6 +127,8 @@ char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
 void	exec_cmd(t_cmd *cmd, t_env *env);
 void	exec_cmds(t_cmd *cmds, t_env *env);
+void	init_pipes(t_cmd *cmds);
+void	exec_pipes(t_cmd *cmds, t_shell *shell);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
@@ -140,9 +144,9 @@ int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
-t_bool	is_builtin(char *cmd_name);
+t_bool	is_builtin(t_shell *shell, char *cmd_name);
 
-t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out);
+t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_shell *shell);
 void	add_cmd(t_cmd **head, t_cmd *new_cmd);
 
 #endif

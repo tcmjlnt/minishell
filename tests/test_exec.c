@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:58:59 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 11:25:51 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:22:42 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ void	test_exec_cmd(t_shell *shell, t_cmd *cmd)
 	char	*args4[] = {"cat", "test_output.txt", NULL};
 
 	// cree les commandes avec create_cmd
-	cmd1 = create_cmd("ls", args1, STDIN_FILENO, STDOUT_FILENO);
-	cmd2 = create_cmd("pwd", args2, STDIN_FILENO, STDOUT_FILENO);
-	cmd3 = create_cmd("echo", args3, STDIN_FILENO, STDOUT_FILENO);
-	cmd4 = create_cmd("cat", args4, STDIN_FILENO, STDOUT_FILENO);
+	cmd1 = create_cmd("ls", args1, STDIN_FILENO, STDOUT_FILENO, shell);
+	cmd2 = create_cmd("pwd", args2, STDIN_FILENO, STDOUT_FILENO, shell);
+	cmd3 = create_cmd("echo", args3, STDIN_FILENO, STDOUT_FILENO, shell);
+	cmd4 = create_cmd("cat", args4, STDIN_FILENO, STDOUT_FILENO, shell);
 
 	// chaine les cmds
 	cmd1->next = cmd2;
@@ -49,7 +49,7 @@ void	test_exec_cmd(t_shell *shell, t_cmd *cmd)
 	fd_out = open("test_output.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	cmd1->fd_out = fd_out;
 	cmd2->fd_out = fd_out;
-	cmd3->fd_out = fd_out;
+	//cmd3->fd_out = fd_out;
 
 	// exec les commandes
 	exec_cmds(cmd1, shell->env);

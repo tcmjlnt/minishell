@@ -19,6 +19,7 @@ SRC_MAIN = \
 	../src/builtins/builtin_env.c \
 	../src/builtins/builtin_pwd.c \
 	../src/exec/create_cmd.c \
+	../src/exec/pipes.c \
 
 LIB_DIR = ../lib
 LIB = $(LIB_DIR)/lib.a

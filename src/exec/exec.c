@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 11:04:22 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:16:29 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,14 +163,14 @@ void	exec_cmds(t_cmd *cmds, t_env *env)
 }
 // version avec pipe
 
-/* void	exec_cmds_pipes(t_cmd *cmds, t_shell *shell)
+void	exec_cmds_pipes(t_cmd *cmds, t_shell *shell)
 {
 	if (!cmds)
 		return ;
 	if (cmds->next)
 	{
 		init_pipes(cmds);
-		execute_pipes(cmds, shell);
+		exec_pipes(cmds, shell);
 	}
 	else
 	{
@@ -179,7 +179,7 @@ void	exec_cmds(t_cmd *cmds, t_env *env)
 		else
 			exec_cmd(cmds, shell->env);
 	}
-} */
+}
 
 /* while (x cmdes a faire)
 {

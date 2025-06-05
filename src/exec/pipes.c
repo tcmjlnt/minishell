@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 19:24:39 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 13:25:05 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:26:40 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ manip les processus après leur fork  ?? faire des kill(pid)
 recup les exit_status ??
 
 */
-pid_t	*alloc_pids(int cmd_count)
+static pid_t	*alloc_pids(int cmd_count)
 {
 	pid_t	*pids;
 
-	gc_mem(GC_ALLOC, sizeof(pid_t) * cmd_count, NULL, GC_CMD);
+	pids = gc_mem(GC_ALLOC, sizeof(pid_t) * cmd_count, NULL, GC_CMD);
 	if (!pids)
 		error_exit("malloc pids");
 	return (pids);
@@ -41,7 +41,7 @@ void	init_pipes(t_cmd *cmds)
 	}
 }
 
-void	exec_child(t_cmd *cmd, int in_fd, t_shell *shell)
+static void	exec_child(t_cmd *cmd, int in_fd, t_shell *shell)
 {
 	if (in_fd != STDIN_FILENO)
 	{
@@ -59,6 +59,42 @@ void	exec_child(t_cmd *cmd, int in_fd, t_shell *shell)
 	else
 		exec_cmd(cmd, shell->env);
 	exit(EXIT_SUCCESS);
+}
+
+static int	count_cmds(t_cmd *cmds)
+{
+	int	count;
+
+	count = 0;
+	while (cmds)
+	{
+		count++;
+		cmds = cmds->next;
+	}
+	return (count);
+}
+static int	update_fds(int in_fd, t_cmd *cmd)
+{
+	if (in_fd != STDIN_FILENO)
+		close(in_fd);
+	if (cmd->next)
+	{
+		close(cmd->pipe[1]);
+		return (cmd->pipe[0]);
+	}
+	return (STDIN_FILENO);
+}
+
+static void	wait_children(pid_t *pids, int cmd_count)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd_count)
+	{
+		waitpid(pids[i], NULL, 0);
+		i++;
+	}
 }
 
 void	exec_pipes(t_cmd *cmds, t_shell *shell)
@@ -89,29 +125,6 @@ void	exec_pipes(t_cmd *cmds, t_shell *shell)
 	wait_children(pids, cmd_count);
 }
 
-int	update_fds(int in_fd, t_cmd *cmd)
-{
-	if (in_fd != STDIN_FILENO)
-		close(in_fd);
-	if (cmd->next)
-	{
-		close(cmd->pipe[1]);
-		return (cmd->pipe[0]);
-	}
-	return (STDIN_FILENO);
-}
-
-void	wait_children(pid_t *pids, int cmd_count)
-{
-	int	i;
-
-	i = 0;
-	while (i < cmd_count)
-	{
-		waitpid(pids[i], NULL, 0);
-		i++;
-	}
-}
 
 
 /* // execution des pipes a retravailler
