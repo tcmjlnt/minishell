@@ -1,116 +1,66 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   deprecated.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/05 20:17:53 by tjacquel         ###   ########.fr       */
+/*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
+/*   Updated: 2025/06/05 16:04:28 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	is_operator(char c)
+// anciennes fonctions ou anciens bout de fonctions
+
+
+
+int	lexer(char *prompt, t_token *token) // premiere iteration du lexer jai change de voie apres
 {
-	if (c == '|' || c == '<' || c == '>')
-		return (true);
-	else
-		return (false);
-}
-
-int	closed_quotes(char *prompt)
-{
-	int i = 0;
-	int in_single = 0;
-	int in_double = 0;
-
-	while (prompt[i])
-	{
-		if (prompt[i] == '\'' && !in_double)
-			in_single = !in_single; // toggle in_single state
-		else if (prompt[i] == '\"' && !in_single)
-			in_double = !in_double; // toggle in_double state
-		i++;
-	}
-	return (in_single == 0 && in_double == 0);
-}
-
-
-static int	is_inside_quotes(char *prompt, int pos)
-{
-	int	i = 0;
-	int	in_single = 0;
-	int	in_double = 0;
-
-	while (i < pos && prompt[i])
-	{
-		if (prompt[i] == '\'' && !in_double)
-			in_single = !in_single; // toggle in_single state
-		else if (prompt[i] == '\"' && !in_single)
-			in_double = !in_double; // toggle in_double state
-		i++;
-	}
-	return (in_single || in_double);
-}
-
-int	is_quote(char c)
-{
-	return (c == '\'' || c == '\"');
-}
-
-static int	is_blank(int c)
-{
-	if (c == ' ' || c == '\t')
-		return (1);
-	return (0);
-}
-
-int	pipes_check(char *prompt)
-{
-	int	i;
+	size_t	i;
+	size_t	j;
+	size_t	n_dup;
+	char	*value;
 
 	i = 0;
-	while (prompt[i] && is_blank(prompt[i]))
-		i++;
-	if (prompt[i] == '|' && !is_inside_quotes(prompt, i))
+	// t_token *current = token;
+
+
+	// while(prompt[i] != "|")
+	// {
+	// 	current->args = ft_split(prompt, " ");
+	// 	// args[0] = cmd;
+	// 	// args[0+i] = args;
+
+	// }
+	// token->next
+
+	while (prompt[i] != '\"' || prompt[i] != '\'')
 	{
-		printf("minishell: syntax error near unexpected token begin `|'\n");
-		return false;
-	}
-	i = 0;
-	while (prompt[i])
-	{
-		if (prompt[i] == '|' && !is_inside_quotes(prompt, i))
+
+
+		if (prompt[i] == '\"')
 		{
-			if (prompt[i + 1] && prompt[i + 1] == '|')
+			j = i;
+			while (prompt[j] != '\0' && prompt[j] != '\"')
 			{
-				printf("minishell: syntax error near unexpected token `|'\n");
-				return false;
+				j++;
 			}
-			i++;
-			while (prompt[i] && is_blank(prompt[i]))
-				i++;
-			if (prompt[i] == '|')
-			{
-				printf("Syntax error %c\n", prompt[i]);
-				return false;
-			}
-			if (!prompt[i])
-			{
-				printf("Syntax error: pipe at the end\n");
-				return false;
-			}
-			continue ;
+			n_dup = j - i;
+			value = ft_strndup(prompt + i, n_dup);
+			token = ft_lstnew_token(value, TOKEN_WORD, 2);
 		}
+		if (is_blank(prompt[i]))
+			i++;
 		i++;
 	}
+	// token->value = ft_strdup("bonjour");
+	return (1);
 
-	return (true);
 }
 
-int first_syntax_check(char *prompt)
+int first_syntax_check(char *prompt) // javais inclus le '&' mais retire ensuite sinon la focntion actuelle c'est la meme
 {
 
 	if (!closed_quotes(prompt))
@@ -121,86 +71,98 @@ int first_syntax_check(char *prompt)
 
 	if (!pipes_check(prompt))
 		return (false);
+	// i = 0;
+	// while(prompt[i])
+	// {
+	// 	if(prompt[i + 1] && (prompt[i] == '&' && prompt[i + 1] == '&'))
+	// 	{
+	// 		printf("Syntax error %c\n", prompt[i]);
+	// 		return false;
+	// 	}
+	// 	i++;
+	// }
 	return (true);
 }
 
-void	print_args(t_cmd *cmd)
+void	old_first_parse(char *prompt) // premiere version degrossie quick 'n' dirty parsing ft. Eric
 {
+	t_cmd	*cmd;
+
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return;
+	cmd->next = NULL;
+	cmd->prev = NULL;
+	cmd->args = malloc(sizeof(char*) * 256);
+	char **first_split = ft_split(prompt, ' ');
 	int i = 0;
 	int j = 0;
-
-	while(cmd->prev)
+	while (first_split[i])
 	{
-		cmd = cmd->prev;
-	}
-	while (cmd)
-	{
-		printf("Command %d:\n", i);
-		if (cmd->args)
+		if (ft_strncmp(first_split[i], "|", 1) == 0)  // Compare 1 character, check if equal
 		{
-			j = 0;
-			while(cmd->args[j])
-			{
-				printf("arg[%d]: %s\n", j, cmd->args[j]);
-				j++;
-			}
+			// Null-terminate current command's args
+			cmd->args[j] = NULL;
+
+			// Create new command node
+			cmd->next = malloc(sizeof(t_cmd));
+			if (!cmd->next)
+				return ;
+			cmd->next->prev = cmd;
+			cmd->next->next = NULL;
+			cmd->next->args = malloc(sizeof(char*) * (MAX_ARGS + 1));
+
+			// Move to new command
+			cmd = cmd->next;
+			j = 0;  // Reset arg counter
+			i++;
+			continue;
 		}
-		i++;
-		cmd = cmd->next;
-	}
-}
+			cmd->args[j] = ft_strdup(first_split[i]);
 
-// void	first_lexing
-
-t_token	*token_wordtpye(char *prompt, int *i)
-{
-	int		start;
-	t_token	*temp;
-	// int i = 0;
-	// int in_single = 0;
-	// int in_double = 0;
-
-	// while (i < pos && prompt[i])
-	// {
-	// 	if (prompt[i] == '\'' && !in_double)
-	// 		in_single = !in_single; // toggle in_single state
-	// 	else if (prompt[i] == '\"' && !in_single)
-	// 		in_double = !in_double; // toggle in_double state
-	// 	i++;
-	// }
-
-	start = 0;
-	start = (*i);
-	while (prompt[(*i)] && !is_blank(prompt[(*i)]) && !is_operator(prompt[(*i)]))
-	{
-		(*i)++;
+			i++;
+			j++;
+			if (j >= MAX_ARGS)
+			{
+				printf("Error: too many arguments (max 255)\n");
+				return ;
+			}
 
 	}
-	temp = ft_lstnewtoken(prompt + start, (*i) - start, TOKEN_WORD);
-	if (!temp)
-		return (NULL);
-
-	return (temp);
+	cmd->args[j] = NULL;
+	print_args(cmd);
 
 }
 
 
-int	parsing(char *prompt, t_shell *shell)
+int	parsing(char *prompt, t_shell *shell) // gros bout de code avant nettoyage qui fonctionne egalement avec old_first_parse() si decommente
 {
 	(void)	shell;
+	// t_cmd	*cmd;
 	t_token	*token;
 	t_token *token_list;
 
 	token_list = NULL;
-
+	// cmd = malloc(sizeof(t_cmd));
+	// if (!cmd)
+	// 	return(false);
+	// cmd->next = NULL;
+	// cmd->prev = NULL;
+	// cmd->args = malloc(sizeof(char*) * 256);
+	// if(!cmd->args)
+	// 	return(false);
 
 	if (!first_syntax_check(prompt))
 	{
 		return (false);
 	}
-
+	// char *content = ft_strdup("bonjour");
+	// token = ft_lstnew_token(content, 2, 3);
+	// old_first_parse(prompt);
 	int i = 0;
+	// int j = 0;
 	int start = 0;
+	// char *arg = NULL;
 	while (prompt[i])
 	{
 		while (prompt[i] && is_blank(prompt[i])) // skip blanks (' ' || '\t')
@@ -293,9 +255,12 @@ int	parsing(char *prompt, t_shell *shell)
 		}
 		ft_lstadd_back_token(&token_list, token);
 
+		// cmd->args[j] = arg;
+		// printf("arg[%d]: %s\n", j, arg);
 
+		// j++;
 
-
+		// else if(prompt[i] = '\'')
 
 	}
 
@@ -304,7 +269,9 @@ int	parsing(char *prompt, t_shell *shell)
 		return (false);
 	}
 
+
+	//printf("%s\n", prompt);
+	// lexer(prompt, token);
 	print_token(token_list);
 	return (1);
 }
-

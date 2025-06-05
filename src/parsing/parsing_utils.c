@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/04 18:05:43 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:52:29 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type)
 	if (!new_token)
 		return (NULL);
 	new_token->token_type = token_type;
-	new_token->token_value = ft_strndup(prompt, n);
+	if (token_type != TOKEN_WORD)
+		new_token->token_value = ft_strndup(prompt, n);
+	else
+		new_token->token_value = ft_strndup_noquotes(prompt, n);
 	// if (new_token->prev && new_token->node_num != 0)
 	// 	new_token->node_num = new_token->prev->node_num++; // ca segfault
 	new_token->prev = NULL;

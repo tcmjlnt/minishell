@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/02 18:35:57 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:52:16 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ void	init_token(t_token *token);
 
 /* ===========================    🛠️ UTILS    ============================== */
 void	error_exit(const char *message);
+char	*ft_strndup_noquotes(char *src, size_t n);
+size_t	ft_strlen_noquotes(char *src, size_t n);
 char	*ft_strndup(char *src, size_t n);
 t_token	*ft_lstnew_token(char *value, int type, int node_num);
 void	print_token(t_token	*token);
@@ -168,6 +170,8 @@ void	ft_lstadd_back_token(t_token **token, t_token *new);
 t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
 int		check_token(t_token *token);
+int		is_quote(char c);
+
 
 
 
