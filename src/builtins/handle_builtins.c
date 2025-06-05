@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 10:38:19 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 11:23:43 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 t_builtin	*get_builtins(void)
 {
-	t_builtin	*builtins;
+	static t_builtin	*builtins;
 
 	builtins = (t_builtin []){
 	{"pwd", ft_pwd},
