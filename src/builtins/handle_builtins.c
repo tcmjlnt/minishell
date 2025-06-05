@@ -6,21 +6,24 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 18:53:28 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:38:19 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* tableau d'objets pour tableau de func KEY VALEUR voir ds tests funcptr.c */
+
 t_builtin	*get_builtins(void)
 {
-	static t_builtin	builtins[] = {
+	t_builtin	*builtins;
+
+	builtins = (t_builtin []){
 	{"pwd", ft_pwd},
 	{"env", ft_env},
 	{"echo", ft_echo},
 	{NULL, NULL}
 	};
-
 	return (builtins);
 }
 
