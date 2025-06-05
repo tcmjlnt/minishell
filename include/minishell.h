@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 18:58:38 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:45:59 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_cmd
 	int				fd_in;
 	int				fd_out;
 	int				pid;
+	int				pipe[2];
 	t_bool			is_builtin;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;

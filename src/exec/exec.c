@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 16:12:31 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:54:48 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@
 		error_exit("fork");
 	}
 } */
-
 
 /* t_cmd cmd = {
 	.cmd = "echo",
@@ -117,6 +116,7 @@ void	exec_cmd(t_cmd *cmd, t_env *env)
 		exit(126);
 	}
 }
+// version sans pipe
 
 void	exec_cmds(t_cmd *cmds, t_env *env)
 {
@@ -160,6 +160,25 @@ void	exec_cmds(t_cmd *cmds, t_env *env)
 	dup2(out_fd, STDOUT_FILENO);
 	close(in_fd);
 	close(out_fd);
+}
+// version avec pipe
+
+void	exec_cmds_pipes(t_cmd *cmds, t_shell *shell)
+{
+	if (!cmds)
+		return ;
+	if (cmds->next)
+	{
+		init_pipes(cmds);
+		execute_pipes(cmds, shell);
+	}
+	else
+	{
+		if (cmds->is_builtin)
+			handle_builtin(shell, cmds, STDOUT_FILENO);
+		else
+			exec_cmd(cmds, shell->env);
+	}
 }
 
 /* while (x cmdes a faire)

@@ -6,22 +6,115 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 19:24:39 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 20:26:32 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/05 10:53:10 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// stocker les pids
+/* stocker les pid dans t_cmd ??
+
+manip les processus après leur fork  ?? faire des kill(pid)
+recup les exit_status ??
+
+*/
 pid_t	*alloc_pids(int cmd_count)
 {
-	pid_t *pids = malloc(sizeof(pid_t) * cmd_count);
+	pid_t	*pids;
+
+	pids = gc_malloc(sizeof(pid_t) * cmd_count, GC_CMD);
 	if (!pids)
 		error_exit("malloc pids");
 	return (pids);
 }
 
-// execution des pipes
+void	init_pipes(t_cmd *cmds)
+{
+	while (cmds)
+	{
+		if (cmds->next)
+		{
+			if (pipe(cmds->pipe) == -1)
+				error_exit("pipe");
+		}
+		cmds = cmds->next;
+	}
+}
+
+void	exec_child(t_cmd *cmd, int in_fd, t_shell *shell)
+{
+	if (in_fd != STDIN_FILENO)
+	{
+		dup2(in_fd, STDIN_FILENO);
+		close(in_fd);
+	}
+	if (cmd->next)
+	{
+		dup2(cmd->pipe[1], STDOUT_FILENO);
+		close(cmd->pipe[1]);
+		close(cmd->pipe[0]);
+	}
+	if (cmd->is_builtin)
+		handle_builtin(shell, cmd, STDOUT_FILENO);
+	else
+		exec_cmd(cmd, shell->env);
+	exit(EXIT_SUCCESS);
+}
+
+void	exec_pipes(t_cmd *cmds, t_shell *shell)
+{
+	int	in_fd;
+	int	cmd_count;
+	pid_t *pids;
+	int	i;
+
+	in_fd = STDIN_FILENO;
+	cmd_count = count_cmds(cmds);
+	pids = alloc_pids(cmd_count);
+	i = 0;
+	while (cmds)
+	{
+		if (cmd_count == 1 && cmds->is_builtin)
+		{
+			handle_builtin(shell, cmds, STDOUT_FILENO);
+			return ;
+		}
+		pids[i] = fork();
+		if (pids[i] == 0)
+			exec_child(cmds, in_fd, shell);
+		in_fd = update_fds(in_fd, cmds);
+		cmds = cmds->next;
+		i++;
+	}
+	wait_children(pids, cmd_count);
+}
+
+int	update_fds(int in_fd, t_cmd *cmd)
+{
+	if (in_fd != STDIN_FILENO)
+		close(in_fd);
+	if (cmd->next)
+	{
+		close(cmd->pipe[1]);
+		return (cmd->pipe[0]);
+	}
+	return (STDIN_FILENO);
+}
+
+void	wait_children(pid_t *pids, int cmd_count)
+{
+	int	i;
+
+	i = 0;
+	while (i < cmd_count)
+	{
+		waitpid(pids[i], NULL, 0);
+		i++;
+	}
+}
+
+
+/* // execution des pipes a retravailler
 void	execute_pipes(t_cmd *cmds, t_env *env)
 {
 	int		pipe_fd[2];
@@ -94,4 +187,4 @@ void	execute_pipes(t_cmd *cmds, t_env *env)
 		waitpid(pids[j], NULL, 0);
 
 	free(pids);
-}
+} */
