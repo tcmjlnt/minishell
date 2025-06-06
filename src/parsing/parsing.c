@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/05 20:17:53 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:25:55 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,12 @@ t_token	*token_wordtpye(char *prompt, int *i)
 
 	start = 0;
 	start = (*i);
-	while (prompt[(*i)] && !is_blank(prompt[(*i)]) && !is_operator(prompt[(*i)]))
+	while (prompt[(*i)]) // && !is_blank(prompt[(*i)]) && !is_operator(prompt[(*i)]))
 	{
-		(*i)++;
+		if ((is_blank(prompt[(*i)]) || is_operator(prompt[(*i)])) && !is_inside_quotes(prompt, *i))
+			break ;
+		else
+			(*i)++;
 
 	}
 	temp = ft_lstnewtoken(prompt + start, (*i) - start, TOKEN_WORD);
@@ -207,35 +210,35 @@ int	parsing(char *prompt, t_shell *shell)
 			i++;
 		if (!prompt[i])
 			break ;
-		if (prompt[i] == '\"') // D_QUOTE word
-		{
-			while (prompt[i] == '\"')
-				i++;
-			start = i;
+		// if (prompt[i] == '\"') // D_QUOTE word
+		// {
+		// 	while (prompt[i] == '\"')
+		// 		i++;
+		// 	start = i;
 
-			while (prompt[i] && prompt[i] != '\"')
-				i++;
-			token = ft_lstnewtoken(prompt + start, i - start, TOKEN_D_QUOTES);
-			if (!token)
-				return (false);
-			while (prompt[i] == '\"')
-				i++;
-		}
-		else if (prompt[i] == '\'') // S_QUOTE word
-		{
-			while (prompt[i] == '\'')
-				i++;
-			start = i;
+		// 	while (prompt[i] && prompt[i] != '\"')
+		// 		i++;
+		// 	token = ft_lstnewtoken(prompt + start, i - start, TOKEN_D_QUOTES);
+		// 	if (!token)
+		// 		return (false);
+		// 	while (prompt[i] == '\"')
+		// 		i++;
+		// }
+		// else if (prompt[i] == '\'') // S_QUOTE word
+		// {
+		// 	while (prompt[i] == '\'')
+		// 		i++;
+		// 	start = i;
 
-			while (prompt[i] && prompt[i] != '\'')
-				i++;
-			token = ft_lstnewtoken(prompt + start, i - start, TOKEN_S_QUOTES);
-			if (!token)
-				return (false);
-			while (prompt[i] == '\'')
-				i++;
-		}
-		else if(prompt[i] == '|') // PIPE
+		// 	while (prompt[i] && prompt[i] != '\'')
+		// 		i++;
+		// 	token = ft_lstnewtoken(prompt + start, i - start, TOKEN_S_QUOTES);
+		// 	if (!token)
+		// 		return (false);
+		// 	while (prompt[i] == '\'')
+		// 		i++;
+		// }
+		if(prompt[i] == '|') // PIPE
 		{
 			start = i;
 			token = ft_lstnewtoken(prompt + start, 1, TOKEN_PIPE);
@@ -305,6 +308,14 @@ int	parsing(char *prompt, t_shell *shell)
 	}
 
 	print_token(token_list);
+
+
+	if (!parse_tokens(token_list))
+		return (false);
+	// expand
+	// redirections
+	// parsing to exec
+
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 18:52:16 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:26:31 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,17 @@ typedef struct s_shell
 {
 	t_gc		gc;
 	t_env		*env;
+	char		**paths;
+	t_bool		is_cmd;
+	int			exit_status;
 }	t_shell;
 
+/* typedef struct s_shell
+{
+	t_gc		gc;
+	t_env		*env;
+}	t_shell;
+ */
 typedef struct s_redir
 {
 	//t_token			type;       // IN, OUT, APPEND, HEREDOC
@@ -106,7 +115,7 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
-typedef struct s_cmd
+/* typedef struct s_cmd
 {
 	char			*cmd;       // nom de la commande ("ls")
 	char			**args;     // tableau args {"ls", "-l", NULL}
@@ -117,12 +126,25 @@ typedef struct s_cmd
 	int				exit_code;  // code retour
 	struct s_cmd	*next;      // commande suivante (pipeline)
 	struct s_cmd	*prev;
+}	t_cmd; */
+
+typedef struct s_cmd
+{
+	char			*cmd;
+	char			**args;
+	int				fd_in;
+	int				fd_out;
+	int				pid;
+	t_bool			is_builtin;
+	struct s_cmd	*next;
+	struct s_cmd	*prev;
 }	t_cmd;
 
 typedef	struct s_token
 {
 	int				token_type;
 	char			*token_value;
+	char			*token_raw;
 	// char			**args;
 	int				node_num;
 	struct s_token	*prev;
@@ -171,6 +193,8 @@ t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
 int		check_token(t_token *token);
 int		is_quote(char c);
+int		parse_tokens(t_token *token_list);
+
 
 
 
