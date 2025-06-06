@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:58:59 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 15:43:53 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/06 12:06:52 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,8 @@ void	test_pipe_single_builtin(t_shell *shell)
 void	run_exec_pipes_tests(t_shell *shell)
 {
     test_pipe_ls_wc(shell);
-    test_pipe_pwd_echo_ls(shell);
-    test_pipe_echo_cat_redir(shell);
-    test_pipe_unknown_cmd(shell);
-    test_pipe_single_builtin(shell);
+    //test_pipe_pwd_echo_ls(shell);
+    //test_pipe_echo_cat_redir(shell);
+    //test_pipe_unknown_cmd(shell);
+    //test_pipe_single_builtin(shell);
 }

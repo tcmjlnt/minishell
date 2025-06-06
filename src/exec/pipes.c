@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 19:24:39 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 15:26:40 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/06 14:26:01 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	init_pipes(t_cmd *cmds)
 
 static void	exec_child(t_cmd *cmd, int in_fd, t_shell *shell)
 {
+	printf("in_fd = %d et out_fd = %d  et cmd->pipe[1]= %d \n\n", in_fd, cmd->fd_out, cmd->pipe[1]);
 	if (in_fd != STDIN_FILENO)
 	{
 		dup2(in_fd, STDIN_FILENO);
@@ -53,6 +54,10 @@ static void	exec_child(t_cmd *cmd, int in_fd, t_shell *shell)
 		dup2(cmd->pipe[1], STDOUT_FILENO);
 		close(cmd->pipe[1]);
 		close(cmd->pipe[0]);
+	}
+	else
+	{
+		printf("je suis la derniere commande ???\n");
 	}
 	if (cmd->is_builtin)
 		handle_builtin(shell, cmd, STDOUT_FILENO);
@@ -76,9 +81,14 @@ static int	count_cmds(t_cmd *cmds)
 static int	update_fds(int in_fd, t_cmd *cmd)
 {
 	if (in_fd != STDIN_FILENO)
+	{
+		printf("in_fd = %d != STDIN_FILENO = %d\n", in_fd, STDIN_FILENO);
+		printf("je close le in_fd\n");
 		close(in_fd);
+	}
 	if (cmd->next)
 	{
+		printf("j'ai une cmd suivante donc je close pipe[1] = %d\n", cmd->pipe[1]);
 		close(cmd->pipe[1]);
 		return (cmd->pipe[0]);
 	}

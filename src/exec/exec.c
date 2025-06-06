@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 15:16:29 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/06 13:28:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void	exec_cmds_pipes(t_cmd *cmds, t_shell *shell)
 		return ;
 	if (cmds->next)
 	{
+		printf("hello\n\n");
 		init_pipes(cmds);
 		exec_pipes(cmds, shell);
 	}
@@ -177,9 +178,12 @@ void	exec_cmds_pipes(t_cmd *cmds, t_shell *shell)
 		if (cmds->is_builtin)
 			handle_builtin(shell, cmds, STDOUT_FILENO);
 		else
-			exec_cmd(cmds, shell->env);
+			exec_cmds(cmds, shell->env);
 	}
 }
+// faire la focntion pour la derniere commande
+
+
 
 /* while (x cmdes a faire)
 {
