@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/06 14:26:31 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/06 20:50:46 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ typedef	struct s_token
 	char			*token_value;
 	char			*token_raw;
 	// char			**args;
-	int				node_num;
+	// int				node_num;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
@@ -193,7 +193,10 @@ t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
 int		check_token(t_token *token);
 int		is_quote(char c);
-int		parse_tokens(t_token *token_list);
+int		parse_tokens(t_cmd **cmd_list, t_token **token_list);
+t_cmd	*ft_lstnewcmd(void);
+void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
+
 
 
 

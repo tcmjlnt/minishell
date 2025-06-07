@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/06 14:25:55 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/06 21:18:22 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,25 +128,26 @@ void	print_args(t_cmd *cmd)
 {
 	int i = 0;
 	int j = 0;
+	t_cmd *temp = cmd;
 
-	while(cmd->prev)
+	while(temp->prev)
 	{
-		cmd = cmd->prev;
+		temp = temp->prev;
 	}
-	while (cmd)
+	while (temp)
 	{
-		printf("Command %d:\n", i);
-		if (cmd->args)
+		printf("-----------------\nCommand %d: `%s`\n", i, temp->cmd);
+		if (temp->args)
 		{
 			j = 0;
-			while(cmd->args[j])
+			while(temp->args[j])
 			{
-				printf("arg[%d]: %s\n", j, cmd->args[j]);
+				printf("arg[%d]: `%s`\n", j, temp->args[j]);
 				j++;
 			}
 		}
 		i++;
-		cmd = cmd->next;
+		temp = temp->next;
 	}
 }
 
@@ -193,8 +194,10 @@ int	parsing(char *prompt, t_shell *shell)
 	(void)	shell;
 	t_token	*token;
 	t_token *token_list;
+	t_cmd	*cmd_list;
 
 	token_list = NULL;
+	cmd_list = NULL;
 
 
 	if (!first_syntax_check(prompt))
@@ -310,8 +313,12 @@ int	parsing(char *prompt, t_shell *shell)
 	print_token(token_list);
 
 
-	if (!parse_tokens(token_list))
+	if (!parse_tokens(&cmd_list, &token_list))
+	{
+		printf("ici\n");
 		return (false);
+	}
+	print_args(cmd_list);
 	// expand
 	// redirections
 	// parsing to exec

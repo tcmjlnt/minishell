@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/05 20:16:46 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/06 20:07:17 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	*ft_strndup(char *src, size_t n)
 	return (dest);
 }
 
-t_token	*ft_lstnew_token(char *value, int type, int node_num)
+/* t_token	*ft_lstnew_token(char *value, int type) //, int node_num)
 {
 	t_token	*new;
 
@@ -115,8 +115,9 @@ t_token	*ft_lstnew_token(char *value, int type, int node_num)
 		return (NULL);
 	new->token_type = type;
 	new->token_value = value;
-	new->node_num = node_num;
+	// new->node_num = node_num;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
 }
+ */
