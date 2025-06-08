@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 15:04:00 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:14:48 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	handle_builtin(t_shell *shell, t_cmd *cmd, int fd)
 		}
 		i++;
 	}
-	return (0);
+	shell->exit_status = 0;
+	return (shell->exit_status);
 }
 
 // a intreger au parsing ?? (dès que tu as le t_cmd)	is_builtin() ➔ remplir cmd->is_builtin

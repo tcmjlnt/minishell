@@ -2,7 +2,7 @@ NAME = minishell_tests
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC_TESTS = test.c debug.c main.c test_builtins.c test_exec.c
+SRC_TESTS = test.c debug.c main.c test_builtins.c test_pipes.c
 SRC_MAIN = \
 	../src/prompt/prompt.c \
 	../src/env/env_build.c \
@@ -19,7 +19,6 @@ SRC_MAIN = \
 	../src/builtins/builtin_env.c \
 	../src/builtins/builtin_pwd.c \
 	../src/exec/create_cmd.c \
-	../src/exec/pipes.c \
 
 LIB_DIR = ../lib
 LIB = $(LIB_DIR)/lib.a

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 11:52:10 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 13:43:39 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:20:14 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ int	ft_pwd(t_shell *shell, t_cmd *cmd, int fd)
 	char	buf[PATH_MAX];
 
 	(void) cmd;
+	(void) shell;
 	if (getcwd(buf, PATH_MAX))
 	{
 		ft_putstr_fd(buf, fd);
 		ft_putstr_fd("\n", fd);
-		shell->exit_status = 0;
+		return (0);
 	}
 	else
 	{
 		perror("pwd");
-		shell->exit_status = 1;
+		return (1);
 	}
-	return (0);
 }

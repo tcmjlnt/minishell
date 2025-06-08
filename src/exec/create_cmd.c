@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:52:57 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 15:22:04 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/06 19:56:30 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_shell *shell)
 {
 	t_cmd		*cmd;
-	t_builtin	*builtins;
 
-	builtins = shell->builtins;
-	cmd = malloc(sizeof(t_cmd));
+	cmd = gc_mem(GC_ALLOC, sizeof(t_cmd), NULL, GC_CMD);
 	if (!cmd)
 		return (NULL);
 	cmd->cmd = cmd_name;

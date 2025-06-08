@@ -6,228 +6,162 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/06 13:28:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:19:37 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-/* void	exec_command(t_cmd *cmds, t_env *env, t_shell *shell)
+void	wait_pipeline(t_cmd *cmds)
 {
-	char	*command_path;
-	char	**env_tab;
-	pid_t	pid;
-	int		status;
-
-	env_tab = env_to_env_tab_for_execve(env);
-
-	if (shell->is_cmd == true)
+	t_cmd *current = cmds;
+	while (current)
 	{
-		;
+		waitpid(current->pid, NULL, 0);
+		current = current->next;
 	}
+}
 
-	command_path = find_command_path(cmds->args[0], env_tab);
-	if (command_path == NULL)
-		handle_exec_errors(ENOENT, cmds->cmd);
+void	pipe_create(int pipe_fd[2])
+{
+	if (pipe(pipe_fd) == -1)
+		error_exit("pipe");
+}
 
-	pid = fork();
-	if (pid == 0)
-	{
-		if (dup2(cmds->input, STDIN_FILENO) == -1
-			|| dup2(cmds->output, STDOUT_FILENO) == -1)
-		{
-			ft_printf("%s\n", command_path);
-			perror("dup2");
-			free(command_path);
-			exit(EXIT_FAILURE);
-		}
-		close(cmds->input);
-		close(cmds->output);
-		if (execve(command_path, cmds->cmd, env_tab) == -1)
-		{
-			handle_exec_errors(errno, cmds->cmd);
-			perror("execve");
-			free(command_path);
-			exit(EXIT_FAILURE);
-		}
-		free(command_path);
-	}
+void	pipe_reset(int pipe_fd[2])
+{
+	pipe_fd[0] = -1;
+	pipe_fd[1] = -1;
+}
 
+void	parent_close_fds(t_exec *exec)
+{
+	if (exec->in_fd != STDIN_FILENO)
+		close(exec->in_fd);
+	if (exec->pipe_fd[1] != -1)
+		close(exec->pipe_fd[1]);
+}
 
-	else
-	{
-		perror("fork");
-		error_exit("fork");
-	}
-} */
-
-/* t_cmd cmd = {
-	.cmd = "echo",
-	.args = (char *[]){"echo", "bonjour", NULL},
-	.redir = NULL,
-	.pipe = {-1, -1},
-	.pid = 0,
-	.is_builtin = false,
-	.exit_code = 0,
-	.next = NULL,
-	.prev = NULL
-} */
-
-void	exec_cmd(t_cmd *cmd, t_env *env)
+void	exec_external_cmd(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
-	char	**env_tab;
 
-	// a supprimer
-	printf("exec_cmd: cmd->cmd = %s\n", cmd->cmd);
-	printf("exec_cmd: cmd->args[0] = %s\n", cmd->args[0]);
-	printf("exec_cmd: cmd->args[1] = %s\n", cmd->args[1]);
-
-
-	if (!cmd || !cmd->cmd)
-		error_exit("exec_command_simple: commande vide");
-
-	// Redirection in
-	if (cmd->fd_in != STDIN_FILENO)
-	{
-		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-			error_exit("dup2 fd_in");
-		close(cmd->fd_in);
-	}
-	// Redirection out
-	if (cmd->fd_out != STDOUT_FILENO)
-	{
-		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-			error_exit("dup2 fd_out");
-		close(cmd->fd_out);
-	}
-
-	path = find_command_path(cmd->cmd, env);
+	path = find_command_path(cmd->cmd, shell->env);
 	if (!path)
 	{
 		ft_printf("minishell: %s: command not found\n", cmd->cmd);
 		exit(127);
 	}
-	env_tab = env_to_env_tab_for_execve(env);
-
-	if (execve(path, cmd->args, env_tab) == -1)
-	{
-		perror("execve");
-		exit(126);
-	}
+	execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
+	perror("execve");
+	exit(126);
 }
-// version sans pipe
 
-void	exec_cmds(t_cmd *cmds, t_env *env)
+void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
-	int		status;
-	int		in_fd;
-	int		out_fd;
 
-	if (!cmds)
-		return ;
-	if (cmds->next == NULL && cmds->is_builtin)
+	if (cmd->is_builtin)
 	{
-		printf("exec_cmds: executing single builtin\n");
-		handle_builtin(get_shell(), cmds, cmds->fd_out);
+		shell->exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
 		return ;
 	}
-	in_fd = dup(STDIN_FILENO);
-	out_fd = dup(STDOUT_FILENO);
-
-	while (cmds)
-	{
-		if (cmds->is_builtin)
-		{
-			printf("exec_cmds: calling handle_builtin\n"); // a sup
-			handle_builtin(get_shell(), cmds, cmds->fd_out);
-		}
-		else
-		{
-			pid = fork();
-			if (pid == 0)
-				exec_cmd(cmds, env);
-			else if (pid > 0)
-				waitpid(pid, &status, 0);
-			else
-				perror("fork");
-		}
-		cmds = cmds->next;
-	}
-
-	dup2(in_fd, STDIN_FILENO);
-	dup2(out_fd, STDOUT_FILENO);
-	close(in_fd);
-	close(out_fd);
-}
-// version avec pipe
-
-void	exec_cmds_pipes(t_cmd *cmds, t_shell *shell)
-{
-	if (!cmds)
-		return ;
-	if (cmds->next)
-	{
-		printf("hello\n\n");
-		init_pipes(cmds);
-		exec_pipes(cmds, shell);
-	}
-	else
-	{
-		if (cmds->is_builtin)
-			handle_builtin(shell, cmds, STDOUT_FILENO);
-		else
-			exec_cmds(cmds, shell->env);
-	}
-}
-// faire la focntion pour la derniere commande
-
-
-
-/* while (x cmdes a faire)
-{
 	pid = fork();
 	if (pid == 0)
 	{
-		dup2(in_fd, STDIN_FILENO);
-		dup2(out_fd, STDOUT_FILENO);
-
-		if (dup2(in_fd, STDIN_FILENO) == -1
-		|| dup2(out_fd, STDOUT_FILENO) == -1)
-		{
-			perror("dup2");
-			free(cmd_path);
-			exit(EXIT_FAILURE);
-		}
-
-		close(in_fd);
-		close(out_fd);
-
-		char *cmd_path = find_cmd_path(cmd[0], env);
-		if (!cmd_path)
-		{
-			perror("cmd not found");
-			exit(127);
-		}
-
-		execve(cmd_path, cmd, env);
-
-		perror("execve failed");
+		exec_external_cmd(cmd, shell);
 		exit(EXIT_FAILURE);
 	}
-	else if (pid > 0)
-	{
-		close(in_fd);
-		close(out_fd);
-		wait_processes();
-		waitpid(pid, &status, 0);
-	}
-	else
-	{
-		perror("fork");
-		error_exit("fork");
-	}
-	// free a faire
+	waitpid(pid, NULL, 0);
 }
- */
+
+void	exec_first_child(t_cmd *cmd, t_exec *exec, t_shell *shell)
+{
+	exec->pid = fork();
+	if (exec->pid == 0)
+	{
+		if (exec->pipe_fd[1] != -1)
+		{
+			dup2(exec->pipe_fd[1], STDOUT_FILENO);
+			close(exec->pipe_fd[1]);
+		}
+		if (cmd->is_builtin)
+			handle_builtin(shell, cmd, STDOUT_FILENO);
+		else
+			exec_external_cmd(cmd, shell);
+		exit(EXIT_SUCCESS);
+	}
+	cmd->pid = exec->pid;
+}
+
+void	exec_middle_child(t_cmd *cmd, t_exec *exec, t_shell *shell)
+{
+	exec->pid = fork();
+	if (exec->pid == 0)
+	{
+		dup2(exec->in_fd, STDIN_FILENO);
+		if (exec->pipe_fd[1] != -1)
+		{
+			dup2(exec->pipe_fd[1], STDOUT_FILENO);
+			close(exec->pipe_fd[1]);
+		}
+		if (cmd->is_builtin)
+			handle_builtin(shell, cmd, STDOUT_FILENO);
+		else
+			exec_external_cmd(cmd, shell);
+		exit(EXIT_SUCCESS);
+	}
+	cmd->pid = exec->pid;
+}
+void	exec_last_child(t_cmd *cmd, t_exec *exec, t_shell *shell)
+{
+	exec->pid = fork();
+	if (exec->pid == 0)
+	{
+		dup2(exec->in_fd, STDIN_FILENO);
+		if (cmd->is_builtin)
+			handle_builtin(shell, cmd, STDOUT_FILENO);
+		else
+			exec_external_cmd(cmd, shell);
+		exit(EXIT_SUCCESS);
+	}
+	cmd->pid = exec->pid;
+}
+
+void	exec_pipeline(t_cmd *cmds, t_shell *shell)
+{
+	t_cmd	*current;
+	t_exec	exec;
+
+	current = cmds;
+	exec.in_fd = STDIN_FILENO;
+	while (current)
+	{
+		if (current->next)
+			pipe_create(exec.pipe_fd);
+		else
+			pipe_reset(exec.pipe_fd);
+		if (current == cmds)
+			exec_first_child(current, &exec, shell);
+		else if (!current->next)
+			exec_last_child(current, &exec, shell);
+		else
+			exec_middle_child(current, &exec, shell);
+		parent_close_fds(&exec);
+		exec.in_fd = exec.pipe_fd[0];
+		current = current->next;
+	}
+	wait_pipeline(cmds);
+}
+
+
+void	exec_dispatcher(t_cmd *cmds, t_shell *shell)
+{
+	if (!cmds)
+		return ;
+
+	if (!cmds->next)
+		exec_single_cmd(cmds, shell);
+	else
+		exec_pipeline(cmds, shell);
+}

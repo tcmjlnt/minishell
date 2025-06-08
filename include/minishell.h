@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 15:22:15 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/08 14:17:43 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,13 @@ typedef struct s_builtin
 	t_builtin_func	func;
 }	t_builtin;
 
+typedef struct s_exec
+{
+	int		in_fd;
+	int		pipe_fd[2];
+	pid_t	pid;
+}	t_exec;
+
 typedef struct s_shell
 {
 	t_gc		gc;
@@ -119,16 +126,14 @@ char	**gc_split(char *str, char sep, t_gc_type type);
 
 /* ===========================    🛠️ UTILS    ============================== */
 void	error_exit(const char *message);
+int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
-void	exec_cmd(t_cmd *cmd, t_env *env);
-void	exec_cmds(t_cmd *cmds, t_env *env);
-void	init_pipes(t_cmd *cmds);
-void	exec_pipes(t_cmd *cmds, t_shell *shell);
+void	exec_dispatcher(t_cmd *cmds, t_shell *shell);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

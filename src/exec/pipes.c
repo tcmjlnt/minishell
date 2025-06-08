@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 19:24:39 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/06 14:26:01 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/06 19:50:59 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,30 +41,43 @@ void	init_pipes(t_cmd *cmds)
 	}
 }
 
-static void	exec_child(t_cmd *cmd, int in_fd, t_shell *shell)
+void	close_fds_parent(t_cmd *cmd)
 {
-	printf("in_fd = %d et out_fd = %d  et cmd->pipe[1]= %d \n\n", in_fd, cmd->fd_out, cmd->pipe[1]);
-	if (in_fd != STDIN_FILENO)
-	{
-		dup2(in_fd, STDIN_FILENO);
-		close(in_fd);
-	}
-	if (cmd->next)
-	{
-		dup2(cmd->pipe[1], STDOUT_FILENO);
-		close(cmd->pipe[1]);
+	if (cmd->fd_in != STDIN_FILENO)
+		close(cmd->fd_in);
+	if (cmd->fd_out != STDOUT_FILENO)
+		close(cmd->fd_out);
+	if (cmd->pipe[0] > 0)
 		close(cmd->pipe[0]);
-	}
-	else
+	if (cmd->pipe[1] > 0)
+		close(cmd->pipe[1]);
+}
+
+static void	exec_child(t_cmd *cmd, t_shell *shell)
+{
+	if (cmd->fd_in != STDIN_FILENO)
 	{
-		printf("je suis la derniere commande ???\n");
+		dup2(cmd->fd_in, STDIN_FILENO);
+		close(cmd->fd_in);
 	}
+	if (cmd->fd_out != STDOUT_FILENO)
+	{
+		dup2(cmd->fd_out, STDOUT_FILENO);
+		close(cmd->fd_out);
+	}
+
+	if (cmd->pipe[0] > 0)
+		close(cmd->pipe[0]);
+	if (cmd->pipe[1] > 0)
+		close(cmd->pipe[1]);
+
 	if (cmd->is_builtin)
 		handle_builtin(shell, cmd, STDOUT_FILENO);
 	else
 		exec_cmd(cmd, shell->env);
 	exit(EXIT_SUCCESS);
 }
+
 
 static int	count_cmds(t_cmd *cmds)
 {
@@ -78,7 +91,29 @@ static int	count_cmds(t_cmd *cmds)
 	}
 	return (count);
 }
-static int	update_fds(int in_fd, t_cmd *cmd)
+
+void	prepare_fds(t_cmd *cmds)
+{
+	t_cmd	*prev = NULL;
+
+	while (cmds)
+	{
+		if (prev)
+			cmds->fd_in = prev->pipe[0];
+		else
+			cmds->fd_in = STDIN_FILENO;
+
+		if (cmds->next)
+			cmds->fd_out = cmds->pipe[1];
+		else
+			cmds->fd_out = STDOUT_FILENO;
+
+		prev = cmds;
+		cmds = cmds->next;
+	}
+}
+
+/* static int	update_fds(int in_fd, t_cmd *cmd)
 {
 	if (in_fd != STDIN_FILENO)
 	{
@@ -93,7 +128,7 @@ static int	update_fds(int in_fd, t_cmd *cmd)
 		return (cmd->pipe[0]);
 	}
 	return (STDIN_FILENO);
-}
+} */
 
 static void	wait_children(pid_t *pids, int cmd_count)
 {
@@ -109,27 +144,27 @@ static void	wait_children(pid_t *pids, int cmd_count)
 
 void	exec_pipes(t_cmd *cmds, t_shell *shell)
 {
-	int		in_fd;
 	int		cmd_count;
 	pid_t	*pids;
 	int		i;
+	t_cmd	*tmp;
 
-	in_fd = STDIN_FILENO;
 	cmd_count = count_cmds(cmds);
 	pids = alloc_pids(cmd_count);
 	i = 0;
-	while (cmds)
+	if (cmd_count == 1 && cmds->is_builtin)
 	{
-		if (cmd_count == 1 && cmds->is_builtin)
-		{
-			handle_builtin(shell, cmds, STDOUT_FILENO);
-			return ;
-		}
+		handle_builtin(shell, cmds, STDOUT_FILENO);
+		return ;
+	}
+	tmp = cmds;
+	while (tmp)
+	{
 		pids[i] = fork();
 		if (pids[i] == 0)
-			exec_child(cmds, in_fd, shell);
-		in_fd = update_fds(in_fd, cmds);
-		cmds = cmds->next;
+			exec_child(tmp, shell);
+		close_fds_parent(tmp);
+		tmp = tmp->next;
 		i++;
 	}
 	wait_children(pids, cmd_count);

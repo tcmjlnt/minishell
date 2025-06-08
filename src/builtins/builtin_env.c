@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:37:06 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/04 13:43:25 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/08 15:04:52 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,5 @@ int	ft_env(t_shell *shell, t_cmd *cmd, int fd)
 		}
 		curr = curr->next;
 	}
-	shell->exit_status = 0;
 	return (0);
 }
