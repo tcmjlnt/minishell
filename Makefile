@@ -56,7 +56,9 @@ SRC_BUILTINS = \
 	builtins/builtin_exit.c \
 	builtins/builtin_export.c \
 	builtins/builtin_pwd.c \
-	builtins/builtin_unset.c
+	builtins/builtin_unset.c \
+	builtins/handle_builtins.c
+
 SRC_UTILS = \
 	utils/error_management.c \
 	utils/garbage_collector.c \
