@@ -6,12 +6,14 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 11:20:16 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:26:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define MAX_ARGS 255
 
 /* ==========================    📚 INCLUDES    ========================== */
 
@@ -22,6 +24,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+// # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
@@ -53,16 +56,27 @@ typedef enum e_bool
 	true
 }	t_bool;
 
-// a sup c'est pour pouvoir compiler
-typedef enum e_token
+typedef enum e_token_type
 {
-	WORD = -1,
-	PIPE = '|',
-	REDIR_IN = '<',
-	REDIR_OUT = '>',
-	REDIR_APPEND = -3,
-	REDIR_HEREDOC = -2
-}	t_token;
+	TOKEN_WORD,				// mot (commande ou argument)
+	TOKEN_BLANK,			// SPACE OR TAB
+	TOKEN_D_QUOTES,			// "
+	TOKEN_S_QUOTES,			// '
+	TOKEN_PIPE,				// |
+	TOKEN_REDIRECT_IN,		// <
+	TOKEN_REDIRECT_OUT,		// >
+	TOKEN_REDIRECT_APPEND,	// >>
+	TOKEN_REDIRECT_HEREDOC,	// <<
+	TOKEN_EOF				// fin de la ligne/commande
+}	t_token_type;
+
+typedef enum	e_parsing_type
+{
+	OPERATOR,
+	LITERAL_STRING,
+	CMD,
+
+}	t_parsing_type;
 
 /* ==========================    📦 STRUCTURES    ========================== */
 
@@ -88,7 +102,7 @@ typedef struct s_env
 
 typedef struct s_redir
 {
-	t_token				type;
+	// t_token				type; // a sup uniquement pour tester exec redir
 	char				*file;
 	struct s_redir		*next;
 }	t_redir;
@@ -136,16 +150,34 @@ typedef struct s_shell
 	int			exit_status;
 }	t_shell;
 
+typedef	struct s_token
+{
+	int				token_type;
+	char			*token_value;
+	char			*token_raw;
+	// char			**args;
+	// int				node_num;
+	struct s_token	*prev;
+	struct s_token	*next;
+}	t_token;
+
 /* ===========================    ♻️ PROMPT    =========================== */
-void	ft_prompt(void);
+void	ft_prompt(t_shell *shell);
 
 /* ======================     🧹 GARBAGE COLLECTOR    ====================== */
 void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 char	*gc_strdup(const char *src, t_gc_type type);
 char	**gc_split(char *str, char sep, t_gc_type type);
 
-/* ===========================    🛠️ UTILS    ============================== */
+/* ==============================    🛠️ UTILS    ================================ */
 void	error_exit(const char *message);
+char	*ft_strndup_noquotes(char *src, size_t n);
+size_t	ft_strnlen_noquotes(char *src, size_t n);
+char	*ft_strndup(char *src, size_t n);
+t_token	*ft_lstnew_token(char *value, int type, int node_num);
+void	print_token(t_token	*token);
+
+/* ===========================    🔧 BUILTINS    ============================ */
 int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
@@ -173,5 +205,20 @@ t_bool	is_builtin(t_shell *shell, char *cmd_name);
 
 t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_shell *shell);
 void	add_cmd(t_cmd **head, t_cmd *new_cmd);
+
+/* ========================    🦄 PARSING    ======================== */
+int		parsing(char *prompt, t_shell *shell);
+t_token	*ft_lstlast_token(t_token *token);
+void	ft_lstadd_back_token(t_token **token, t_token *new);
+t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
+int		is_operator_token(t_token *token);
+int		check_token(t_token *token);
+int		is_quote(char c);
+int		parse_tokens(t_cmd **cmd_list, t_token **token_list);
+t_cmd	*ft_lstnewcmd(void);
+void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
+int		handle_expansion(t_token **token_list_head, t_shell *shell);
+int		is_inside_squotes(char *token_raw);
+int		is_inside_dquotes(char *token_raw);
 
 #endif

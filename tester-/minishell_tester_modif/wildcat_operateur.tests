@@ -1,0 +1,50 @@
+echo hola && echo bonjour
+echo hola || echo bonjour
+( ( ls&&pwd ) )
+( ( ls ) &&pwd )
+(ls && ( ( pwd ) ) )
+> hola ls && pwd
+> hola (ls && pwd)
+( ( ( ( ( pwd) ) ) ) )
+() pwd
+> pwd (ls) 
+(ls||pwd)&&(ls||pwd)
+(lss&&pwd)&&(lss&&pwd)
+(lss&&pwd)&&(lss&&pwd)
+pwd && ls && echo hola
+pwd || ls && echo hola
+pwd && ls || echo hola
+pwd || ls || echo hola
+ls || export ""
+export "" || ls
+ls && export ""
+export "" && ls
+ls || ;
+; || ls
+ls && ;
+; && ls
+export "" && unset ""
+(ls)
+( ( ls ) )
+( ( ) ls )
+ls && (ls)
+(ls && pwd)
+(lss||pwd)&&(lss||pwd)
+cat | echo || ls
+cat | echo && ls
+echo -n bonjour && echo -n hola
+(pwd | wc) < hola 
+(ls -z || pwd | wc) < hola
+echo hey > hola
+(pwd | wc) < hola
+echo hey > hola
+echo hey > hola
+(ls -z || pwd | wc) < hola
+(ls -z || pwd && ls)
+ls || (cat Makefile|grep srcs) && (pwd|wc)
+ls -z && (ls) && (pwd)
+(ls && pwd | wc) < hola
+(ls && pwd | wc) > hola |  cat hola
+ls || <
+ls || cat | echo
+ls && <

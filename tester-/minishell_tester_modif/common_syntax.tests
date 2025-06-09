@@ -1,0 +1,19 @@
+|
+| echo oi
+| |
+| $
+| >
+>
+>>
+>>>
+<
+<<
+echo hi <
+cat    <| ls
+echo hi | >
+echo hi | > >>
+echo hi | < |
+echo hi |   |
+echo hi |  "|"
+(ls && ls) ls
+(ls && pwd | wc) > hola | cat hola

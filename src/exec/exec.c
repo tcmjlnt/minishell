@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:10:54 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 16:32:08 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:19:43 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,6 @@ void	exec_pipeline(t_cmd *cmds, t_shell *shell)
 	}
 	wait_pipeline(cmds);
 }
-
 
 void	exec_dispatcher(t_cmd *cmds, t_shell *shell)
 {

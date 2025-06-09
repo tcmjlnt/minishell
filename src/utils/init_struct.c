@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:25:25 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/05 15:08:33 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/09 18:28:27 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,3 +41,16 @@ void	init_shell(void)
 	ft_bzero(shell, sizeof(t_shell));
 	get_builtins(shell->builtins);
 }
+
+// t_token	*init_token(t_token	*token)
+// {
+// 	token = malloc(sizeof(t_token));
+// 	if (!token)
+// 		return ;
+// 	token->type = -1;
+// 	token->node_num = 0;
+// 	token->value = NULL;
+// 	token->prev = NULL;
+// 	token->next = NULL;
+// 	return (token);
+// }
