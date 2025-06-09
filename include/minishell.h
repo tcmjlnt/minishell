@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/08 14:17:43 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/09 11:20:16 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
+# include <fcntl.h>
 
 /* ===========================    🔷 ENUMS    =========================== */
 
@@ -52,6 +53,17 @@ typedef enum e_bool
 	true
 }	t_bool;
 
+// a sup c'est pour pouvoir compiler
+typedef enum e_token
+{
+	WORD = -1,
+	PIPE = '|',
+	REDIR_IN = '<',
+	REDIR_OUT = '>',
+	REDIR_APPEND = -3,
+	REDIR_HEREDOC = -2
+}	t_token;
+
 /* ==========================    📦 STRUCTURES    ========================== */
 
 typedef struct s_gc_node
@@ -74,6 +86,13 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_redir
+{
+	t_token				type;
+	char				*file;
+	struct s_redir		*next;
+}	t_redir;
+
 typedef struct s_cmd
 {
 	char			*cmd;
@@ -83,6 +102,7 @@ typedef struct s_cmd
 	int				pid;
 	int				pipe[2];
 	t_bool			is_builtin;
+	t_redir			*redir;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
 }	t_cmd;
