@@ -104,7 +104,7 @@ typedef struct s_env
 
 typedef struct s_redir
 {
-	// t_token				type; // a sup uniquement pour tester exec redir
+	t_token_type		type; // a sup uniquement pour tester exec redir
 	char				*file;
 	struct s_redir		*next;
 }	t_redir;
@@ -186,7 +186,6 @@ void	init_shell(void);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 char	*find_command_path(char *cmd, t_env *env);
-void	print_cmd_path_found(char *cmd, t_env *env);
 void	exec_dispatcher(t_cmd *cmds, t_shell *shell);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
