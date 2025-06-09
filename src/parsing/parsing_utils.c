@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/06 21:06:39 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:05:27 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,13 @@ t_cmd	*ft_lstnewcmd(void)
 	if (!new_cmd->args)
 	{
 		// free etc.
+		// gc_free_all
+		// exit
 		return (NULL);
 	}
 	new_cmd->cmd = NULL;
 	new_cmd->args[0] = NULL;
-	new_cmd->fd_in = 0;
+	new_cmd->fd_in = 0; // a checker valeur d'initialisation
 	new_cmd->fd_out = 0;
 	new_cmd->pid = 0;
 	new_cmd->is_builtin = false;

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/29 15:53:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:28:34 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	ft_prompt(t_shell *shell)
 				free(prompt);
 				continue ;
 			}
+			parsing_to_exec(&cmd_list, shell);
 			// printf("%d\n", x);
 			// printf("Tu as tapé : %s\n", prompt); // a sup
 		}
