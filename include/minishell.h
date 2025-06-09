@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 19:45:03 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 21:28:00 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_shell *s
 void	add_cmd(t_cmd **head, t_cmd *new_cmd);
 
 /* ========================    🦄 PARSING    ======================== */
-int		parsing(char *prompt, t_shell *shell);
+int		parsing(char *prompt, t_cmd **cmd_list, t_shell *shell);
 t_token	*ft_lstlast_token(t_token *token);
 void	ft_lstadd_back_token(t_token **token, t_token *new);
 t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
@@ -222,5 +222,7 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
 int		handle_expansion(t_token **token_list_head, t_shell *shell);
 int		is_inside_squotes(char *token_raw);
 int		is_inside_dquotes(char *token_raw);
+void	print_args(t_cmd *cmd);
+
 
 #endif
