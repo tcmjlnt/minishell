@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/09 21:27:03 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 21:54:33 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	}
 	// handle_expansion(&token_list, shell); // eet si on faisait l'expand apres la token avant le parsing
 
-	print_token(token_list);
+	// print_token(token_list);
 
 
 	if (!parse_tokens(cmd_list, &token_list))
