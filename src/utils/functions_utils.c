@@ -6,13 +6,13 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/06 20:07:17 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:51:07 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../..//include/minishell.h"
 
-size_t	ft_strlen_noquotes(char *src, size_t n)
+size_t	ft_strnlen_noquotes(char *src, size_t n)
 {
 	size_t	i;
 	size_t	j;
@@ -54,7 +54,7 @@ char	*ft_strndup_noquotes(char *src, size_t n)
 	int	in_single = 0;
 	int	in_double = 0;
 
-	len_noquotes = ft_strlen_noquotes(src, n);
+	len_noquotes = ft_strnlen_noquotes(src, n);
 	dest = malloc(sizeof(char) * (len_noquotes + 1));
 	if (!dest)
 		return(NULL);

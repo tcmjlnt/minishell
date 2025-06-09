@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/06 20:50:46 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:59:12 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,15 @@ typedef struct s_cmd
 {
 	char			*cmd;
 	char			**args;
+	// char			*args_raw; // " " arg[j]= token->token_raw
 	int				fd_in;
 	int				fd_out;
 	int				pid;
 	t_bool			is_builtin;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
+	// char			**token_raw; // = token->token_raw
+
 }	t_cmd;
 
 typedef	struct s_token
@@ -168,7 +171,7 @@ void	init_token(t_token *token);
 /* ===========================    🛠️ UTILS    ============================== */
 void	error_exit(const char *message);
 char	*ft_strndup_noquotes(char *src, size_t n);
-size_t	ft_strlen_noquotes(char *src, size_t n);
+size_t	ft_strnlen_noquotes(char *src, size_t n);
 char	*ft_strndup(char *src, size_t n);
 t_token	*ft_lstnew_token(char *value, int type, int node_num);
 void	print_token(t_token	*token);
@@ -196,6 +199,11 @@ int		is_quote(char c);
 int		parse_tokens(t_cmd **cmd_list, t_token **token_list);
 t_cmd	*ft_lstnewcmd(void);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
+int		handle_expansion(t_token **token_list_head, t_shell *shell);
+int		is_inside_squotes(char *token_raw);
+int		is_inside_dquotes(char *token_raw);
+
+
 
 
 

@@ -6,11 +6,45 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:43:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/02 19:47:14 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:04:19 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	is_inside_dquotes(char *token_raw)
+{
+	int i = 0;
+	int in_single = 0;
+	int in_double = 0;
+
+	while (token_raw[i])
+	{
+		if (token_raw[i] == '\'' && !in_double)
+			in_single = !in_single; // toggle in_single state
+		else if (token_raw[i] == '\"' && !in_single)
+			in_double = !in_double; // toggle in_double state
+		i++;
+	}
+	return (in_double);
+}
+
+int	is_inside_squotes(char *token_raw)
+{
+	int i = 0;
+	int in_single = 0;
+	int in_double = 0;
+
+	while (token_raw[i])
+	{
+		if (token_raw[i] == '\'' && !in_double)
+			in_single = !in_single; // toggle in_single state
+		else if (token_raw[i] == '\"' && !in_single)
+			in_double = !in_double; // toggle in_double state
+		i++;
+	}
+	return (in_single);
+}
 
 const char	*token_type_string(t_token_type token_type)
 {

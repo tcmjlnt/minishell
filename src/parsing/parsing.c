@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/06 21:18:22 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:00:29 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	print_args(t_cmd *cmd)
 	int j = 0;
 	t_cmd *temp = cmd;
 
-	while(temp->prev)
+	while(temp && temp->prev)
 	{
 		temp = temp->prev;
 	}
@@ -309,6 +309,7 @@ int	parsing(char *prompt, t_shell *shell)
 	{
 		return (false);
 	}
+	// handle_expansion(&token_list, shell); // eet si on faisait l'expand apres la token avant le parsing
 
 	print_token(token_list);
 
@@ -318,9 +319,11 @@ int	parsing(char *prompt, t_shell *shell)
 		printf("ici\n");
 		return (false);
 	}
+
 	print_args(cmd_list);
+	// handle_expansion(&cmd_list, &token_list, shell);
 	// expand
-	// redirections
+	// redirections --> penser a creer un liste chainee pour les redirections
 	// parsing to exec
 
 	return (1);
