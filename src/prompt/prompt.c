@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 21:54:22 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 22:56:52 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	ft_prompt(t_shell *shell)
 			}
 			// print_args(cmd_list);
 
-			exec_dispatcher(cmd_list, shell); // ceci est un commentaire pour le merge
+			exec_dispatcher(cmd_list, shell);
+			// ceci est un commentaire pour le merge
 			// printf("%d\n", x);
 			// printf("Tu as tapé : %s\n", prompt); // a sup
 		}
