@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 18:26:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:45:03 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,9 @@ typedef enum e_token_type
 	TOKEN_REDIRECT_OUT,		// >
 	TOKEN_REDIRECT_APPEND,	// >>
 	TOKEN_REDIRECT_HEREDOC,	// <<
-	TOKEN_EOF				// fin de la ligne/commande
+	TOKEN_EOF,				// fin de la ligne/commande
+	ble,
+	bla,
 }	t_token_type;
 
 typedef enum	e_parsing_type
