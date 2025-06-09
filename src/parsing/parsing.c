@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/09 17:00:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/09 21:27:03 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,15 +189,15 @@ t_token	*token_wordtpye(char *prompt, int *i)
 }
 
 
-int	parsing(char *prompt, t_shell *shell)
+int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 {
 	(void)	shell;
 	t_token	*token;
 	t_token *token_list;
-	t_cmd	*cmd_list;
+	// t_cmd	*cmd_list;
 
 	token_list = NULL;
-	cmd_list = NULL;
+	// cmd_list = NULL;
 
 
 	if (!first_syntax_check(prompt))
@@ -314,13 +314,13 @@ int	parsing(char *prompt, t_shell *shell)
 	print_token(token_list);
 
 
-	if (!parse_tokens(&cmd_list, &token_list))
+	if (!parse_tokens(cmd_list, &token_list))
 	{
 		printf("ici\n");
 		return (false);
 	}
 
-	print_args(cmd_list);
+	// print_args(*cmd_list);
 	// handle_expansion(&cmd_list, &token_list, shell);
 	// expand
 	// redirections --> penser a creer un liste chainee pour les redirections
