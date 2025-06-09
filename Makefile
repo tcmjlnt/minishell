@@ -60,13 +60,25 @@ SRC_BUILTINS = \
 SRC_UTILS = \
 	utils/error_management.c \
 	utils/garbage_collector.c \
+	utils/gc_utils.c \
 	utils/init_struct.c \
 
 SRC_PROMPT = \
 	prompt/prompt.c \
 
+SRC_ENV = \
+	env/print.c \
+	env/env_build.c \
+	env/env_tab_build.c \
+
+SRC_EXEC = \
+	exec/exec.c \
+	exec/paths.c \
+
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \
+			$(SRC_ENV) \
+			$(SRC_EXEC) \
 
 # Chemins complets des sources et objets
 SRCS = $(addprefix $(SRC_DIR), $(SRC_FILES))
@@ -129,7 +141,6 @@ $(NAME): $(OBJS) $(LIB)
 	@$(CC) $(CFLAGS) $(OBJS) $(LINKER) -o $(NAME) \
 	&& echo "✅ $(NAME) a été créé avec succès (✔)" \
 	|| { echo "❌ Erreur : Compilation de $(NAME) échouée (✘)"; exit 1; }
-
 
 # Nettoyage
 clean:

@@ -1,26 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_boolean.h                                       :+:      :+:    :+:   */
+/*   funcptr.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 16:34:07 by aumartin          #+#    #+#             */
-/*   Updated: 2025/02/27 19:43:28 by aumartin         ###   ########.fr       */
+/*   Created: 2025/06/05 10:30:42 by aumartin          #+#    #+#             */
+/*   Updated: 2025/06/05 10:37:01 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_BOOLEAN_H
-# define FT_BOOLEAN_H
+/* apprentissage avec Gaelle du tableau de struc (= tableau d'objets) */
+/* int	fa(void)
+{
+	return (1);
+}
 
-# ifndef TRUE
-#  define TRUE 1
-# endif
+int	fb(void)
+{
+	return (2);
+}
 
-# ifndef FALSE
-#  define FALSE 0
-# endif
+int	fc(void)
+{
+	return (3);
+}
 
-int	true_or_false(int condition);
+typedef int	(*fptr)(void);
 
-#endif
+fptr	*cpnd(void)
+{
+	fptr	*func;
+
+	func = (fptr []){fa, fb, fc};
+	return (func);
+}
+
+int main()
+{
+	cpnd();
+} */
+
+// int main() {
+// 	int *blbl;
+
+// 	blbl = (int []){1, 2, 3};
+// }

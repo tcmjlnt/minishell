@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bool.c                                          :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 16:35:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/02/27 16:40:57 by aumartin         ###   ########.fr       */
+/*   Created: 2025/05/13 11:31:57 by aumartin          #+#    #+#             */
+/*   Updated: 2025/05/13 11:32:12 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft/libft.h"
-#include "ft_boolean.h"
+#include "libft.h"
 
-// Cette fonction prend une condition en paramètre
-// Si la condition est vraie (différente de 0), elle renvoie TRUE
-// Sinon, elle renvoie FALSE
-int	true_or_false(int condition)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	if (condition)
-		return (TRUE);
-	else
-		return (FALSE);
+	size_t	i;
+
+	i = 0;
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return ((unsigned char) s1[i] - (unsigned char) s2[i]);
 }
