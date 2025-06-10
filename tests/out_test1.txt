@@ -11,3 +11,7 @@ ceci est le contenu du fichier test.txt
 Je suis le texte input_test.txt
 
 [Test redirection multiple < et >]
+
+[Test redirection < fichier inexistant]
+
+[Test pipe + redirection]
