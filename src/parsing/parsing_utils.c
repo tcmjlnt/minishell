@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/09 21:51:00 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:54:17 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ t_cmd	*ft_lstnewcmd(void)
 	}
 	new_cmd->cmd = NULL;
 	new_cmd->args[0] = NULL;
-	new_cmd->fd_in = 0; // a checker valeur d'initialisation
-	new_cmd->fd_out = 0;
+	new_cmd->fd_in = STDIN_FILENO;
+	new_cmd->fd_out = STDOUT_FILENO;
 	new_cmd->pid = 0;
 	new_cmd->is_builtin = false;
 
