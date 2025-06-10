@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 12:12:48 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/08 15:04:39 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:31:37 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ int	ft_echo(t_shell *shell, t_cmd *cmd, int fd)
 	}
 	if (!no_newline)
 		ft_putstr_fd("\n", fd);
+	shell->exit_status = 0;
 	return (0);
 }
