@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/09 16:51:07 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:25:03 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,19 +105,3 @@ char	*ft_strndup(char *src, size_t n)
 	dest[i] = '\0';
 	return (dest);
 }
-
-/* t_token	*ft_lstnew_token(char *value, int type) //, int node_num)
-{
-	t_token	*new;
-
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (NULL);
-	new->token_type = type;
-	new->token_value = value;
-	// new->node_num = node_num;
-	new->next = NULL;
-	new->prev = NULL;
-	return (new);
-}
- */

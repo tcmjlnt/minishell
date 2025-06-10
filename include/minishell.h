@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/10 09:27:35 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:09:32 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,10 +232,10 @@ t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
 int		check_token(t_token *token);
 int		is_quote(char c);
-int		parse_tokens(t_cmd **cmd_list, t_token **token_list);
+int		parse_tokens(t_cmd **cmd_list, t_token **tkn_list);
 t_cmd	*ft_lstnewcmd(void);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
-int		handle_expansion(t_token **token_list_head, t_shell *shell);
+int		handle_expansion(t_token **tkn_list, t_shell *shell);
 int		is_inside_squotes(char *token_raw);
 int		is_inside_dquotes(char *token_raw);
 void	print_args(t_cmd *cmd);

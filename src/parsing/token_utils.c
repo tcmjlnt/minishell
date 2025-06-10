@@ -6,11 +6,20 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:43:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/09 16:04:19 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:30:04 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	is_redir_operator(int token_type)
+{
+	if (token_type == TOKEN_REDIRECT_APPEND || token_type == TOKEN_REDIRECT_HEREDOC
+		|| token_type == TOKEN_REDIRECT_IN || token_type == TOKEN_REDIRECT_OUT)
+		return (true);
+	else
+		return (false);
+}
 
 int	is_inside_dquotes(char *token_raw)
 {
@@ -46,7 +55,7 @@ int	is_inside_squotes(char *token_raw)
 	return (in_single);
 }
 
-const char	*token_type_string(t_token_type token_type)
+const char	*token_type_string(t_token_type token_type) // elle est pas utilisee cette fonction??
 {
 	if (token_type == TOKEN_PIPE)
 		return ("|");

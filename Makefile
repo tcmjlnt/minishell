@@ -11,7 +11,7 @@ NAME = minishell
 
 # Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 OS = $(shell uname | tr '[:upper:]' '[:lower:]')
 
 MAKE = make -sC
