@@ -6,13 +6,60 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 16:40:17 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/10 09:26:53 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Attention applique les redir AVANT exec du builtin
+
+void	wait_pipeline(t_cmd *cmds)
+{
+	t_cmd	*current;
+
+	current = cmds;
+	while (current)
+	{
+		waitpid(current->pid, NULL, 0);
+		current = current->next;
+	}
+}
+
+void	pipe_create(int pipe_fd[2])
+{
+	if (pipe(pipe_fd) == -1)
+		error_exit("pipe");
+}
+
+void	pipe_reset(int pipe_fd[2])
+{
+	pipe_fd[0] = -1;
+	pipe_fd[1] = -1;
+}
+
+void	parent_close_fds(t_exec *exec)
+{
+	if (exec->in_fd != STDIN_FILENO)
+		close(exec->in_fd);
+	if (exec->pipe_fd[1] != -1)
+		close(exec->pipe_fd[1]);
+}
+
+void	exec_external_cmd(t_cmd *cmd, t_shell *shell)
+{
+	char	*path;
+
+	path = find_command_path(cmd->cmd, shell->env);
+	if (!path)
+	{
+		ft_printf("minishell: %s: command not found\n", cmd->cmd);
+		exit(127);
+	}
+	execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
+	perror("execve");
+	exit(126);
+}
 
 /* single commande sans pipe */
 void	exec_single_cmd(t_cmd *cmd, t_shell *shell)

@@ -2,13 +2,12 @@ NAME = minishell_tests
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-SRC_TESTS = test.c debug.c main.c test_builtins.c test_pipes.c
+SRC_TESTS = test.c debug.c main.c test_builtins.c test_exec_redir.c
 SRC_MAIN = \
-	../src/prompt/prompt.c \
 	../src/env/env_build.c \
 	../src/env/env_tab_build.c \
 	../src/env/print.c \
-	../src/exec/exec.c \
+	../src/exec/exec_with_redir.c \
 	../src/exec/paths.c \
 	../src/utils/gc_utils.c \
 	../src/utils/init_struct.c \
@@ -18,7 +17,9 @@ SRC_MAIN = \
 	../src/builtins/builtin_echo.c \
 	../src/builtins/builtin_env.c \
 	../src/builtins/builtin_pwd.c \
-	../src/exec/create_cmd.c \
+	../src/exec/redir_exec.c \
+	../src/exec/redir_handle.c \
+	../src/exec/redir_open.c \
 
 LIB_DIR = ../lib
 LIB = $(LIB_DIR)/lib.a

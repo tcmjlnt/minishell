@@ -11,7 +11,7 @@ NAME = minishell
 
 # Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3
 OS = $(shell uname | tr '[:upper:]' '[:lower:]')
 
 MAKE = make -sC
@@ -75,8 +75,11 @@ SRC_ENV = \
 	env/env_tab_build.c \
 
 SRC_EXEC = \
-	exec/exec.c \
 	exec/paths.c \
+	exec/exec_with_redir.c \
+	exec/redir_exec.c \
+	exec/redir_handle.c \
+	exec/redir_open.c \
 
 SRC_PARSING = \
 	parsing/parsing.c \
