@@ -105,36 +105,36 @@ YELLOW = \033[33m
 CLEAR_LINE = \033[2K\r
 
 # Logo cool
-# PRINT_LOGO = \
-# 	echo "   _____ __ __    ___  _      _      ___ ___   ____  ______    ___  _____"; \
-# 	echo "  / ___/|  |  |  /  _]| |    | |    |   |   | /    ||      |  /  _]/ ___/"; \
-# 	echo " (   \_ |  |  | /  [_ | |    | |    | _   _ ||  o  ||      | /  [_(   \_ "; \
-# 	echo "  \__  ||  _  ||    _]| |___ | |___ |  \_/  ||     ||_|  |_||    _]\__  |"; \
-# 	echo "  /  \ ||  |  ||   [_ |     ||     ||   |   ||  _  |  |  |  |   [_ /  \ |"; \
-# 	echo "  \    ||  |  ||     ||     ||     ||   |   ||  |  |  |  |  |     |\    |"; \
-# 	echo "   \___||__|__||_____||_____||_____||___|___||__|__|  |__|  |_____| \___|"; \
-# 	echo "                                                                         "; \
-# 	echo "                                           "; \
-# 	echo "              SHELLMATES                  "; \
-# 	echo ""; \
-# 	echo "  ┌─────────────────────────────┐"; \
-# 	echo "  │  Partnered to code & debug  │"; \
-# 	echo "  │   through bugs and segfault │"; \
-# 	echo "  │    for better or for bash   │"; \
-# 	echo "  └─────────────────────────────┘"; \
-# 	echo "                                           "; \
-# 	echo "     tjacquel 🤝 aumartin"
+PRINT_LOGO = \
+	echo "   _____ __ __    ___  _      _      ___ ___   ____  ______    ___  _____"; \
+	echo "  / ___/|  |  |  /  _]| |    | |    |   |   | /    ||      |  /  _]/ ___/"; \
+	echo " (   \_ |  |  | /  [_ | |    | |    | _   _ ||  o  ||      | /  [_(   \_ "; \
+	echo "  \__  ||  _  ||    _]| |___ | |___ |  \_/  ||     ||_|  |_||    _]\__  |"; \
+	echo "  /  \ ||  |  ||   [_ |     ||     ||   |   ||  _  |  |  |  |   [_ /  \ |"; \
+	echo "  \    ||  |  ||     ||     ||     ||   |   ||  |  |  |  |  |     |\    |"; \
+	echo "   \___||__|__||_____||_____||_____||___|___||__|__|  |__|  |_____| \___|"; \
+	echo "                                                                         "; \
+	echo "                                           "; \
+	echo "              SHELLMATES                  "; \
+	echo ""; \
+	echo "  ┌─────────────────────────────┐"; \
+	echo "  │  Partnered to code & debug  │"; \
+	echo "  │   through bugs and segfault │"; \
+	echo "  │    for better or for bash   │"; \
+	echo "  └─────────────────────────────┘"; \
+	echo "                                           "; \
+	echo "     tjacquel 🤝 aumartin"
 
 # Compilation principale
 all: $(LIB) $(NAME)
-	@$(PRINT_LOGO)
+# @$(PRINT_LOGO)
 
 # Compilation lib
 $(LIB):
-# @echo "$(YELLOW)📦 Compilation de la lib...$(RESET)\r"
+	@echo "$(YELLOW)📦 Compilation de la lib...$(RESET)\r"
 	@$(MAKE) $(LIB_DIR) > /dev/null 2>&1 \
-# && echo -e "$(CLEAR_LINE)✅ Compilation lib réussie (✔)" \
-# || { echo -e "$(CLEAR_LINE)❌ Erreur : Compilation de la lib échouée (✘)"; exit 1; }
+	&& echo -e "$(CLEAR_LINE)✅ Compilation lib réussie (✔)" \
+	|| { echo -e "$(CLEAR_LINE)❌ Erreur : Compilation de la lib échouée (✘)"; exit 1; }
 
 # Règle pour objets
 $(OBJS_DIR):
@@ -149,22 +149,22 @@ $(OBJS_DIR)main.o: main.c $(INCLUDE) | $(OBJS_DIR)
 
 # Compilation du binaire
 $(NAME): $(OBJS) $(LIB)
-	# @echo "🚀 Compilation de $(NAME)..."
+	@echo "🚀 Compilation de $(NAME)..."
 	@$(CC) $(CFLAGS) $(OBJS) $(LINKER) -o $(NAME) \
 	&& echo "✅ $(NAME) a été créé avec succès (✔)" \
 	|| { echo "❌ Erreur : Compilation de $(NAME) échouée (✘)"; exit 1; }
 
 # Nettoyage
 clean:
-	# @echo "$(YELLOW)🧹 Nettoyage clean en cours...$(RESET)\r"
+	@echo "$(YELLOW)🧹 Nettoyage clean en cours...$(RESET)\r"
 	@$(RM) $(OBJS_DIR)
-	# @echo -e "$(CLEAR_LINE)✅ Nettoyage clean réussi (✔)"
+	@echo -e "$(CLEAR_LINE)✅ Nettoyage clean réussi (✔)"
 
 fclean: clean
-	# @echo "$(YELLOW)🧼 Nettoyage complet fclean en cours...$(RESET)\r"
+	@echo "$(YELLOW)🧼 Nettoyage complet fclean en cours...$(RESET)\r"
 	@$(RM) $(NAME)
-	# @$(MAKE) $(LIB_DIR) fclean
-	# @echo -e "$(CLEAR_LINE)✅ Nettoyage complet fclean réussi (✔)"
+	@$(MAKE) $(LIB_DIR) fclean
+	@echo -e "$(CLEAR_LINE)✅ Nettoyage complet fclean réussi (✔)"
 
 re: fclean all
 
