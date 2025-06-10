@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 22:54:18 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/10 09:27:35 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,24 @@ void	init_shell(void);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 char	*find_command_path(char *cmd, t_env *env);
+void	print_cmd_path_found(char *cmd, t_env *env);
+void	exec_external_cmd(t_cmd *cmd, t_shell *shell);
+void	parent_close_fds(t_exec *exec);
+void	pipe_reset(int pipe_fd[2]);
+void	pipe_create(int pipe_fd[2]);
+void	wait_pipeline(t_cmd *cmds);
 void	exec_dispatcher(t_cmd *cmds, t_shell *shell);
+void	exec_single_cmd(t_cmd *cmd, t_shell *shell);
+void	exec_first_child(t_cmd *cmd, t_shell *shell);
+void	exec_middle_child(t_cmd *cmd, t_shell *shell);
+void	exec_last_child(t_cmd *cmd, t_shell *shell);
+void	exec_pipeline(t_cmd *cmd, t_shell *shell);
+void	apply_dup_redirections(t_cmd *cmd);
+void	prepare_child(t_cmd *cmd, t_shell *shell);
+void	close_redirections(t_cmd *cmd);
+int		open_file(t_token_type type, char *file);
+int		handle_single_redirection(t_cmd *cmd, t_redir *redir);
+int		apply_redirections(t_cmd *cmd);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

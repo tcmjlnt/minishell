@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:58:59 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/06 19:47:07 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/10 09:53:44 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,4 +149,5 @@ void	run_exec_pipes_tests(t_shell *shell)
 	test_pipe_pwd_echo_ls(shell);
 	test_pipe_unknown_cmd(shell);
 	test_pipe_single_builtin(shell);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 }

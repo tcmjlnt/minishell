@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 22:56:52 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:31:03 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,9 @@ void	ft_prompt(t_shell *shell)
 				cmd_list = NULL;
 				continue ;
 			}
-			// print_args(cmd_list);
+			print_args(cmd_list);
+			printf("  fd_in  = %d\n", cmd_list->fd_in);
+			printf("  fd_out = %d\n", cmd_list->fd_out);
 
 			exec_dispatcher(cmd_list, shell);
 			// ceci est un commentaire pour le merge

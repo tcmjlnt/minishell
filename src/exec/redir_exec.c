@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 09:58:47 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 16:18:57 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:14:34 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	prepare_child(t_cmd *cmd, t_shell *shell)
 		exit(shell->exit_status);
 	}
 	apply_dup_redirections(cmd);
+	close_redirections(cmd);
 }
 
 /* ferme les fd ouverts pour les redir

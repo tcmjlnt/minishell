@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 09:58:34 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 11:21:54 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/10 10:49:21 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,18 @@ int	handle_single_redirection(t_cmd *cmd, t_redir *redir)
 {
 	int	fd;
 
+	if (!redir)
+		return (0);
 	fd = open_file(redir->type, redir->file);
 	if (fd == -1)
 		return (-1);
-	if (redir->type == REDIR_IN)
+	if (redir->type == TOKEN_REDIRECT_IN)
 	{
 		if (cmd->fd_in > 2)
 			close(cmd->fd_in);
 		cmd->fd_in = fd;
 	}
-	else if (redir->type == REDIR_OUT || redir->type == REDIR_APPEND)
+	else if (redir->type == TOKEN_REDIRECT_OUT || redir->type == TOKEN_REDIRECT_APPEND)
 	{
 		if (cmd->fd_out > 2)
 			close(cmd->fd_out);
@@ -47,6 +49,8 @@ int	apply_redirections(t_cmd *cmd)
 	t_redir	*redir;
 	int		result;
 
+	if (!cmd || !cmd->redir)
+		return (0);
 	redir = cmd->redir;
 	while (redir)
 	{

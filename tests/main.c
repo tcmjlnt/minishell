@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/08 11:42:47 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/10 13:56:20 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ int	main(int ac, char **av, char **envp)
 	//test_handle_builtin(shell, cmd);
 
 	// test_exec_cmd(shell, cmd);
-	run_all_tests(shell);
+	// run_all_tests(shell);
+	run_redirections_tests(shell);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 
 	return (0);
 }
