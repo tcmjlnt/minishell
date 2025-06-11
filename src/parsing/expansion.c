@@ -6,14 +6,17 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/10 18:56:55 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:30:05 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	is_it_a_valid_key(char *buff)
+static int	is_it_a_valid_key(char *key, t_shell *shell)
 {
+	char *value = get_env_value(shell->env, key); // non ca c'est juste remplacer la key par la value
+	if (!value)
+		return (NULL);
 	// ca implique de decouper la string token_raw
 	// char ** avec un ft_split, le separateur c'est ' ', '\t', '$'
 }
@@ -65,6 +68,7 @@ int	handle_expansion(t_token **tkn_list, t_shell *shell)
 		if (is_inside_dquotes(tkn_current->token_raw) && ft_strchr(tkn_current, '$'))
 		{
 			tkn_current->token_value = expand_dquotes(tkn_current, shell);
+			if (is_it_a_valid_key(tkn_current->token_raw))
 		}
 	}
 }
