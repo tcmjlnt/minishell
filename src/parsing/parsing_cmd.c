@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/11 16:31:02 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:38:44 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 {
 	t_token *tkn_current;
 	t_cmd	*cmd_current;
+	t_redir *redir_list;
 	int		j;
 
 	j = 0;
+	redir_list = NULL;
 	cmd_current = NULL;
 
 	if (!tkn_list || !(*tkn_list)) // si ya pas de tkn_list nsm on se casse
@@ -39,6 +41,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 				return (false);
 			ft_lstadd_back_cmd(cmd_list_head, cmd_current);
 			j = 0;
+			redir_list = NULL; // need to reset redir_list for new command
 		}
 		if (tkn_current->token_type == TOKEN_PIPE)
 		{
@@ -46,6 +49,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 				cmd_current->args[j] = NULL;
 			else
 				return (false); // too many args
+			cmd_current->redir = redir_list;
 			cmd_current = NULL;
 			j = 0;
 			if (!tkn_current->next || tkn_current->next->token_type == TOKEN_PIPE)
@@ -63,7 +67,6 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 				tkn_current=tkn_current->next;
 				if(tkn_current->token_type == TOKEN_WORD)
 				{
-					t_redir *redir_list = NULL;
 					if(!fill_redir(&redir_list, cmd_current, tkn_current))
 						printf("pas marcher");
 					//t_redir->file = current_token->token_value;
@@ -102,10 +105,14 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 		tkn_current = tkn_current->next;
 	}
 
-	if (cmd_current != NULL && j < 256)
-		cmd_current->args[j] = NULL;
-	else if (cmd_current != NULL && j >= 256)
-		return (false);
+	if (cmd_current != NULL)
+	{
+		cmd_current->redir = redir_list;
+		if (j < 256)
+			cmd_current->args[j] = NULL;
+		else
+			return (false);
+	}
 	// if (!add_arg(temp, *cmd_list, cmd))
 	// 	return (printf("la2\n"), false);
 

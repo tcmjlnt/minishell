@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/11 17:21:30 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:53:50 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,22 @@ int first_syntax_check(char *prompt)
 	return (true);
 }
 
+void	print_redir(t_cmd *temp)
+{
+	t_redir	*redir_current = NULL;
+	int	i = 0;
+
+	if (!temp)
+		return ;
+	redir_current = temp->redir;
+	while (redir_current)
+	{
+		printf("	redir_file[%d]: `%s`	;	redir_type[%d]: `%d`\n", i, redir_current->file, i, redir_current->type);
+		i++;
+		redir_current = redir_current->next;
+	}
+}
+
 void	print_args(t_cmd *cmd)
 {
 	int i = 0;
@@ -146,8 +162,11 @@ void	print_args(t_cmd *cmd)
 				j++;
 			}
 		}
+		if (temp->redir)
+			print_redir(temp);
 		i++;
 		temp = temp->next;
+
 	}
 	printf("----------------- END OF COMMAND LIST -----------------\n");
 

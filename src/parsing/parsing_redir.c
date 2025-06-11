@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:53:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/11 16:31:59 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/11 18:54:02 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	fill_redir(t_redir **redir_list, t_cmd *cmd, t_token *token)
 	current_redir->file = gc_strdup(token->token_value, GC_CMD);
 	current_redir->type = token->prev->token_type;
 	ft_lstadd_back_redir(redir_list, current_redir);
-	printf("file redir : %s\n", current_redir->file);
+	//printf("file redir : %s\n", current_redir->file);
 	return (true);
 }
 
