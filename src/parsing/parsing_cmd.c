@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/10 18:15:48 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:31:02 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,20 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 				// This indicates a syntax error that should have been caught earlier.
 				// printf("Syntax error near pipe handled by parse_tokens (should be earlier)\n");
 				// return (false); // Or rely on earlier checks
+			}
+		}
+		else if(is_redir_operator(tkn_current->token_type))
+		{
+			if(tkn_current->next)
+			{
+				tkn_current=tkn_current->next;
+				if(tkn_current->token_type == TOKEN_WORD)
+				{
+					t_redir *redir_list = NULL;
+					if(!fill_redir(&redir_list, cmd_current, tkn_current))
+						printf("pas marcher");
+					//t_redir->file = current_token->token_value;
+				}
 			}
 		}
 		else if (tkn_current->token_type == TOKEN_WORD)
