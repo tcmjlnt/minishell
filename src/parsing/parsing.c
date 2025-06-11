@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/09 22:57:08 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:58:30 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,10 +193,10 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 {
 	(void)	shell;
 	t_token	*token;
-	t_token *token_list;
+	t_token *tkn_list;
 	// t_cmd	*cmd_list;
 
-	token_list = NULL;
+	tkn_list = NULL;
 	// cmd_list = NULL;
 
 
@@ -297,7 +297,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 			// if (!token)
 			// 	return (false);
 		}
-		ft_lstadd_back_token(&token_list, token);
+		ft_lstadd_back_token(&tkn_list, token);
 
 
 
@@ -305,23 +305,23 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 
 	}
 
-	if (!check_token(token_list))
+	if (!check_token(tkn_list))
 	{
 		return (false);
 	}
-	// handle_expansion(&token_list, shell); // eet si on faisait l'expand apres la token avant le parsing
+	// handle_expansion(&tkn_list, shell); // eet si on faisait l'expand apres la token avant le parsing
 
-	// print_token(token_list);
+	print_token(tkn_list);
 
 
-	if (!parse_tokens(cmd_list, &token_list))
+	if (!parse_tokens(cmd_list, &tkn_list))
 	{
 		printf("ici\n");
 		return (false);
 	}
 
 	// print_args(*cmd_list);
-	// handle_expansion(&cmd_list, &token_list, shell);
+	// handle_expansion(&cmd_list, &tkn_list, shell);
 	// expand
 	// redirections --> penser a creer un liste chainee pour les redirections
 	// parsing to exec

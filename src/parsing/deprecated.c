@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/05 16:04:28 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:09:32 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,9 +140,9 @@ int	parsing(char *prompt, t_shell *shell) // gros bout de code avant nettoyage q
 	(void)	shell;
 	// t_cmd	*cmd;
 	t_token	*token;
-	t_token *token_list;
+	t_token *tkn_list;
 
-	token_list = NULL;
+	tkn_list = NULL;
 	// cmd = malloc(sizeof(t_cmd));
 	// if (!cmd)
 	// 	return(false);
@@ -253,7 +253,7 @@ int	parsing(char *prompt, t_shell *shell) // gros bout de code avant nettoyage q
 			// if (!token)
 			// 	return (false);
 		}
-		ft_lstadd_back_token(&token_list, token);
+		ft_lstadd_back_token(&tkn_list, token);
 
 		// cmd->args[j] = arg;
 		// printf("arg[%d]: %s\n", j, arg);
@@ -264,7 +264,7 @@ int	parsing(char *prompt, t_shell *shell) // gros bout de code avant nettoyage q
 
 	}
 
-	if (!check_token(token_list))
+	if (!check_token(tkn_list))
 	{
 		return (false);
 	}
@@ -272,6 +272,6 @@ int	parsing(char *prompt, t_shell *shell) // gros bout de code avant nettoyage q
 
 	//printf("%s\n", prompt);
 	// lexer(prompt, token);
-	print_token(token_list);
+	print_token(tkn_list);
 	return (1);
 }

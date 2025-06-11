@@ -13,83 +13,42 @@
 #include "../../include/minishell.h"
 
 
-
-// int	add_arg(t_token *temp, t_cmd *cmd_list, t_cmd *cmd)
-// {
-// 	int	j;
-
-// 	j = 0;
-// 	cmd = ft_lstnewcmd(temp, TOKEN_WORD, &j);
-// 	if (!cmd)
-// 		return (false);
-
-
-// 	while (temp) // on parcourt la chaine jusquau dernier noeud
-// 	{
-// 		// si premier passage ou si pipe
-// 		// creer un nouveau noeud
-// 		// le rattacher a la liste
-
-// 		if (temp->token_type == TOKEN_PIPE && temp->next) // si on tombe sur un PIPE on SKIP le token PIPE et on passe a la commande suivante. bien sur faut que la prochain noeud existe
-// 		{
-// 			cmd->args[j] = NULL; // (ou ft_strdup(""))?
-// 			temp = temp->next;
-// 			j = 0;
-// 			cmd = ft_lstnewcmd(temp, TOKEN_PIPE, &j);
-// 			if (!cmd)
-// 				return (false);
-// 			j++;
-// 		}
-// 		else // sinon remplir le tableau de string des arguments char **args
-// 		{
-// 			cmd->args[j] = ft_strdup(temp->token_value);
-// 			j++;
-
-
-// 		}
-// 		ft_lstadd_back_cmd(&cmd_list, cmd);
-// 		temp = temp->next;
-// 	}
-// 	return (true);
-
-// }
-
-int	parse_tokens(t_cmd **cmd_list_head, t_token **token_list_head) // passer la liste de token a la liste de cmd
+int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste de token a la liste de cmd
 {
-	t_token *current_token;
-	t_cmd	*current_cmd;
+	t_token *tkn_current;
+	t_cmd	*cmd_current;
 	int		j;
 
 	j = 0;
-	current_cmd = NULL;
+	cmd_current = NULL;
 
-	if (!token_list_head || !(*token_list_head)) // si ya pas de token_list nsm on se casse
+	if (!tkn_list || !(*tkn_list)) // si ya pas de tkn_list nsm on se casse
 		return (false);
 	// if (!cmd_list)
 	// 	return (printf("la\n"), false);
-	current_token = *token_list_head;
-	while (current_token && current_token->prev) // on remonte la liste ofc!!
-		current_token = current_token->prev;
+	tkn_current = *tkn_list;
+	while (tkn_current && tkn_current->prev) // on remonte la liste ofc!!
+		tkn_current = tkn_current->prev;
 
-	while (current_token)
+	while (tkn_current)
 	{
-		if (current_cmd == NULL)
+		if (cmd_current == NULL)
 		{
-			current_cmd = ft_lstnewcmd();
-			if (!current_cmd)
+			cmd_current = ft_lstnewcmd();
+			if (!cmd_current)
 				return (false);
-			ft_lstadd_back_cmd(cmd_list_head, current_cmd);
+			ft_lstadd_back_cmd(cmd_list_head, cmd_current);
 			j = 0;
 		}
-		if (current_token->token_type == TOKEN_PIPE)
+		if (tkn_current->token_type == TOKEN_PIPE)
 		{
 			if (j < 256)
-				current_cmd->args[j] = NULL;
+				cmd_current->args[j] = NULL;
 			else
 				return (false); // too many args
-			current_cmd = NULL;
+			cmd_current = NULL;
 			j = 0;
-			if (!current_token->next || current_token->next->token_type == TOKEN_PIPE)
+			if (!tkn_current->next || tkn_current->next->token_type == TOKEN_PIPE)
 			{
 				return (false);
 				// This indicates a syntax error that should have been caught earlier.
@@ -97,55 +56,55 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **token_list_head) // passer la 
 				// return (false); // Or rely on earlier checks
 			}
 		}
-		else if(is_redir_operator(current_token->token_type))
+		else if(is_redir_operator(tkn_current->token_type))
 		{
-			if(current_token->next)
+			if(tkn_current->next)
 			{
-				current_token=current_token->next;
-				if(current_token->token_type == TOKEN_WORD)
+				tkn_current=tkn_current->next;
+				if(tkn_current->token_type == TOKEN_WORD)
 				{
 					t_redir *redir_list = NULL;
-					if(!fill_redir(&redir_list, current_cmd, current_token))
+					if(!fill_redir(&redir_list, cmd_current, tkn_current))
 						printf("pas marcher");
 					//t_redir->file = current_token->token_value;
 				}
 			}
 		}
-		else if (current_token->token_type == TOKEN_WORD)
+		else if (tkn_current->token_type == TOKEN_WORD)
 		{
 			if (j >= 255)
 			{
 				printf("blabla\n");
 				return (false);
 			}
-			current_cmd->args[j] = ft_strdup(current_token->token_value);
-			if (!current_cmd->args[j]) // ft_strdup malloc failure
+			cmd_current->args[j] = ft_strdup(tkn_current->token_value);
+			if (!cmd_current->args[j]) // ft_strdup malloc failure
 				return (false);
 			if (j == 0)
 			{
-				current_cmd->cmd = ft_strdup(current_token->token_value);
-				if (!current_cmd->cmd)
+				cmd_current->cmd = ft_strdup(tkn_current->token_value);
+				if (!cmd_current->cmd)
 					return (false);
 			}
 			j++;
 		}
 		// Add handling for REDIRECTION tokens here.
-		// They modify the current_cmd_node (e.g., infile, outfile) and consume the next token (filename).
+		// They modify the cmd_current_node (e.g., infile, outfile) and consume the next token (filename).
 		// Example:
-		// else if (current_token->token_type == TOKEN_REDIRECT_OUT)
+		// else if (tkn_current->token_type == TOKEN_REDIRECT_OUT)
 		// {
-		//     if (!current_token->next || current_token->next->token_type != TOKEN_WORD)
+		//     if (!tkn_current->next || tkn_current->next->token_type != TOKEN_WORD)
 		//         return (false); // Syntax error: > not followed by filename
-		//     current_cmd_node->outfile = ft_strdup(current_token->next->token_value);
+		//     cmd_current_node->outfile = ft_strdup(tkn_current->next->token_value);
 		//     // Set mode (truncate/append)
-		//     current_token = current_token->next; // Consume filename token
+		//     tkn_current = tkn_current->next; // Consume filename token
 		// }
-		current_token = current_token->next;
+		tkn_current = tkn_current->next;
 	}
 
-	if (current_cmd != NULL && j < 256)
-		current_cmd->args[j] = NULL;
-	else if (current_cmd != NULL && j >= 256)
+	if (cmd_current != NULL && j < 256)
+		cmd_current->args[j] = NULL;
+	else if (cmd_current != NULL && j >= 256)
 		return (false);
 	// if (!add_arg(temp, *cmd_list, cmd))
 	// 	return (printf("la2\n"), false);

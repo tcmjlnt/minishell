@@ -12,6 +12,15 @@
 
 #include "../../include/minishell.h"
 
+int	is_redir_operator(int token_type)
+{
+	if (token_type == TOKEN_REDIRECT_APPEND || token_type == TOKEN_REDIRECT_HEREDOC
+		|| token_type == TOKEN_REDIRECT_IN || token_type == TOKEN_REDIRECT_OUT)
+		return (true);
+	else
+		return (false);
+}
+
 int	is_inside_dquotes(char *token_raw)
 {
 	int i = 0;
@@ -46,7 +55,7 @@ int	is_inside_squotes(char *token_raw)
 	return (in_single);
 }
 
-const char	*token_type_string(t_token_type token_type)
+const char	*token_type_string(t_token_type token_type) // elle est pas utilisee cette fonction??
 {
 	if (token_type == TOKEN_PIPE)
 		return ("|");
