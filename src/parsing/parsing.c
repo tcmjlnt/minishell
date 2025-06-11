@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/11 18:53:50 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:45:36 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,7 +332,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	}
 	// handle_expansion(&tkn_list, shell); // eet si on faisait l'expand apres la token avant le parsing
 
-	print_token(tkn_list);
+	//print_token(tkn_list);
 
 
 	if (!parse_tokens(cmd_list, &tkn_list))

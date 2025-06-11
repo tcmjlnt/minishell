@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/10 18:08:04 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/11 21:40:00 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,9 @@ void	ft_prompt(t_shell *shell)
 		prompt = readline("minishell: ");
 		if (!prompt)
 		{
-			error_exit("readline");
+			// write(1, "exit\n", 5);
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+			exit(shell->exit_status);
 		}
 		if (*prompt)
 		{
@@ -94,7 +96,7 @@ void	ft_prompt(t_shell *shell)
 				cmd_list = NULL;
 				continue ;
 			}
-			print_args(cmd_list);
+			// print_args(cmd_list);
 			// printf("  fd_in  = %d\n", cmd_list->fd_in);
 			// printf("  fd_out = %d\n", cmd_list->fd_out);
 

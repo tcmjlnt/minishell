@@ -1,0 +1,136 @@
+echo "🧪 Running TESTS"
+echo hello
+echo -n -n test
+echo "hello     world"
+ls
+ls -l
+ls | grep .c | wc -l
+cat /etc/passwd | grep root | wc -l
+echo 'test' | cat
+echo 'unclosed
+echo "unclosed double
+ls | | wc
+| ls
+echo hello >
+cat <
+echo hello | cat | cat | wc -c
+echo hello | grep h | cat -e
+env | sort | head -n 5
+ls | grep . | grep .c | sort | uniq
+ls | unknowncmd
+echo echo             hello | cat -e
+echo '"' | cat -e
+echo "echo  hello" | cat -e
+echo echo" " hello | cat -e
+echo 'unclosed single
+echo echo"hello
+cat <input_a.txt -n
+wc> 'out'
+last -l>out -c<redin -L
+< input_a.txt> output
+<input_a.txt <input_b.txt cat
+./a.out hell'o w'orld
+env | grep PATH
+pwd
+whoami
+date
+echo '"'
+ls | grep "" | wc -c
+ls | sort | grep src
+ls | grep -v .c
+echo 'newline
+test'
+echo test | wc -w
+ls -la | grep '^d'
+ls -la | awk '{print $1}'
+ps aux | grep bash
+seq 10 | tail -n 3
+printf "test\n" | wc -l
+ls -la | head -n 1
+echo "  test  " | sed 's/^ *//;s/ *$//'
+echo "🧪 Running TESTS Commande Thomas"
+wc> 'out'
+last -l>out -c<redin -L
+< input_a.txt> output
+cat <input_a.txt -n
+./a.out hell'o w'orld
+<input_a.txt <input_b.txt cat
+echo '"' | cat -e
+echo ''' | cat -e
+echo "echo" " hello" | cat -e
+echo echo" " hello | cat -e
+echo "echo  hello" | cat -e
+echo echo             hello | cat -e
+echo '"' | cat -e
+echo ''' | cat -e
+touch "\?\$*\'MaRViN\'*\$?\"
+touch ""\?\$*'MaRViN'*\$?\""
+touch '"\?$*'\''MaRViN'\''*$?\"'
+touch '"\?$*'"'"MaRViN"'"'*$?\"'
+touch $'"\\?$*\'MaRViN\'*$?\\"'
+env TEST=hello printenv TEST | cat -e
+echo "🧪 Running TESTS Batards de la bible horrible"
+ls hola
+./Makefile
+./minishell
+env | grep SHLVL
+./minishell
+env | grep SHLVL
+touch hola
+./hola
+env|"wc" -l
+env|"wc "-l
+expr 1 + 1
+echo "🧪 Running TESTS Toujours plus"
+echo hello     world
+echo -n -n -n test
+date
+echo coucou
+unknowncmd
+echo hello | | wc
+| ls
+echo hello >
+cat <
+echo "multi      espace"
+ls     -l
+echo hello | wc -c
+echo ""
+echo 'single quote'
+echo "double quote"
+echo "nested 'quotes' test"
+echo 'nested "quotes" test'
+ls | grep "Makefile"
+ls | grep .c | sort
+ls | grep .c | sort | uniq
+ls | grep .c | sort | uniq | wc -l
+cat < Makefile | wc -l
+echo test >> test_log.txt
+echo 'append' >> test_log.txt
+cat < test_log.txt
+echo hello > out1.txt
+cat < out1.txt | wc -c
+ls | grep "src" | grep exec | wc -l
+echo test | grep test | grep -v "notfound"
+ls -l | grep ^d
+ls -l | grep ^-
+ls -al | grep "." | wc -l
+echo "unterminated double
+echo 'unterminated single
+ls |     | wc
+echo "hello | wc"
+ls | grep -v main | sort
+ls | sort | uniq | wc -l
+cat < Makefile > out2.txt
+cat < Makefile >> out2.txt
+ls -l | grep minishell | wc -l
+echo -n -nnn -nnnn
+echo -nnnnn
+echo -n-nnn -nnnn
+echo -e "a\nb\nc" | wc -l
+printf "bonjour\nbonjour\n" | wc -l
+seq 10 | wc -l
+yes | head -n 42 | wc -l
+echo "🧪 Running TESTS DE FIN CAR CHMOD"
+chmod 000 minishell
+./minishell
+chmod 744 minishell
