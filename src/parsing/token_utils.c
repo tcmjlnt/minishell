@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:43:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/11 17:06:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:15:02 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,11 @@ int	check_token(t_token *token)
 		if (is_operator_token(temp) && temp->next && is_operator_token(temp->next))
 		{
 			printf("minishell: syntax error near unexpected token `%s'\n", token_type_string(temp->next->token_type));
+			return (false);
+		}
+		if (is_operator_token(temp) && !temp->next)
+		{
+			printf("minishell: syntax error near unexpected token `newline'\n");
 			return (false);
 		}
 		temp = temp->next;

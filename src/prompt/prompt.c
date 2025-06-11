@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/10 18:08:04 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/11 19:08:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	ft_prompt(t_shell *shell)
 				cmd_list = NULL;
 				continue ;
 			}
-			print_args(cmd_list);
+			// print_args(cmd_list);
 			// printf("  fd_in  = %d\n", cmd_list->fd_in);
 			// printf("  fd_out = %d\n", cmd_list->fd_out);
 
