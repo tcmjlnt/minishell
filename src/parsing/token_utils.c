@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:43:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/09 16:04:19 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/11 15:32:07 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,13 @@ int	check_token(t_token *token)
 		temp = temp->next;
 	}
 	return (true);
+}
+
+int	is_redir_operator(t_token_type token_type)
+{
+	if (token_type == TOKEN_REDIRECT_IN || token_type == TOKEN_REDIRECT_OUT
+		|| token_type == TOKEN_REDIRECT_APPEND
+		|| token_type == TOKEN_REDIRECT_HEREDOC)
+		return (true);
+	return (false);
 }
