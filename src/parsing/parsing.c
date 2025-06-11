@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/10 18:58:30 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:21:30 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,8 @@ void	print_args(t_cmd *cmd)
 		i++;
 		temp = temp->next;
 	}
+	printf("----------------- END OF COMMAND LIST -----------------\n");
+
 }
 
 // void	first_lexing
