@@ -1,1 +1,4 @@
 objs
+/lib/*/*.o
+/lib/*.a
+minishell
