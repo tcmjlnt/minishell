@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/12 17:33:35 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/12 22:00:29 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,7 +330,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	{
 		return (false);
 	}
-	print_token(tkn_list);
+	// print_token(tkn_list);
 
 	// handle_expansion(&tkn_list, shell); // eet si on faisait l'expand apres la token avant le parsing
 
@@ -343,7 +343,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		return (false);
 	}
 
-	print_args(*cmd_list);
+	// print_args(*cmd_list);
 	// handle_expansion(&cmd_list, &tkn_list, shell);
 	// expand
 	// redirections --> penser a creer un liste chainee pour les redirections
