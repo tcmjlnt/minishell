@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/11 18:38:44 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/12 21:23:49 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 
 	if (!tkn_list || !(*tkn_list)) // si ya pas de tkn_list nsm on se casse
 		return (false);
-	// if (!cmd_list)
+	// if (!cmd_list) // cmd_list est set a nul puisquon le rempli dans cette fonction meme
 	// 	return (printf("la\n"), false);
 	tkn_current = *tkn_list;
 	while (tkn_current && tkn_current->prev) // on remonte la liste ofc!!
@@ -62,14 +62,13 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 		}
 		else if(is_redir_operator(tkn_current->token_type))
 		{
-			if(tkn_current->next)
+			if(tkn_current->next && tkn_current->next->token_type == TOKEN_WORD)
 			{
 				tkn_current=tkn_current->next;
-				if(tkn_current->token_type == TOKEN_WORD)
+				if(!fill_redir(&redir_list, tkn_current))
 				{
-					if(!fill_redir(&redir_list, cmd_current, tkn_current))
-						printf("pas marcher");
-					//t_redir->file = current_token->token_value;
+					printf("pas marcher");
+					return (false);
 				}
 			}
 		}
@@ -77,7 +76,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 		{
 			if (j >= 255)
 			{
-				printf("blabla\n");
+				printf("blabla faut pas abuser le nombre d'args stp\n");
 				return (false);
 			}
 			cmd_current->args[j] = ft_strdup(tkn_current->token_value);

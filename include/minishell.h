@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/11 16:30:09 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/12 21:21:37 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,6 @@ int		is_inside_squotes(char *token_raw);
 int		is_inside_dquotes(char *token_raw);
 void	print_args(t_cmd *cmd);
 int		is_redir_operator(t_token_type token_type);
-int		fill_redir(t_redir **redir, t_cmd *cmd, t_token *token);
+int		fill_redir(t_redir **redir, t_token *token);
 
 #endif

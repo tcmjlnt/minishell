@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/11 19:08:43 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/12 16:12:38 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	free_tcmd(t_cmd *cmd_list)
 {
 	t_cmd	*cmd_current;
 	t_cmd	*next_cmd;
-/* 	t_redir	*current_redir;
-	t_redir	*next_redir; */
+	t_redir	*current_redir;
+	t_redir	*next_redir;
 	int		j = 0;
 
 	if (!cmd_list)
@@ -46,7 +46,7 @@ void	free_tcmd(t_cmd *cmd_list)
 			free(cmd_current->args);
 			// cmd_current->args = NULL;
 		}
-/* 		if (cmd_current->redir)
+		if (cmd_current->redir)
 		{
 			current_redir = cmd_current->redir;
 			while (current_redir)
@@ -55,13 +55,13 @@ void	free_tcmd(t_cmd *cmd_list)
 				if (current_redir->file)
 				{
 					free(current_redir->file);
-					current_redir->file = NULL;
+					// current_redir->file = NULL;
 				}
 				free(current_redir);
 				current_redir = next_redir;
 			}
-			cmd_current->redir = NULL;
-		} */
+			// cmd_current->redir = NULL;
+		}
 
 		free(cmd_current);
 		cmd_current = cmd_current->next;
@@ -102,6 +102,9 @@ void	ft_prompt(t_shell *shell)
 			// ceci est un commentaire pour le merge
 			// printf("%d\n", x);
 			// printf("Tu as tapé : %s\n", prompt); // a sup
+
+			// print_args(cmd_list);
+
 			free_tcmd(cmd_list);
 			// cmd_list = NULL;
 
