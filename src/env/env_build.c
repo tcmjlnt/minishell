@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_build.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 18:12:51 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:19:59 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,7 @@ char	*get_env_value(t_env *env, const char *key)
 			return (env->value);
 		env = env->next;
 	}
+		return (NULL);
+	while (env)
 	return (NULL);
 }

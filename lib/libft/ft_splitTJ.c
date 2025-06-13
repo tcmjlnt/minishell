@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 19:22:32 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/05/29 19:22:09 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/13 12:09:17 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static size_t	word_len(char const *s, char c)
 	return (i);
 }
 
-char	**ft_splitTJ(char const *s, char c)
+char	**ft_spliteejay(char const *s, char c)
 {
 	char	**dest;
 	size_t	i;
