@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:22:07 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/13 12:09:13 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/13 13:52:43 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int	open_file(t_token_type type, char *file, t_shell *shell)
 		return (-1);
 	if (type == TOKEN_REDIRECT_IN)
 	{
-		if (check_file_access(file, F_OK, 1, shell, ": No such file or directory\n") == -1)
-			return (-1);
 		if (is_directory(file))
 		{
 			ft_putstr_fd("minishell: ", STDERR_FILENO);
