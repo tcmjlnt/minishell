@@ -3,6 +3,7 @@
 		"history.h": "c",
 		"libft.h": "c",
 		"type_traits": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"stdbool.h": "c"
 	}
 }

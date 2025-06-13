@@ -1,18 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   essaiexpand.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/13 19:21:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/13 20:36:34 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
+
+
+char	*ft_strndup(char *src, size_t n)
+{
+	char	*dest;
+	size_t		i;
+
+	dest = malloc(sizeof(char) * (n + 1));
+	if (!dest)
+		return(NULL);
+	i = 0;
+	while (i < n && src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
 
 int	ft_isdigit(int c)
 {
@@ -44,6 +64,54 @@ static int is_valid_keychar(char c)
 		return (0);
 }
 
+char	**char_keys(char *tkn_raw, size_t count_expand)
+{
+	size_t	i;
+	size_t	start;
+	size_t	count_keys;
+
+	bool	in_single;
+	bool	in_double;
+	char	**key = malloc(sizeof(char *) * (count_expand + 1));
+	if (!key)
+		return (NULL);
+	i = 0;
+	start = 0;
+	count_keys = 0;
+
+	in_double = false;
+	in_single = false;
+	while(tkn_raw[i])
+	{
+		if (tkn_raw[i] == '\'' && !in_double)
+			in_single = !in_single; // toggle in_single state
+		else if (tkn_raw[i] == '\"' && !in_single)
+			in_double = !in_double; // toggle in_double state
+		if (tkn_raw[i] == '$' && tkn_raw[i + 1] && is_valid_keychar(tkn_raw[i + 1])
+				&& !in_single)
+		{
+			i++;
+			start = i;
+			while (tkn_raw[i] && is_valid_keychar(tkn_raw[i]))
+				i++;
+			key[count_keys] = ft_strndup(tkn_raw + start, i - start);
+			if (!key[count_keys])
+			{
+				while (count_keys > 0)
+					free(key[--count_keys]);
+				free(key);
+				return (NULL);
+			}
+			count_keys++;
+			if (!tkn_raw[i])
+				break ;
+		}
+		else
+			i++;
+	}
+	key[count_expand] = NULL;
+	return (key);
+}
 
 
 size_t	count_expand(char *tkn_raw)
@@ -73,8 +141,21 @@ size_t	count_expand(char *tkn_raw)
 
 int	main(void)
 {
-	char	*arg1 = "echo \"$A\'$B\"\'$C\"$D\'$E\'\"$F\'\"\'$G\'$H\"";
+	// char	*arg2="$USER";
+	char	*arg1 = "echo \"$Abba\'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"";
 	size_t	count = count_expand(arg1);
-	printf("arg: `%s`\n%td\n", arg1, count);
+	char **key;
+
+
+	key = char_keys(arg1, count);
+	if (key)
+	{
+		for (size_t i = 0 ; i < count ; i++)
+		{
+			printf("arg: `%s`\nchar_keys: `%s`\n%td\n", arg1, key[i], count);
+			free(key[i]);
+		}
+		free(key);
+	}
 	return (0);
 }

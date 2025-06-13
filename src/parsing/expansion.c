@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/13 19:50:39 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/13 20:32:03 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,24 @@ static int	shall_i_expand(char	*str)
 	// on veut faire quoi ? on veut juste la longueur de la string expand ?
 }
 
-	char_keys(char *tkn_raw, size_t count_expand)
+/* cette fonction creer un tableau de string avec les KEYS potentielles identifiees a expand*/
+char	**char_keys(char *tkn_raw, size_t count_expand)
 {
 	size_t	i;
 	size_t	start;
 	size_t	count_keys;
+
 	t_bool	in_single;
 	t_bool	in_double;
+	char	**key;
+
+	key = malloc(sizeof(char *) * (count_expand + 1));
+	if (!key)
+		return (NULL);
 
 	i = 0;
 	start = 0;
+	count_keys = 0;
 	in_double = false;
 	in_single = false;
 	while(tkn_raw[i])
@@ -82,15 +90,26 @@ static int	shall_i_expand(char	*str)
 			start = i;
 			while (tkn_raw[i] && is_valid_keychar(tkn_raw[i]))
 				i++;
-			char *key = ft_strndup(tkn_raw + start, i);
+			key[count_keys] = ft_strndup(tkn_raw + start, i - start);
+			if (!key[count_keys])
+			{
+				while (count_keys > 0)
+					free(key[--count_keys]);
+				free(key);
+				return (NULL);
+			}
+			count_keys++;
 			if (!tkn_raw[i])
 				break ;
 		}
-		i++;
+		else
+			i++;
 	}
-	return (count_expand);
+	key[count_expand] = NULL;
+	return (key);
 }
 
+/* cette fonction compte le nombre de KEYS potentielles*/
 size_t	count_expand(char *tkn_raw)
 {
 	size_t	i;
