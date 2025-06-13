@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/12 16:12:38 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:04:54 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	ft_prompt(t_shell *shell)
 		prompt = readline("minishell: ");
 		if (!prompt)
 		{
+			exit(-1); // quelle valeur mettre
 			error_exit("readline");
 		}
 		if (*prompt)
