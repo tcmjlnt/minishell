@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/10 12:43:55 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:09:47 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 
 	if (cmd->is_builtin)
 	{
-		if (apply_redirections(cmd) == -1)
+		if (apply_redirections(cmd, shell) == -1)
 		{
 			shell->exit_status = 1;
 			close_redirections(cmd);
