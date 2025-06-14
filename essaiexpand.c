@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/13 21:07:04 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:20:06 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ char	**char_keys(char *tkn_raw, size_t count_expand)
 	return (key);
 }
 
-
 size_t	count_expand(char *tkn_raw)
 {
 	size_t	i;
@@ -144,10 +143,55 @@ size_t	count_expand(char *tkn_raw)
 	return (count_expand);
 }
 
+
+size_t	count_segment(char *tkn_raw)
+{
+	size_t	i;
+	size_t	count_segment;
+	size_t	current_literal_length;
+	bool	in_single;
+	bool	in_double;
+
+	i = 0;
+	count_segment = 0;
+	current_literal_length = 0;
+	in_double = false;
+	in_single = false;
+	while(tkn_raw[i])
+	{
+		if (tkn_raw[i] == '\'' && !in_double)
+			in_single = !in_single; // toggle in_single state
+		else if (tkn_raw[i] == '\"' && !in_single)
+			in_double = !in_double; // toggle in_double state
+		if (tkn_raw[i] == '$' && tkn_raw[i + 1] && is_valid_keychar(tkn_raw[i + 1])
+				&& !in_single)
+		{
+			if (current_literal_length > 0)
+				count_segment++;
+			current_literal_length = 0;
+			count_segment++;
+			i++;
+			while (tkn_raw[i] && is_valid_keychar(tkn_raw[i]))
+				i++;
+			continue ;
+		}
+		else
+		{
+			current_literal_length++;
+			i++;
+		}
+	}
+	if (current_literal_length > 0)
+		count_segment++;
+	return (count_segment);
+}
+
 int	main(void)
 {
-	char	*arg1="echo $$$USER    ";
+	// char	*arg1="$USER\"$USER\"\'$USER\'$US\"ER\"";
 	// char	*arg2 = "echo \"$Abba\'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"";
+	char	*arg3="\'$USER $USER\'$USER";
+
 	size_t	count = count_expand(arg1);
 	char **key;
 

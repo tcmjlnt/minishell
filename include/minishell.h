@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/14 16:17:19 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:31:40 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,10 +165,10 @@ typedef	struct s_token
 
 typedef	struct s_xpnd
 {
-	char			*str_raw;
-	char			*key;
-	t_bool			xpnd_or_not;
-	char			*xpnd_value;
+	char			*substr;
+	// char			*key;
+	t_bool			xpnd_check;
+	// char			*xpnd_value;
 	char			*str_to_join;
 	// t_token			*token_link; // jai peur que ce soit complique a gerer notamment dans les cas ou je ne veux pas expand
 	struct s_xpnd	*prev;
