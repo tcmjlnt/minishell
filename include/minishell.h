@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/14 20:31:40 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:45:26 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,10 @@ int		fill_redir(t_redir **redir, t_token *token);
 int		is_inside_dquotes(char *token_raw);
 int		is_inside_squotes(char *token_raw);
 
+/* ========================    💰 EXPANSION    ======================== */
+t_xpnd	*ft_lstnewxpnd(void);
+void	ft_lstadd_back_xpnd(t_xpnd **xpnd, t_xpnd *new);
+t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd);
 
 
 #endif

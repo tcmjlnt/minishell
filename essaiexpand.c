@@ -6,13 +6,14 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/14 20:20:06 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:58:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "./include/minishell.h"
 
 
 
@@ -113,6 +114,53 @@ char	**char_keys(char *tkn_raw, size_t count_expand)
 	return (key);
 }
 
+int	tkn_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
+{
+	size_t	i;
+	size_t	start;
+	size_t	count_keys;
+	t_xpnd	*current_xpnd;
+
+	bool	in_single;
+	bool	in_double;
+
+	i = 0;
+	start = 0;
+	count_keys = 0;
+
+	in_double = false;
+	in_single = false;
+	while(tkn_raw[i])
+	{
+		if (tkn_raw[i] == '\'' && !in_double)
+			in_single = !in_single; // toggle in_single state
+		else if (tkn_raw[i] == '\"' && !in_single)
+			in_double = !in_double; // toggle in_double state
+		if (tkn_raw[i] == '$' && tkn_raw[i + 1] && is_valid_keychar(tkn_raw[i + 1])
+				&& !in_single)
+		{
+			i++;
+			start = i;
+			while (tkn_raw[i] && is_valid_keychar(tkn_raw[i]))
+				i++;
+			current_xpnd = ft_lstnewxpnd();
+			if (!current_xpnd)
+				return (false);
+			current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+			current_xpnd->xpnd_check = true;
+			// je me suis arrete la --> il faut 1. remplir la liste avec des noeuds les substrs qui ne sont pas xpnd_check =true (else)
+			// il faut 2. recuperer la valeur de la cle depuis l'env. ca peut etre fait dans cette boucle ou en dehors pour plus concis
+			count_keys++;
+			if (!tkn_raw[i])
+				break ;
+		}
+		else
+			i++;
+	}
+	key[count_expand] = NULL;
+	return (key);
+}
+
 size_t	count_expand(char *tkn_raw)
 {
 	size_t	i;
@@ -194,6 +242,7 @@ int	main(void)
 
 	size_t	count = count_expand(arg1);
 	char **key;
+	t_xpnd *xpnd_list = NULL;
 
 
 	key = char_keys(arg1, count);
