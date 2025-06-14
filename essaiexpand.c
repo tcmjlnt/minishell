@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/13 20:36:34 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/13 21:07:04 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,11 @@ size_t	count_expand(char *tkn_raw)
 		if (tkn_raw[i] == '$' && tkn_raw[i + 1] && is_valid_keychar(tkn_raw[i + 1])
 				&& !in_single)
 			count_expand++;
+		else
+		{
+			// while ()
+			//count_expand++;
+		}
 		i++;
 	}
 	return (count_expand);
@@ -141,8 +146,8 @@ size_t	count_expand(char *tkn_raw)
 
 int	main(void)
 {
-	// char	*arg2="$USER";
-	char	*arg1 = "echo \"$Abba\'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"";
+	char	*arg1="echo $$$USER    ";
+	// char	*arg2 = "echo \"$Abba\'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"";
 	size_t	count = count_expand(arg1);
 	char **key;
 

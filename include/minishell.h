@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/13 16:33:40 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/14 16:17:19 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,18 @@ typedef	struct s_token
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
+
+typedef	struct s_xpnd
+{
+	char			*str_raw;
+	char			*key;
+	t_bool			xpnd_or_not;
+	char			*xpnd_value;
+	char			*str_to_join;
+	// t_token			*token_link; // jai peur que ce soit complique a gerer notamment dans les cas ou je ne veux pas expand
+	struct s_xpnd	*prev;
+	struct s_xpnd	*next;
+}	t_xpnd;
 
 /* ===========================    ♻️ PROMPT    =========================== */
 void	ft_prompt(t_shell *shell);
