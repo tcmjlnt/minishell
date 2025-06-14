@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/12 22:00:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/14 17:10:46 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void	print_args(t_cmd *cmd)
 	}
 	while (temp)
 	{
-		printf("-----------------\nCommand %d: `%s`\n", i, temp->cmd);
+		printf("-----------------\nCommand %d: `%s`	;	is_builtin=%d	;	cmd_type=%d\n", i, temp->cmd, temp->is_builtin, temp->cmd_type);
 		if (temp->args)
 		{
 			j = 0;
