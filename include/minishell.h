@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/14 20:45:26 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 22:40:49 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ typedef	struct s_xpnd
 {
 	char			*substr;
 	// char			*key;
+	t_bool			in_single;
+	t_bool			in_double;
 	t_bool			xpnd_check;
 	// char			*xpnd_value;
 	char			*str_to_join;

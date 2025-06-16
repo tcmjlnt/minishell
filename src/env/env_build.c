@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/13 12:19:59 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:33:27 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,5 @@ char	*get_env_value(t_env *env, const char *key)
 			return (env->value);
 		env = env->next;
 	}
-		return (NULL);
-	while (env)
 	return (NULL);
 }

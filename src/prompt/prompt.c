@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/14 20:23:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 22:10:52 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	ft_prompt(t_shell *shell)
 
 			// print_args(cmd_list);
 
-			free_tcmd(cmd_list);
+			// free_tcmd(cmd_list);
 			// cmd_list = NULL;
 
 		}

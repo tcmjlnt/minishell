@@ -87,7 +87,8 @@ SRC_PARSING = \
 	parsing/token_utils.c \
 	parsing/parsing_cmd.c \
 	parsing/parsing_redir.c \
-	# parsing/expansion.c
+	parsing/expansion.c \
+	parsing/expansion_utils.c
 
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \

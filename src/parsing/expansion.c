@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/13 20:32:03 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 23:21:38 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,42 +20,42 @@ static int is_valid_keychar(char c)
 		return (0);
 }
 
-static int	key_exist(char *key, t_shell *shell)
-{
+// static int	key_exist(char *key, t_shell *shell)
+// {
 
-	char *value = get_env_value(shell->env, key); // non ca c'est juste remplacer la key par la value
-	if (!value)
-		return (NULL);
-	// ca implique de decouper la string token_raw
-	// char ** avec un ft_split, le separateur c'est ' ', '\t', '$'
-}
+// 	char *value = get_env_value(shell->env, key); // non ca c'est juste remplacer la key par la value
+// 	if (!value)
+// 		return (NULL);
+// 	// ca implique de decouper la string token_raw
+// 	// char ** avec un ft_split, le separateur c'est ' ', '\t', '$'
+// }
 
-static int	shall_i_expand(char	*str)
-{
-	int i = 0;
-	int in_single = 0;
-	int in_double = 0;
-	int	expand_res = 0;
+// static int	shall_i_expand(char	*str)
+// {
+// 	int i = 0;
+// 	int in_single = 0;
+// 	int in_double = 0;
+// 	int	expand_res = 0;
 
-	while (str[i])
-	{
-		if (str[i] == '\'' && !in_double) // je recontre une S_QUOTE et je NE suis PAS dans une D_QUOTE
-		{
-			in_single = !in_single;  // toggle in_single state
-			expand_res = 0; // il faudrait split pour avoir la valeur key la plus petite possible
-							// sinon $USER'$USER'"$USER" ca marche pas
-		}
-			 // toggle in_single state
-		else if (str[i] == '\"' && !in_single) // je rencontre une D_QUOTE et je NE suis PAS dans une S_QUOTE
-			in_double = !in_double; // toggle in_double state
+// 	while (str[i])
+// 	{
+// 		if (str[i] == '\'' && !in_double) // je recontre une S_QUOTE et je NE suis PAS dans une D_QUOTE
+// 		{
+// 			in_single = !in_single;  // toggle in_single state
+// 			expand_res = 0; // il faudrait split pour avoir la valeur key la plus petite possible
+// 							// sinon $USER'$USER'"$USER" ca marche pas
+// 		}
+// 			 // toggle in_single state
+// 		else if (str[i] == '\"' && !in_single) // je rencontre une D_QUOTE et je NE suis PAS dans une S_QUOTE
+// 			in_double = !in_double; // toggle in_double state
 
-	}
-}
+// 	}
+// }
 
-	whatwhedoinghere(char *tkn_raw, size_t i)
-{
-	// on veut faire quoi ? on veut juste la longueur de la string expand ?
-}
+// 	whatwhedoinghere(char *tkn_raw, size_t i)
+// {
+// 	// on veut faire quoi ? on veut juste la longueur de la string expand ?
+// }
 
 /* cette fonction creer un tableau de string avec les KEYS potentielles identifiees a expand*/
 char	**char_keys(char *tkn_raw, size_t count_expand)
@@ -135,40 +135,316 @@ size_t	count_expand(char *tkn_raw)
 	return (count_expand);
 }
 
-char	*expand_dquotes(char *tkn_raw, t_shell *shell)
-{
-	int	i = 0;
-	size_t	len_noquotes = ft_strlen_noquotes(tkn_raw);
+// char	*expand_dquotes(char *tkn_raw, t_shell *shell)
+// {
+// 	int	i = 0;
+// 	size_t	len_noquotes = ft_strnlen_noquotes(tkn_raw);
 
+// 	while (tkn_raw[i])
+// 	{
+// 		if (tkn_raw[i] == '$')
+// 		{
+// 			i++;
+// 			while (is_valid_keychar(tkn_raw[i]))
+// 			{
+// 				// stocker chaque cle potentielle dans un char**??
+// 				// faut peut etre split en amont ??
+// 			}
+// 		}
+// 		// si ft_strcmp($KEY, cmt_delimiter??) == 0
+// 	}
+// }
+
+t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd)
+{
+	new_xpnd->substr = ft_strndup(src, n);
+	new_xpnd->xpnd_check = xpnd_check;
+	new_xpnd->in_single = xpnd_quotes_curr->in_single;
+	new_xpnd->in_double = xpnd_quotes_curr->in_double;
+	return (new_xpnd);
+}
+
+int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list) // gere les subtokens single quotes
+{
+	size_t	strlen;
+	t_xpnd	*new_xpnd;
+
+	strlen = ft_strlen(substr);
+	new_xpnd = ft_lstnewxpnd();
+	if (!new_xpnd)
+		return (false);
+	if (strlen > 2)
+	{
+		new_xpnd = xpnd_new_fill(substr + 1, strlen - 2, false, xpnd_quotes_curr, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	}
+	return (true);
+}
+
+int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+{
+	size_t	i;
+	size_t	start;
+	size_t	strlen;
+	t_xpnd	*new_xpnd;
+
+	strlen = ft_strlen(xpnd_quotes_curr->substr);
+	if (strlen < 2)
+	{
+		new_xpnd = ft_lstnewxpnd();
+		if (!new_xpnd)
+			return (false);
+		new_xpnd = xpnd_new_fill("", 0, false, xpnd_quotes_curr, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+		return (true);
+	}
+	i = 1;
+	start = 1;
+	while (i < strlen - 1)
+	{
+		if(substr[i] == '$' && (i + 1 < strlen - 1) && is_valid_keychar(substr[i + 1]))
+		{
+			if (i > start)
+			{
+				new_xpnd = ft_lstnewxpnd();
+				if (!new_xpnd)
+					return (false);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			}
+			start = ++i;
+			while (i < strlen - 1 && is_valid_keychar(substr[i]))
+				i++;
+			new_xpnd = ft_lstnewxpnd();
+			if (!new_xpnd)
+				return (false);
+			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			start = i;
+		}
+		// else if (!is_valid_keychar(substr[i]) && substr[i] != '$')
+		// {
+		// 	if (i > start)
+		// 	{
+		// 		new_xpnd = ft_lstnewxpnd();
+		// 		if (!new_xpnd)
+		// 			return (false);
+		// 		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+		// 	}
+		// 	start = i;
+		// 	while (substr[i] != '$' && (i < strlen - 1))
+		// 		i++;
+		// 	new_xpnd = ft_lstnewxpnd();
+		// 	if (!new_xpnd)
+		// 		return (false);
+		// 	new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		// 	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+		// 	start = i;
+		// }
+		else
+			i++;
+	}
+	if (i > start)
+	{
+		new_xpnd = ft_lstnewxpnd();
+		if (!new_xpnd)
+			return (false);
+		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	}
+
+	return (true);
+}
+
+int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+{
+	size_t	i;
+	size_t	start;
+	size_t	strlen;
+	t_xpnd	*new_xpnd;
+
+	strlen = ft_strlen(xpnd_quotes_curr->substr);
+	i = 0;
+	start = 0;
+	while(substr[i])
+	{
+		if(substr[i] == '$' && substr[i + 1] && is_valid_keychar(substr[i + 1]))
+		{
+			if (i > start)
+			{
+				new_xpnd = ft_lstnewxpnd();
+				if (!new_xpnd)
+					return (false);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			}
+			start = ++i;
+			while (substr[i] && is_valid_keychar(substr[i]))
+				i++;
+			new_xpnd = ft_lstnewxpnd();
+			if (!new_xpnd)
+				return (false);
+			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			start = i;
+		}
+		else
+			i++;
+	}
+	if (i > start)
+	{
+		new_xpnd = ft_lstnewxpnd();
+		if (!new_xpnd)
+			return (false);
+		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	}
+	return (true);
+
+}
+
+int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+{
+	if (!xpnd_quotes_curr || !xpnd_quotes_curr->substr)
+		return (true);
+	if (xpnd_quotes_curr->in_single)
+	{
+		if (!tkn_xpnd_segmentation2_squotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+			return (false);
+	}
+	else if (xpnd_quotes_curr->in_double)
+	{
+		if (!tkn_xpnd_segmentation2_dquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+			return (false);
+	}
+	else
+	{
+		if (!tkn_xpnd_segmentation2_noquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+			return (false);
+	}
+	return (true);
+}
+
+int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
+{
+	size_t	i;
+	size_t	start;
+	t_bool	in_single;
+	t_bool	in_double;
+
+	t_xpnd	*current_xpnd;
+
+
+	i = 0;
+	start = 0;
+	in_double = false;
+	in_single = false;
 	while (tkn_raw[i])
 	{
-		if (tkn_raw[i] == '$')
+		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single))
 		{
-			i++;
-			while (is_valid_keychar(tkn_raw[i]))
+			if (i > start)
 			{
-				// stocker chaque cle potentielle dans un char**??
-				// faut peut etre split en amont ??
+				current_xpnd = ft_lstnewxpnd();
+				if (!current_xpnd)
+					return (false);
+				current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+				current_xpnd->xpnd_check = false;
+				ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
 			}
+			if (tkn_raw[i] == '\'' && !in_double)
+				in_single = !in_single;
+			else if (tkn_raw[i] == '\"' && !in_single)
+				in_double = !in_double;
+			start = i;
+			i++;
+			while(tkn_raw[i])
+			{
+				if ((tkn_raw[i] == '\'' && in_single && !in_double) ||
+					(tkn_raw[i] == '\"' && in_double && !in_single))
+				{
+					current_xpnd = ft_lstnewxpnd();
+					if (!current_xpnd)
+						return (false);
+					current_xpnd->in_single = in_single;
+					current_xpnd->in_double = in_double;
+					if (tkn_raw[i] == '\'' && !in_double)
+						in_single = !in_single;
+					else if (tkn_raw[i] == '\"' && !in_single)
+						in_double = !in_double;
+					i++;
+					break ;
+				}
+				i++;
+			}
+			current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+			current_xpnd->xpnd_check = false;
+			ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+			start = i;
 		}
-		// si ft_strcmp($KEY, cmt_delimiter??) == 0
+		else
+			i++;
+	}
+	if (i > start) {
+		current_xpnd = ft_lstnewxpnd();
+		if (!current_xpnd)
+			return (false);
+		current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+		current_xpnd->xpnd_check = false;
+		ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+	}
+	return (true);
+}
+
+void	printf_xpnd(t_xpnd **xpnd_list)
+{
+	t_xpnd *xpnd_current;
+	int i = 0;
+
+	xpnd_current = *xpnd_list;
+	if (!xpnd_current)
+		return ;
+	while (xpnd_current && xpnd_current->prev)
+		xpnd_current = xpnd_current->prev;
+	while (xpnd_current)
+	{
+		printf("xpnd_current->substr[%d]: `%s`	;	in_single: %d	;	in_double: %d	;	xpnd_check: %d	;	str_to_join: `%s`\n",
+			 i, xpnd_current->substr, xpnd_current->in_single, xpnd_current->in_double, xpnd_current->xpnd_check, xpnd_current->str_to_join);
+		i++;
+		xpnd_current = xpnd_current->next;
 	}
 }
 
 int	handle_expansion(t_token **tkn_list, t_shell *shell)
 {
 	t_token	*tkn_current;
+	t_xpnd *xpnd_quotes_list = NULL;
+	t_xpnd *xpnd_list = NULL;
+	(void) shell;
 
 	if (!tkn_list || !(*tkn_list))
 		return (false);
+	tkn_current = *tkn_list;
 	while (tkn_current && tkn_current->prev)
 		tkn_current = tkn_current->prev;
 	while (tkn_current)
 	{
-		if (is_inside_dquotes(tkn_current->token_raw) && ft_strchr(tkn_current->token_raw, '$'))
+		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
+			return (false);
+		printf("================= ENTERING XPND QUOTES LIST PRINTF =================\n");
+		printf_xpnd(&xpnd_quotes_list);
+		while (xpnd_quotes_list)
 		{
-			tkn_current->token_value = expand_dquotes(tkn_current, shell);
-			if (key_exist(tkn_current->token_raw))
+			if (!tkn_xpnd_segmentation2(xpnd_quotes_list, &xpnd_list))
+				return (false);
+			xpnd_quotes_list = xpnd_quotes_list->next;
 		}
+		printf("================= ENTERING XPND LIST PRINTF =================\n");
+		printf_xpnd(&xpnd_list);
+		tkn_current = tkn_current->next;
+
 	}
+
+	return (true);
 }
