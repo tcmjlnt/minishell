@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/15 21:59:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:26:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,22 @@ int	is_inside_squotes(char *token_raw, size_t pos)
 	return (in_single);
 }
 
-// static int	is_inside_quotes(char *prompt, size_t pos)
-// {
-// 	size_t	i = 0;
-// 	int	in_single = 0;
-// 	int	in_double = 0;
+int	is_inside_quotes(char *prompt, size_t pos)
+{
+	size_t	i = 0;
+	int	in_single = 0;
+	int	in_double = 0;
 
-// 	while (i < pos && prompt[i])
-// 	{
-// 		if (prompt[i] == '\'' && !in_double)
-// 			in_single = !in_single; // toggle in_single state
-// 		else if (prompt[i] == '\"' && !in_single)
-// 			in_double = !in_double; // toggle in_double state
-// 		i++;
-// 	}
-// 	return (in_single || in_double);
-// }
+	while (i < pos && prompt[i])
+	{
+		if (prompt[i] == '\'' && !in_double)
+			in_single = !in_single; // toggle in_single state
+		else if (prompt[i] == '\"' && !in_single)
+			in_double = !in_double; // toggle in_double state
+		i++;
+	}
+	return (in_single || in_double);
+}
 
 size_t	ft_strnlen_noquotes(char *src, size_t n)
 {
@@ -497,7 +497,7 @@ int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av
 
 {
 	// char	*arg1="$USER\"$MAIL\"\'$PAGER\'$$$COL\"\"\"$$$ORTERM\"";
-	char	*arg2 = "echo \"$Abba\'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"";
+	char	*arg2 = "\"$Abba\'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"";
 	// char	*arg3="\'$USER $USER\'$USER";
 	// char *arg5="echo $$USER";
 
