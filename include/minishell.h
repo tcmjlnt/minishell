@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 10:37:00 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/16 11:39:09 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,19 @@ typedef enum e_token_type
 	TOKEN_REDIRECT_APPEND,	// >>
 	TOKEN_REDIRECT_HEREDOC,	// <<
 	TOKEN_EOF,				// fin de la ligne/commande
-	ble,
-	bla,
 }	t_token_type;
+
+typedef enum	e_cmd_type
+{
+	CD_BT,
+	ECHO_BT,
+	ENV_BT,
+	EXIT_BT,
+	EXPORT_BT,
+	PWD_BT,
+	UNSET_BT,
+	NOT_A_BT,
+}	t_cmd_type;
 
 typedef enum	e_parsing_type
 {
@@ -118,6 +128,7 @@ typedef struct s_cmd
 	int				pid;
 	int				pipe[2];
 	t_bool			is_builtin;
+	int				cmd_type;
 	t_redir			*redir;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
