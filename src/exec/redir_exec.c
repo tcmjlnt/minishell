@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 09:58:47 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/13 16:10:32 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:23:03 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	apply_dup_redirections(t_cmd *cmd)
 
 void	prepare_child(t_cmd *cmd, t_shell *shell)
 {
-	if (apply_redirections(cmd, shell) == -1)
+	if (apply_redirections(cmd, shell, exec) == -1)
 	{
 		shell->exit_status = 1;
 		exit(shell->exit_status);

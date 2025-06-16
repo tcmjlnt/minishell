@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 10:46:22 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/16 15:23:33 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ void	exec_external_cmd(t_cmd *cmd, t_shell *shell)
 }
 
 /* single commande sans pipe */
-void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
+void	exec_single_cmd(t_cmd *cmd, t_shell *shell, t_exec *exec)
 {
 	pid_t	pid;
 
 	if (cmd->is_builtin)
 	{
-		if (apply_redirections(cmd, shell) == -1)
+		if (apply_redirections(cmd, shell, exec) == -1)
 		{
 			shell->exit_status = 1;
 			close_redirections(cmd);
