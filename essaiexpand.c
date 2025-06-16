@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/16 21:00:54 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:26:32 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,11 +387,11 @@ int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	new_xpnd = ft_lstnewxpnd();
 	if (!new_xpnd)
 		return (false);
-	if (strlen >= 2) // pour rappel ft_strlen('') == 2 donc pris en charge par if(strlen >= 2)
+	if (strlen > 2)
+	{
 		new_xpnd = xpnd_new_fill(substr + 1, strlen - 2, false, xpnd_quotes_curr, new_xpnd);
-	else
-		new_xpnd = xpnd_new_fill("", 0, false, xpnd_quotes_curr, new_xpnd);
-	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	}
 	return (true);
 }
 
@@ -905,7 +905,7 @@ void	free_xpnd_quotes_list(t_xpnd *xpnd_quotes_list)
 int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av PARCE QUE LE SHELL VA EXPAND LES $USER
 
 {
-	// char	*arg1="$USER\"$MAIL\"\'$PAGER\'$$$COL\"\"\"$$$ORTERM\"";
+	// char	*arg1="$USER\"$MAIL\"\'$PAGER\'$$$COL\"\"\"$$ORTERM\"";
 	char	*arg2 = "bob\'\'\"\"\"$Abba$  c ' $Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"Iguane";
 	// char	*arg3="\'$USER $USER\'$USER\"$USER $USER\"";
 	// char *arg5="\"echo $$USER\"";
