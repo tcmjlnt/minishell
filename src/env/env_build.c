@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 18:12:51 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/16 10:23:46 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,17 +80,4 @@ void	env_from_envp(t_shell *shell, char **envp)
 		env_add_back(&shell->env, new);
 		i++;
 	}
-}
-
-char	*get_env_value(t_env *env, const char *key)
-{
-	if (!key)
-		return (NULL);
-	while (env)
-	{
-		if (ft_strcmp(env->key, key) == 0 && env->equal == true) //check si a garder apres implementatin , export ?
-			return (env->value);
-		env = env->next;
-	}
-	return (NULL);
 }

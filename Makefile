@@ -11,7 +11,7 @@ NAME = minishell
 
 # Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra -g3 #-fsanitize=address
 OS = $(shell uname | tr '[:upper:]' '[:lower:]')
 
 MAKE = make -sC
@@ -73,6 +73,7 @@ SRC_ENV = \
 	env/print.c \
 	env/env_build.c \
 	env/env_tab_build.c \
+	env/env_access.c \
 
 SRC_EXEC = \
 	exec/paths.c \
@@ -89,11 +90,14 @@ SRC_PARSING = \
 	parsing/parsing_redir.c \
 	# parsing/expansion.c
 
+SRC_DEBUG = debug/debug.c \
+
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \
 			$(SRC_ENV) \
 			$(SRC_EXEC) \
 			$(SRC_PARSING) \
+			$(SRC_DEBUG) \
 
 
 # Chemins complets des sources et objets
