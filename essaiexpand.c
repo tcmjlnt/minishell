@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/16 12:26:43 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 13:08:48 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ typedef	struct s_xpnd
 {
 	char			*substr;
 	// char			*key;
+	t_bool			in_single;
+	t_bool			in_double;
 	t_bool			xpnd_check;
 	// char			*xpnd_value;
 	char			*str_to_join;
@@ -182,6 +184,8 @@ t_xpnd	*ft_lstnewxpnd(void)
 	if (!new_xpnd)
 		return (NULL);
 	new_xpnd->substr = NULL;
+	new_xpnd->in_single = false;
+	new_xpnd->in_double = false;
 	new_xpnd->xpnd_check = false;
 	new_xpnd->str_to_join = NULL;
 	new_xpnd->prev = NULL;
@@ -402,6 +406,82 @@ int	tkn_xpnd_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 	return (true);
 }
 
+int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
+{
+	size_t	i;
+	size_t	start;
+	t_bool	in_single;
+	t_bool	in_double;
+
+	t_xpnd	*current_xpnd;
+
+
+	i = 0;
+	start = 0;
+	in_double = false;
+	in_single = false;
+	while (tkn_raw[i])
+	{
+		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single))
+		{
+			if (i > start)
+			{
+				current_xpnd = ft_lstnewxpnd();
+				if (!current_xpnd)
+					return (false);
+				current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+				current_xpnd->xpnd_check = false;
+				ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+			}
+			if (tkn_raw[i] == '\'' && !in_double)
+				in_single = !in_single;
+			else if (tkn_raw[i] == '\"' && !in_single)
+				in_double = !in_double;
+			start = i;
+			i++;
+			while(tkn_raw[i])
+			{
+				if ((tkn_raw[i] == '\'' && in_single && !in_double) ||
+					(tkn_raw[i] == '\"' && in_double && !in_single))
+				{
+					current_xpnd = ft_lstnewxpnd();
+					if (!current_xpnd)
+						return (false);
+					current_xpnd->in_single = in_single;
+					current_xpnd->in_double = in_double;
+					if (tkn_raw[i] == '\'' && !in_double)
+						in_single = !in_single;
+					else if (tkn_raw[i] == '\"' && !in_single)
+						in_double = !in_double;
+					i++;
+					break ;
+				}
+				i++;
+			}
+			// current_xpnd = ft_lstnewxpnd();
+			// if (!current_xpnd)
+			// 	return (false);
+			current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+			current_xpnd->xpnd_check = false;
+			// current_xpnd->in_single = in_single;
+			// current_xpnd->in_double = in_double;
+			ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+			start = i;
+		}
+		else
+			i++;
+	}
+	if (i > start) {
+		current_xpnd = ft_lstnewxpnd();
+		if (!current_xpnd)
+			return (false);
+		current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+		current_xpnd->xpnd_check = false;
+		ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+	}
+	return (true);
+}
+
 size_t	count_expand(char *tkn_raw)
 {
 	size_t	i;
@@ -487,7 +567,8 @@ void	printf_xpnd(t_xpnd **xpnd_list)
 		xpnd_current = xpnd_current->prev;
 	while (xpnd_current)
 	{
-		printf("xpnd_current->substr[%d]: `%s`	;	xpnd_check: %d	;	str_to_join: `%s`\n", i, xpnd_current->substr, xpnd_current->xpnd_check, xpnd_current->str_to_join);
+		printf("xpnd_current->substr[%d]: `%s`	;	in_single: %d	;	in_double: %d	;	xpnd_check: %d	;	str_to_join: `%s`\n",
+			 i, xpnd_current->substr, xpnd_current->in_single, xpnd_current->in_double, xpnd_current->xpnd_check, xpnd_current->str_to_join);
 		i++;
 		xpnd_current = xpnd_current->next;
 	}
@@ -507,7 +588,7 @@ int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av
 
 
 	// key = char_keys(arg1, count);
-	if (!tkn_xpnd_segmentation(arg2, &xpnd_list))
+	if (!tkn_xpnd_quotes_segmentation(arg2, &xpnd_list))
 	return (1);
 
 	// if (key)
