@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/16 13:08:48 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 19:08:47 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,16 @@ typedef	struct s_xpnd
 int	is_quote(char c)
 {
 	return (c == '\'' || c == '\"');
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
 int	is_inside_squotes(char *token_raw, size_t pos)
@@ -336,6 +346,171 @@ char	**char_keys(char *tkn_raw, size_t count_expand)
 // 	return (true);
 // }
 
+/* void	ft_lstadd_in_xpnd(t_xpnd *xpnd_current, t_xpnd *new)
+{
+	t_xpnd	*temp;
+
+	if (xpnd_current == NULL || new == NULL)
+		return ;
+	if (xpnd_current->prev == NULL)
+	{
+		// le noeud actuel est en tete de liste, donc prev pointe vers NULL
+		// on relie le nouveau noeud->prev a NULL
+		// le next doit pointer vers ?? le prochain noeud de la chaine de caracteres decoupee si ya plusieurs token a decouper
+		//								le prochain noeud de la LISTE initiale si ya pas plusieurs token a decouper
+		*xpnd = new;
+		new->prev = NULL;
+	}
+	else if (xpnd_current->next = NULL)
+	else
+	{
+		temp = ft_lstlast_xpnd(*xpnd);
+		new->prev = temp;
+		temp->next = new;
+	}
+} */
+int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+{
+	size_t	i;
+	size_t	start;
+	size_t	strlen;
+	t_xpnd	*new_xpdn;
+
+	i = 0;
+	start = 0;
+	strlen = ft_strlen(substr);
+	new_xpdn = ft_lstnewxpnd();
+	if (!new_xpdn)
+		return (false);
+	if (strlen >= 2)
+		new_xpdn->substr = ft_strndup(substr + 1, strlen - 2);
+	else
+		new_xpdn->substr = ft_strndup("", 0); // pour rappel ft_strlen('') == 2 donc pris en charge par if(strlen >= 2)
+	new_xpdn->xpnd_check = false;
+	new_xpdn->in_single = xpnd_quotes_curr->in_single;
+	new_xpdn->in_double = xpnd_quotes_curr->in_double;
+	ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+	return (true);
+}
+
+
+
+
+int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+{
+	size_t	i;
+	size_t	start;
+	size_t	strlen;
+	t_xpnd	*new_xpdn;
+
+	i = 0;
+	start = 0;
+	strlen = ft_strlen(xpnd_quotes_curr->substr);
+
+	if (!xpnd_quotes_curr || !xpnd_quotes_curr->substr)
+		return (true);
+	if (xpnd_quotes_curr->in_single)
+	{
+		if (!tkn_xpnd_segmentation2_squotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+			return (false);
+	}
+	while(xpnd_quotes_curr->substr[i])
+	{
+		// if (xpnd_quotes_curr->in_single)
+		// {
+		// 	start = ++i;
+		// 	while (xpnd_quotes_curr->substr[i] && xpnd_quotes_curr->substr[i] != '\'')
+		// 		i++;
+		// 	new_xpdn = ft_lstnewxpnd();
+		// 	if (!new_xpdn)
+		// 		return (false);
+		// 	new_xpdn->in_double = xpnd_quotes_curr->in_double;
+		// 	new_xpdn->in_single = xpnd_quotes_curr->in_single;
+		// 	new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+		// 	new_xpdn->xpnd_check = false;
+		// 	ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+		// 	i++;
+		// 	start = i;
+		// }
+
+		// else if (xpnd_quotes_curr->in_double)
+		// {
+		// 	if (i > start) // 1. Add literal segment before this variable, if any
+		// 	{
+		// 		new_xpdn = ft_lstnewxpnd();
+		// 		if (!new_xpdn)
+		// 			return (false);
+		// 		new_xpdn->in_double = xpnd_quotes_curr->in_double;
+		// 		new_xpdn->in_single = xpnd_quotes_curr->in_single;
+		// 		new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+		// 		new_xpdn->xpnd_check = false;
+		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+		// 	}
+		// 	start = i;
+		// 	if (xpnd_quotes_curr->substr[i] == '$' && xpnd_quotes_curr->substr[i + 1] && is_valid_keychar(xpnd_quotes_curr->substr[i + 1]))
+		// 	{
+		// 		i++;
+		// 		start = i;
+		// 		while (xpnd_quotes_curr->substr[i] && is_valid_keychar(xpnd_quotes_curr->substr[i]))
+		// 			i++;
+		// 		new_xpdn = ft_lstnewxpnd();
+		// 		if (!new_xpdn)
+		// 			return (false);
+		// 		new_xpdn->in_double = xpnd_quotes_curr->in_double;
+		// 		new_xpdn->in_single = xpnd_quotes_curr->in_single;
+		// 		new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+		// 		new_xpdn->xpnd_check = true;
+		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+		// 		start = ++i;
+		// 	}
+		// }
+
+		if (xpnd_quotes_curr->substr[i] == '$' && xpnd_quotes_curr->substr[i + 1] && is_valid_keychar(xpnd_quotes_curr->substr[i + 1]))
+		{
+			if (i > start) // 1. Add literal segment before this variable, if any
+			{
+				new_xpdn = ft_lstnewxpnd();
+				if (!new_xpdn)
+					return (false);
+				new_xpdn->in_double = xpnd_quotes_curr->in_double;
+				new_xpdn->in_single = xpnd_quotes_curr->in_single;
+				new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+				new_xpdn->xpnd_check = false;
+				ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+			}
+			// // 2. Add variable segment
+			i++;
+			start = i;
+			while (xpnd_quotes_curr->substr[i] && is_valid_keychar(xpnd_quotes_curr->substr[i]))
+				i++;
+			new_xpdn = ft_lstnewxpnd();
+			if (!new_xpdn)
+				return (false);
+			new_xpdn->in_double = xpnd_quotes_curr->in_double;
+			new_xpdn->in_single = xpnd_quotes_curr->in_single;
+			new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+			new_xpdn->xpnd_check = true;
+			ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+			start = i;
+		}
+		else
+			i++;
+	}
+	// 3. Add any remaining literal at the end
+	if (i > start)
+	{
+		new_xpdn = ft_lstnewxpnd();
+		if (!new_xpdn)
+			return (false);
+		new_xpdn->in_double = xpnd_quotes_curr->in_double;
+		new_xpdn->in_single = xpnd_quotes_curr->in_single;
+		new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+		new_xpdn->xpnd_check = false;
+		ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+	}
+	return (true);
+}
+
 int	tkn_xpnd_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 {
 	size_t	i;
@@ -371,31 +546,30 @@ int	tkn_xpnd_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 				current_xpnd->xpnd_check = false;
 				ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
 			}
+			i++;
+			start = i;
+			while (tkn_raw[i] && is_valid_keychar(tkn_raw[i]))
 			{
+				printf("tkn_raw[i]: %c	;	i: %zd\n", tkn_raw[i], i);
 				i++;
-				start = i;
-				while (tkn_raw[i] && is_valid_keychar(tkn_raw[i]))
-				{
-					printf("tkn_raw[i]: %c	;	i: %zd\n", tkn_raw[i], i);
-					i++;
-				}
-				current_xpnd = ft_lstnewxpnd();
-				if (!current_xpnd)
-					return (false);
-				current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
-				current_xpnd->xpnd_check = true;
-				// je me suis arrete la --> il faut 1. remplir la liste avec des noeuds les substrs qui ne sont pas xpnd_check =true (else)
-				// 1b ajouter le noeud a la liste
-				// il faut 2. recuperer la valeur de la cle depuis l'env. ca peut etre fait dans cette boucle ou en dehors pour plus concis
-				// count_keys++;
-				ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
-				start = i;
 			}
+			current_xpnd = ft_lstnewxpnd();
+			if (!current_xpnd)
+				return (false);
+			current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+			current_xpnd->xpnd_check = true;
+			// je me suis arrete la --> il faut 1. remplir la liste avec des noeuds les substrs qui ne sont pas xpnd_check =true (else)
+			// 1b ajouter le noeud a la liste
+			// il faut 2. recuperer la valeur de la cle depuis l'env. ca peut etre fait dans cette boucle ou en dehors pour plus concis
+			// count_keys++;
+			ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+			start = i;
 		}
 		else
 			i++;
 	}
-	if (i > start) {
+	if (i > start)
+	{
 		current_xpnd = ft_lstnewxpnd();
 		if (!current_xpnd)
 			return (false);
@@ -578,18 +752,33 @@ int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av
 
 {
 	// char	*arg1="$USER\"$MAIL\"\'$PAGER\'$$$COL\"\"\"$$$ORTERM\"";
-	char	*arg2 = "\"$Abba\'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"";
-	// char	*arg3="\'$USER $USER\'$USER";
-	// char *arg5="echo $$USER";
+	char	*arg2 = "bob\'\'\"\"\"$Abba'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"Iguane";
+	// char	*arg3="\'$USER $USER\'$USER\"$USER $USER\"";
+	// char *arg5="\"echo $$USER\"";
 
 	// size_t	count = count_expand(arg1);
 	// char **key;
+	t_xpnd *xpnd_quotes_list = NULL;
 	t_xpnd *xpnd_list = NULL;
 
 
+
 	// key = char_keys(arg1, count);
-	if (!tkn_xpnd_quotes_segmentation(arg2, &xpnd_list))
-	return (1);
+	if (!tkn_xpnd_quotes_segmentation(arg2, &xpnd_quotes_list))
+		return (1);
+	printf("================= ENTERING XPND QUOTES LIST PRINTF =================\n");
+	printf_xpnd(&xpnd_quotes_list);
+
+	// if (!tkn_xpnd_segmentation(arg2, &xpnd_list))
+	while (xpnd_quotes_list)
+	{
+		if (!tkn_xpnd_segmentation2(xpnd_quotes_list, &xpnd_list))
+			return (1);
+		xpnd_quotes_list = xpnd_quotes_list->next;
+	}
+	printf("================= ENTERING XPND LIST PRINTF =================\n");
+	printf_xpnd(&xpnd_list);
+
 
 	// if (key)
 	// {
@@ -601,7 +790,7 @@ int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av
 	// 	free(key);
 	// }
 
-	printf_xpnd(&xpnd_list);
+	// printf_xpnd(&xpnd_list);
 
 
 	return (0);
