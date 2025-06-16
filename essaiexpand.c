@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/16 19:08:47 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:00:54 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,43 +369,165 @@ char	**char_keys(char *tkn_raw, size_t count_expand)
 		temp->next = new;
 	}
 } */
-int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd)
 {
-	size_t	i;
-	size_t	start;
-	size_t	strlen;
-	t_xpnd	*new_xpdn;
+	new_xpnd->substr = ft_strndup(src, n);
+	new_xpnd->xpnd_check = xpnd_check;
+	new_xpnd->in_single = xpnd_quotes_curr->in_single;
+	new_xpnd->in_double = xpnd_quotes_curr->in_double;
+	return (new_xpnd);
+}
 
-	i = 0;
-	start = 0;
+int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list) // gere les subtokens single quotes
+{
+	size_t	strlen;
+	t_xpnd	*new_xpnd;
+
 	strlen = ft_strlen(substr);
-	new_xpdn = ft_lstnewxpnd();
-	if (!new_xpdn)
+	new_xpnd = ft_lstnewxpnd();
+	if (!new_xpnd)
 		return (false);
-	if (strlen >= 2)
-		new_xpdn->substr = ft_strndup(substr + 1, strlen - 2);
+	if (strlen >= 2) // pour rappel ft_strlen('') == 2 donc pris en charge par if(strlen >= 2)
+		new_xpnd = xpnd_new_fill(substr + 1, strlen - 2, false, xpnd_quotes_curr, new_xpnd);
 	else
-		new_xpdn->substr = ft_strndup("", 0); // pour rappel ft_strlen('') == 2 donc pris en charge par if(strlen >= 2)
-	new_xpdn->xpnd_check = false;
-	new_xpdn->in_single = xpnd_quotes_curr->in_single;
-	new_xpdn->in_double = xpnd_quotes_curr->in_double;
-	ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+		new_xpnd = xpnd_new_fill("", 0, false, xpnd_quotes_curr, new_xpnd);
+	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 	return (true);
 }
 
-
-
-
-int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
 {
 	size_t	i;
 	size_t	start;
 	size_t	strlen;
-	t_xpnd	*new_xpdn;
+	t_xpnd	*new_xpnd;
 
+	strlen = ft_strlen(xpnd_quotes_curr->substr);
+	if (strlen < 2)
+	{
+		new_xpnd = ft_lstnewxpnd();
+		if (!new_xpnd)
+			return (false);
+		new_xpnd = xpnd_new_fill("", 0, false, xpnd_quotes_curr, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+		return (true);
+	}
+	i = 1;
+	start = 1;
+	while (i < strlen - 1)
+	{
+		if(substr[i] == '$' && (i + 1 < strlen - 1) && is_valid_keychar(substr[i + 1]))
+		{
+			if (i > start)
+			{
+				new_xpnd = ft_lstnewxpnd();
+				if (!new_xpnd)
+					return (false);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			}
+			start = ++i;
+			while (i < strlen - 1 && is_valid_keychar(substr[i]))
+				i++;
+			new_xpnd = ft_lstnewxpnd();
+			if (!new_xpnd)
+				return (false);
+			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			start = i;
+		}
+		// else if (!is_valid_keychar(substr[i]) && substr[i] != '$')
+		// {
+		// 	if (i > start)
+		// 	{
+		// 		new_xpnd = ft_lstnewxpnd();
+		// 		if (!new_xpnd)
+		// 			return (false);
+		// 		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+		// 	}
+		// 	start = i;
+		// 	while (substr[i] != '$' && (i < strlen - 1))
+		// 		i++;
+		// 	new_xpnd = ft_lstnewxpnd();
+		// 	if (!new_xpnd)
+		// 		return (false);
+		// 	new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		// 	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+		// 	start = i;
+		// }
+		else
+			i++;
+	}
+	if (i > start)
+	{
+		new_xpnd = ft_lstnewxpnd();
+		if (!new_xpnd)
+			return (false);
+		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	}
+
+	return (true);
+}
+
+int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+{
+	size_t	i;
+	size_t	start;
+	size_t	strlen;
+	t_xpnd	*new_xpnd;
+
+	strlen = ft_strlen(xpnd_quotes_curr->substr);
 	i = 0;
 	start = 0;
-	strlen = ft_strlen(xpnd_quotes_curr->substr);
+	while(substr[i])
+	{
+		if(substr[i] == '$' && substr[i + 1] && is_valid_keychar(substr[i + 1]))
+		{
+			if (i > start)
+			{
+				new_xpnd = ft_lstnewxpnd();
+				if (!new_xpnd)
+					return (false);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			}
+			start = ++i;
+			while (substr[i] && is_valid_keychar(substr[i]))
+				i++;
+			new_xpnd = ft_lstnewxpnd();
+			if (!new_xpnd)
+				return (false);
+			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			start = i;
+		}
+		else
+			i++;
+	}
+	if (i > start)
+	{
+		new_xpnd = ft_lstnewxpnd();
+		if (!new_xpnd)
+			return (false);
+		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	}
+	return (true);
+
+}
+
+int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+{
+	// size_t	i;
+	// size_t	start;
+	// size_t	strlen;
+	// // t_xpnd	*new_xpnd;
+
+	// i = 0;
+	// start = 0;
+	// strlen = ft_strlen(xpnd_quotes_curr->substr);
 
 	if (!xpnd_quotes_curr || !xpnd_quotes_curr->substr)
 		return (true);
@@ -414,21 +536,31 @@ int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
 		if (!tkn_xpnd_segmentation2_squotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
 			return (false);
 	}
-	while(xpnd_quotes_curr->substr[i])
+	else if (xpnd_quotes_curr->in_double)
 	{
+		if (!tkn_xpnd_segmentation2_dquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+			return (false);
+	}
+	else
+	{
+		if (!tkn_xpnd_segmentation2_noquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+			return (false);
+	}
+	// while(xpnd_quotes_curr->substr[i])
+	// {
 		// if (xpnd_quotes_curr->in_single)
 		// {
 		// 	start = ++i;
 		// 	while (xpnd_quotes_curr->substr[i] && xpnd_quotes_curr->substr[i] != '\'')
 		// 		i++;
-		// 	new_xpdn = ft_lstnewxpnd();
-		// 	if (!new_xpdn)
+		// 	new_xpnd = ft_lstnewxpnd();
+		// 	if (!new_xpnd)
 		// 		return (false);
-		// 	new_xpdn->in_double = xpnd_quotes_curr->in_double;
-		// 	new_xpdn->in_single = xpnd_quotes_curr->in_single;
-		// 	new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
-		// 	new_xpdn->xpnd_check = false;
-		// 	ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+		// 	new_xpnd->in_double = xpnd_quotes_curr->in_double;
+		// 	new_xpnd->in_single = xpnd_quotes_curr->in_single;
+		// 	new_xpnd->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+		// 	new_xpnd->xpnd_check = false;
+		// 	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 		// 	i++;
 		// 	start = i;
 		// }
@@ -437,14 +569,14 @@ int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
 		// {
 		// 	if (i > start) // 1. Add literal segment before this variable, if any
 		// 	{
-		// 		new_xpdn = ft_lstnewxpnd();
-		// 		if (!new_xpdn)
+		// 		new_xpnd = ft_lstnewxpnd();
+		// 		if (!new_xpnd)
 		// 			return (false);
-		// 		new_xpdn->in_double = xpnd_quotes_curr->in_double;
-		// 		new_xpdn->in_single = xpnd_quotes_curr->in_single;
-		// 		new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
-		// 		new_xpdn->xpnd_check = false;
-		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+		// 		new_xpnd->in_double = xpnd_quotes_curr->in_double;
+		// 		new_xpnd->in_single = xpnd_quotes_curr->in_single;
+		// 		new_xpnd->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+		// 		new_xpnd->xpnd_check = false;
+		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 		// 	}
 		// 	start = i;
 		// 	if (xpnd_quotes_curr->substr[i] == '$' && xpnd_quotes_curr->substr[i + 1] && is_valid_keychar(xpnd_quotes_curr->substr[i + 1]))
@@ -453,61 +585,61 @@ int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
 		// 		start = i;
 		// 		while (xpnd_quotes_curr->substr[i] && is_valid_keychar(xpnd_quotes_curr->substr[i]))
 		// 			i++;
-		// 		new_xpdn = ft_lstnewxpnd();
-		// 		if (!new_xpdn)
+		// 		new_xpnd = ft_lstnewxpnd();
+		// 		if (!new_xpnd)
 		// 			return (false);
-		// 		new_xpdn->in_double = xpnd_quotes_curr->in_double;
-		// 		new_xpdn->in_single = xpnd_quotes_curr->in_single;
-		// 		new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
-		// 		new_xpdn->xpnd_check = true;
-		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
+		// 		new_xpnd->in_double = xpnd_quotes_curr->in_double;
+		// 		new_xpnd->in_single = xpnd_quotes_curr->in_single;
+		// 		new_xpnd->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+		// 		new_xpnd->xpnd_check = true;
+		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 		// 		start = ++i;
 		// 	}
 		// }
 
-		if (xpnd_quotes_curr->substr[i] == '$' && xpnd_quotes_curr->substr[i + 1] && is_valid_keychar(xpnd_quotes_curr->substr[i + 1]))
-		{
-			if (i > start) // 1. Add literal segment before this variable, if any
-			{
-				new_xpdn = ft_lstnewxpnd();
-				if (!new_xpdn)
-					return (false);
-				new_xpdn->in_double = xpnd_quotes_curr->in_double;
-				new_xpdn->in_single = xpnd_quotes_curr->in_single;
-				new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
-				new_xpdn->xpnd_check = false;
-				ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
-			}
-			// // 2. Add variable segment
-			i++;
-			start = i;
-			while (xpnd_quotes_curr->substr[i] && is_valid_keychar(xpnd_quotes_curr->substr[i]))
-				i++;
-			new_xpdn = ft_lstnewxpnd();
-			if (!new_xpdn)
-				return (false);
-			new_xpdn->in_double = xpnd_quotes_curr->in_double;
-			new_xpdn->in_single = xpnd_quotes_curr->in_single;
-			new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
-			new_xpdn->xpnd_check = true;
-			ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
-			start = i;
-		}
-		else
-			i++;
-	}
-	// 3. Add any remaining literal at the end
-	if (i > start)
-	{
-		new_xpdn = ft_lstnewxpnd();
-		if (!new_xpdn)
-			return (false);
-		new_xpdn->in_double = xpnd_quotes_curr->in_double;
-		new_xpdn->in_single = xpnd_quotes_curr->in_single;
-		new_xpdn->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
-		new_xpdn->xpnd_check = false;
-		ft_lstadd_back_xpnd(xpnd_list, new_xpdn);
-	}
+	// 	if (xpnd_quotes_curr->substr[i] == '$' && xpnd_quotes_curr->substr[i + 1] && is_valid_keychar(xpnd_quotes_curr->substr[i + 1]))
+	// 	{
+	// 		if (i > start) // 1. Add literal segment before this variable, if any
+	// 		{
+	// 			new_xpnd = ft_lstnewxpnd();
+	// 			if (!new_xpnd)
+	// 				return (false);
+	// 			new_xpnd->in_double = xpnd_quotes_curr->in_double;
+	// 			new_xpnd->in_single = xpnd_quotes_curr->in_single;
+	// 			new_xpnd->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+	// 			new_xpnd->xpnd_check = false;
+	// 			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	// 		}
+	// 		// // 2. Add variable segment
+	// 		i++;
+	// 		start = i;
+	// 		while (xpnd_quotes_curr->substr[i] && is_valid_keychar(xpnd_quotes_curr->substr[i]))
+	// 			i++;
+	// 		new_xpnd = ft_lstnewxpnd();
+	// 		if (!new_xpnd)
+	// 			return (false);
+	// 		new_xpnd->in_double = xpnd_quotes_curr->in_double;
+	// 		new_xpnd->in_single = xpnd_quotes_curr->in_single;
+	// 		new_xpnd->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+	// 		new_xpnd->xpnd_check = true;
+	// 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	// 		start = i;
+	// 	}
+	// 	else
+	// 		i++;
+	// }
+	// // 3. Add any remaining literal at the end
+	// if (i > start)
+	// {
+	// 	new_xpnd = ft_lstnewxpnd();
+	// 	if (!new_xpnd)
+	// 		return (false);
+	// 	new_xpnd->in_double = xpnd_quotes_curr->in_double;
+	// 	new_xpnd->in_single = xpnd_quotes_curr->in_single;
+	// 	new_xpnd->substr = ft_strndup(xpnd_quotes_curr->substr + start, i - start);
+	// 	new_xpnd->xpnd_check = false;
+	// 	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	// }
 	return (true);
 }
 
@@ -748,11 +880,33 @@ void	printf_xpnd(t_xpnd **xpnd_list)
 	}
 }
 
+void	free_xpnd_quotes_list(t_xpnd *xpnd_quotes_list)
+{
+	t_xpnd	*xpnd_curr;
+	t_xpnd	*xpnd_next;
+
+	if (!xpnd_quotes_list)
+		return ;
+	xpnd_curr = xpnd_quotes_list;
+	while (xpnd_curr && xpnd_curr->prev)
+		xpnd_curr = xpnd_curr->prev;
+	while(xpnd_curr)
+	{
+		//if (xpnd_curr->next)
+		xpnd_next = xpnd_curr->next;
+		// else
+		// 	return ;
+		free(xpnd_curr);
+		xpnd_curr = xpnd_next;
+	}
+
+}
+
 int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av PARCE QUE LE SHELL VA EXPAND LES $USER
 
 {
 	// char	*arg1="$USER\"$MAIL\"\'$PAGER\'$$$COL\"\"\"$$$ORTERM\"";
-	char	*arg2 = "bob\'\'\"\"\"$Abba'$Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"Iguane";
+	char	*arg2 = "bob\'\'\"\"\"$Abba$  c ' $Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"Iguane";
 	// char	*arg3="\'$USER $USER\'$USER\"$USER $USER\"";
 	// char *arg5="\"echo $$USER\"";
 
@@ -776,8 +930,10 @@ int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av
 			return (1);
 		xpnd_quotes_list = xpnd_quotes_list->next;
 	}
+	free_xpnd_quotes_list(xpnd_quotes_list);
 	printf("================= ENTERING XPND LIST PRINTF =================\n");
 	printf_xpnd(&xpnd_list);
+	free_xpnd_quotes_list(xpnd_list);
 
 
 	// if (key)
