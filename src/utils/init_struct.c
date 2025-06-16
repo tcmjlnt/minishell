@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:25:25 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/09 18:28:27 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/16 10:16:50 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static void	get_builtins(t_builtin	*builtins)
 	builtins[0] = (t_builtin){"pwd", ft_pwd};
 	builtins[1] = (t_builtin){"env", ft_env};
 	builtins[2] = (t_builtin){"echo", ft_echo};
-	builtins[3] = (t_builtin){"cd", NULL};
-	builtins[4] = (t_builtin){"exit", NULL};
+	builtins[3] = (t_builtin){"cd", ft_cd};
+	builtins[4] = (t_builtin){"exit", ft_exit};
 	builtins[5] = (t_builtin){"export", NULL};
 	builtins[6] = (t_builtin){"unset", NULL};
 	builtins[7] = (t_builtin){NULL, NULL}; // NULL de fin pour boucle cond while (builtins[i].name)

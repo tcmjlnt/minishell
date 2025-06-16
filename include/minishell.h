@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/14 15:57:43 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/16 10:37:00 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,19 +210,19 @@ void	print_env_line(char *line);
 void	print_env(t_env *env);
 void	print_env_tab(char **env_tab);
 void	env_from_envp(t_shell *shell, char **envp);
-char	*get_env_value(t_env *env, const char *key);
 char	**env_to_env_tab_for_execve(t_env *env);
+char	*get_env_value(t_env *env, const char *key);
+void	update_env_value(t_env *env, const char *key, const char *new_value);
 
 /* ===========================    🔧 BUILTINS    ============================ */
 int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
+int		ft_cd(t_shell *shell, t_cmd *cmd, int fd);
+int		ft_exit(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
 t_bool	is_builtin(t_shell *shell, char *cmd_name);
 t_bool	is_parent_builtin(t_cmd *cmd);
-
-t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_shell *shell);
-void	add_cmd(t_cmd **head, t_cmd *new_cmd);
 
 /* ========================    🦄 PARSING    ======================== */
 int		parsing(char *prompt, t_cmd **cmd_list, t_shell *shell);
@@ -241,5 +241,14 @@ int		is_inside_dquotes(char *token_raw);
 void	print_args(t_cmd *cmd);
 int		is_redir_operator(t_token_type token_type);
 int		fill_redir(t_redir **redir, t_token *token);
+
+/* ========================    🚧 DEBUG    ======================== */
+void	debug_env(t_shell *shell);
+void	debug_env_tab(t_shell *shell);
+void	debug_path_for(char *cmd, t_shell *shell);
+void	debug_cmd(t_cmd *cmd);
+void	debug_cmd_list(t_cmd *cmds);
+void	debug_pipe(int in_fd, int pipe_fd[2]);
+void	debug_exec_external(t_cmd *cmd);
 
 #endif
