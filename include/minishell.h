@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/13 16:09:22 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:57:43 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,11 +178,10 @@ size_t	ft_strnlen_noquotes(char *src, size_t n);
 char	*ft_strndup(char *src, size_t n);
 t_token	*ft_lstnew_token(char *value, int type, int node_num);
 void	print_token(t_token	*token);
-
-/* ===========================    🔧 BUILTINS    ============================ */
 int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
+void	print_builtin_pipe_warning(t_cmd *cmd);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 char	*find_command_path(char *cmd, t_env *env);
@@ -220,6 +219,7 @@ int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
 t_bool	is_builtin(t_shell *shell, char *cmd_name);
+t_bool	is_parent_builtin(t_cmd *cmd);
 
 t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_shell *shell);
 void	add_cmd(t_cmd **head, t_cmd *new_cmd);

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/08 15:14:48 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/14 15:36:32 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,16 @@ t_bool	is_builtin(t_shell *shell, char *cmd_name)
 	}
 	return (false);
 }
+
+t_bool	is_parent_builtin(t_cmd *cmd)
+{
+	if (!cmd || !cmd->args || !cmd->args[0])
+		return (false);
+	return (
+		ft_strcmp(cmd->args[0], "cd") == 0
+		|| ft_strcmp(cmd->args[0], "exit") == 0
+		|| ft_strcmp(cmd->args[0], "export") == 0
+		|| ft_strcmp(cmd->args[0], "unset") == 0
+	);
+}
+
