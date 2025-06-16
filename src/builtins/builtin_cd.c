@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:17:01 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 10:25:53 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/16 12:11:52 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 /* gere les cas speciaux comme '~', '-', ou autres erreurs */
 static int	handle_special_cases(t_cmd *cmd)
 {
-	if (!cmd->args[0] || cmd->args[1])
+	if (!cmd->args[0])
 	{
 		ft_putstr_fd("minishell: cd: missing path\n", STDERR_FILENO);
 		ft_putstr_fd("Usage: cd <path> relative or absolute\n", STDERR_FILENO);
@@ -56,7 +56,7 @@ int	ft_cd(t_shell *shell, t_cmd *cmd, int fd)
 	old_pwd = getcwd(NULL, 0);
 	if (!old_pwd)
 		return (perror("minishell: cd: getcwd"), 1);
-	if (chdir(cmd->args[0]) != 0)
+	if (chdir(cmd->args[1]) != 0)
 	{
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 		perror(cmd->args[0]);
