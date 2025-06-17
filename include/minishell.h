@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 22:40:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:17:23 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,6 @@ typedef enum e_token_type
 	TOKEN_REDIRECT_APPEND,	// >>
 	TOKEN_REDIRECT_HEREDOC,	// <<
 	TOKEN_EOF,				// fin de la ligne/commande
-	ble,
-	bla,
 }	t_token_type;
 
 typedef enum	e_parsing_type
@@ -249,7 +247,6 @@ int		is_quote(char c);
 int		parse_tokens(t_cmd **cmd_list, t_token **tkn_list);
 t_cmd	*ft_lstnewcmd(void);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
-int		handle_expansion(t_token **tkn_list, t_shell *shell);
 int		is_inside_squotes(char *token_raw);
 int		is_inside_dquotes(char *token_raw);
 void	print_args(t_cmd *cmd);
@@ -259,9 +256,14 @@ int		is_inside_dquotes(char *token_raw);
 int		is_inside_squotes(char *token_raw);
 
 /* ========================    💰 EXPANSION    ======================== */
+int		handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell);
 t_xpnd	*ft_lstnewxpnd(void);
 void	ft_lstadd_back_xpnd(t_xpnd **xpnd, t_xpnd *new);
 t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd);
+t_token	*ft_lstnewtoken_xpnd(void);
+void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list);
+
+
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/16 21:26:32 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/17 13:46:56 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,16 @@ typedef	struct s_xpnd
 	struct s_xpnd	*next;
 }	t_xpnd;
 
-int	is_quote(char c)
+typedef	struct s_token
 {
-	return (c == '\'' || c == '\"');
-}
+	int				token_type;
+	char			*token_value;
+	char			*token_raw;
+	// char			**args;
+	// int				node_num;
+	struct s_token	*prev;
+	struct s_token	*next;
+}	t_token;
 
 size_t	ft_strlen(const char *s)
 {
@@ -49,6 +55,65 @@ size_t	ft_strlen(const char *s)
 		i++;
 	return (i);
 }
+
+char	*ft_strcpy(char *dest, char *src)
+{
+	int	i;
+
+	i = 0;
+	while (src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
+char	*ft_strdup(char *src)
+{
+	char	*dest;
+	int		len;
+
+	len = ft_strlen(src) + 1;
+	dest = malloc(sizeof(char) * len);
+	if (dest == NULL)
+		return (NULL);
+	*dest = 0;
+	ft_strcpy(dest, src);
+	return (dest);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*joined;
+	size_t	i;
+	size_t	j;
+
+	joined = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!joined)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		joined[i] = s1[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j])
+	{
+		joined[i + j] = s2[j];
+		j++;
+	}
+	joined[i + j] = '\0';
+	return (joined);
+}
+
+int	is_quote(char c)
+{
+	return (c == '\'' || c == '\"');
+}
+
 
 int	is_inside_squotes(char *token_raw, size_t pos)
 {
@@ -902,23 +967,68 @@ void	free_xpnd_quotes_list(t_xpnd *xpnd_quotes_list)
 
 }
 
+/* int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list)
+{
+	t_xpnd *xpnd_curr;
+	char	*temp;
+	char	*res;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (false);
+	xpnd_curr = *xpnd_list;
+	temp = xpnd_curr->str_to_join;
+	res = NULL;
+	while (xpnd_curr)
+	{
+		res = ft_strjoin(temp, xpnd_curr->next->str_to_join);
+		if (!res)
+			return (false);
+		temp = ft_strdup(res);
+		if (!temp)
+			return (false);
+		xpnd_curr = xpnd_curr->next;
+	}
+
+
+} */
+/*
+int	handle_key_value(t_xpnd **xpnd_list)
+{
+	t_xpnd	*xpnd_curr;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (false);
+	xpnd_curr = *xpnd_list;
+
+	while (xpnd_curr)
+	{
+		if (xpnd_curr->xpnd_check = true)
+		{
+			xpnd_curr->str_to_join = ft_strdup(getenv())
+		}
+	}
+} */
+
 int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av PARCE QUE LE SHELL VA EXPAND LES $USER
 
 {
 	// char	*arg1="$USER\"$MAIL\"\'$PAGER\'$$$COL\"\"\"$$ORTERM\"";
-	char	*arg2 = "bob\'\'\"\"\"$Abba$  c ' $Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"Iguane";
+	// char	*arg2 = "bob\'\'\"\"\"$Abba$  c ' $Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"Iguane";
 	// char	*arg3="\'$USER $USER\'$USER\"$USER $USER\"";
 	// char *arg5="\"echo $$USER\"";
+	char	*arg6="echo\"$US\"";
 
 	// size_t	count = count_expand(arg1);
 	// char **key;
 	t_xpnd *xpnd_quotes_list = NULL;
 	t_xpnd *xpnd_list = NULL;
+	// t_token	*tkn_xpnd_list = NULL;
+
 
 
 
 	// key = char_keys(arg1, count);
-	if (!tkn_xpnd_quotes_segmentation(arg2, &xpnd_quotes_list))
+	if (!tkn_xpnd_quotes_segmentation(arg6, &xpnd_quotes_list))
 		return (1);
 	printf("================= ENTERING XPND QUOTES LIST PRINTF =================\n");
 	printf_xpnd(&xpnd_quotes_list);
@@ -933,7 +1043,16 @@ int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av
 	free_xpnd_quotes_list(xpnd_quotes_list);
 	printf("================= ENTERING XPND LIST PRINTF =================\n");
 	printf_xpnd(&xpnd_list);
+
+/* 	if (!handle_key_value(&xpnd_list))
+		return (false);
+	printf_xpnd(&xpnd_list);
+
+	if (!join_xpnd(&xpnd_list, &tkn_xpnd_list))
+		return (1); */
 	free_xpnd_quotes_list(xpnd_list);
+
+
 
 
 	// if (key)

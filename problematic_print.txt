@@ -1,0 +1,42 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    problematic_print.txt                              :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/06/17 14:12:38 by tjacquel          #+#    #+#              #
+#    Updated: 2025/06/17 14:12:59 by tjacquel         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+minishell: echo "$USER $US $USER"
+token[0]: `echo` ; token_raw: `echo` ; token_type: 0
+token[1]: `$USER $US $USER` ; token_raw: `"$USER $US $USER"` ; token_type: 0
+================= ENTERING XPND QUOTES LIST FROM TOKEN[0] PRINTF =================
+xpnd_current->substr[0]: `echo` ;       in_single: 1348578656   ;       in_double: 30996        ;       xpnd_check: 0   ;       str_to_join: `(null)`
+================= ENTERING XPND LIST FROM TOKEN[0] PRINTF =================
+xpnd_current->substr[0]: `ch`   ;       in_single: 1348578656   ;       in_double: 30996        ;       xpnd_check: 0   ;       str_to_join: `(null)`
+================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[0] PRINTF =================
+xpnd_current->substr[0]: `ch`   ;       in_single: 1348578656   ;       in_double: 30996        ;       xpnd_check: 0   ;       str_to_join: `ch`
+================= ENTERING XPND QUOTES LIST FROM TOKEN[1] PRINTF =================
+xpnd_current->substr[0]: `"$USER $US $USER"`    ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 0   ;       str_to_join: `(null)`
+================= ENTERING XPND LIST FROM TOKEN[1] PRINTF =================
+xpnd_current->substr[0]: `USER` ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 1   ;       str_to_join: `(null)`
+xpnd_current->substr[1]: ` `    ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 0   ;       str_to_join: `(null)`
+xpnd_current->substr[2]: `US`   ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 1   ;       str_to_join: `(null)`
+xpnd_current->substr[3]: ` `    ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 0   ;       str_to_join: `(null)`
+xpnd_current->substr[4]: `USER` ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 1   ;       str_to_join: `(null)`
+================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[1] PRINTF =================
+xpnd_current->substr[0]: `USER` ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 1   ;       str_to_join: `tjacquel`
+xpnd_current->substr[1]: ` `    ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 0   ;       str_to_join: ` `
+xpnd_current->substr[2]: `US`   ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 1   ;       str_to_join: ``
+xpnd_current->substr[3]: ` `    ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 0   ;       str_to_join: ` `
+xpnd_current->substr[4]: `USER` ;       in_single: 0    ;       in_double: 1    ;       xpnd_check: 1   ;       str_to_join: `tjacquel`
+-----------------
+Command 0: `echo`
+arg[0]: `echo`
+arg[1]: `$USER $US $USER`
+----------------- END OF COMMAND LIST -----------------
+$USER $US $USER
+minishell: 

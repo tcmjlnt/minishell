@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/16 23:21:38 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:12:50 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,33 +416,136 @@ void	printf_xpnd(t_xpnd **xpnd_list)
 	}
 }
 
-int	handle_expansion(t_token **tkn_list, t_shell *shell)
+int	handle_key_value(t_xpnd **xpnd_list, t_env *env)
+{
+	t_xpnd	*xpnd_curr;
+	// char	*key_value;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (false);
+	xpnd_curr = *xpnd_list;
+	// key_value = NULL;
+
+	while (xpnd_curr)
+	{
+		if (xpnd_curr->xpnd_check == true)
+		{
+			// key_value = get_env_value(env, xpnd_curr->substr);
+			// if (!key_value)
+			// 	return (false);
+			// xpnd_curr->str_to_join = ft_strdup(key_value); // a check si faire comme ca avec
+			xpnd_curr->str_to_join = ft_strdup(get_env_value(env, xpnd_curr->substr));
+			if (!xpnd_curr->str_to_join)
+				return (false);
+		}
+		else
+		{
+			xpnd_curr->str_to_join = ft_strdup(xpnd_curr->substr);
+			if (!xpnd_curr->str_to_join)
+				return (false);
+		}
+		xpnd_curr = xpnd_curr->next;
+	}
+	return (true);
+}
+
+// int	new_tkn_xpnd_list()
+// {
+
+// }
+
+int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
+{
+	t_xpnd	*xpnd_curr;
+	t_token	*tkn_xpnd_curr;
+	char	*temp;
+	char	*res;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (false);
+	xpnd_curr = *xpnd_list;
+	temp = ft_strdup(xpnd_curr->str_to_join);
+	if (!temp)
+		return (false);
+	res = ft_strdup("");
+	if (!res)
+		return (false);
+	while (xpnd_curr && xpnd_curr->next) // besoin de check
+	{
+		res = ft_strjoin(temp, xpnd_curr->next->str_to_join);
+		if (!res)
+			return (false);
+		temp = ft_strdup(res);
+		if (!temp)
+			return (false);
+		xpnd_curr = xpnd_curr->next;
+	}
+	tkn_xpnd_curr = ft_lstnewtoken_xpnd();
+	if (!tkn_xpnd_curr)
+		return (false);
+	tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
+	if (!tkn_current->token_raw)
+		return (false);
+	tkn_xpnd_curr->token_type = tkn_current->token_type;
+	tkn_xpnd_curr->token_value = ft_strdup(res);
+	if (!tkn_xpnd_curr->token_value)
+		return (false);
+	ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
+
+	return (true);
+}
+
+int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
 {
 	t_token	*tkn_current;
-	t_xpnd *xpnd_quotes_list = NULL;
-	t_xpnd *xpnd_list = NULL;
-	(void) shell;
+	t_xpnd	*xpnd_quotes_list;
+	t_xpnd	*xpnd_list;
+	t_xpnd	*temp_xpnd_quotes;
+	int		token_index = 0;
+
+	// (void) tkn_xpnd_list;
 
 	if (!tkn_list || !(*tkn_list))
 		return (false);
 	tkn_current = *tkn_list;
 	while (tkn_current && tkn_current->prev)
 		tkn_current = tkn_current->prev;
+	xpnd_list = NULL;
+
 	while (tkn_current)
 	{
+		xpnd_quotes_list = NULL;
+		xpnd_list = NULL;
 		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
 			return (false);
-		printf("================= ENTERING XPND QUOTES LIST PRINTF =================\n");
+		printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
 		printf_xpnd(&xpnd_quotes_list);
-		while (xpnd_quotes_list)
+		temp_xpnd_quotes = xpnd_quotes_list;
+		while (temp_xpnd_quotes)
 		{
-			if (!tkn_xpnd_segmentation2(xpnd_quotes_list, &xpnd_list))
+			if (!tkn_xpnd_segmentation2(temp_xpnd_quotes, &xpnd_list))
 				return (false);
-			xpnd_quotes_list = xpnd_quotes_list->next;
+
+
+			temp_xpnd_quotes = temp_xpnd_quotes->next;
 		}
-		printf("================= ENTERING XPND LIST PRINTF =================\n");
+		printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
 		printf_xpnd(&xpnd_list);
+
+		if (!handle_key_value(&xpnd_list, shell->env))
+			return (false);
+		printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_list);
+
+		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
+			return (false);
+
+		free_t_xpnd_list(xpnd_quotes_list);
+		free_t_xpnd_list(xpnd_list);
+
+		token_index++;
 		tkn_current = tkn_current->next;
+
 
 	}
 
