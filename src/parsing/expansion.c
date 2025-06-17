@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/17 16:15:01 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/17 18:12:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -524,8 +524,8 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 		xpnd_list = NULL;
 		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
 			return (false);
-		// printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_quotes_list);
+		printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_quotes_list);
 		temp_xpnd_quotes = xpnd_quotes_list;
 		while (temp_xpnd_quotes)
 		{
@@ -535,13 +535,13 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 
 			temp_xpnd_quotes = temp_xpnd_quotes->next;
 		}
-		// printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_list);
+		printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_list);
 
 		if (!handle_key_value(&xpnd_list, shell->env))
 			return (false);
-		// printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_list);
+		printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_list);
 
 		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
 			return (false);
