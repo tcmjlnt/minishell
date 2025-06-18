@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 15:13:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:35:38 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ void	write_here_doc(int fd, char *limiter)
 	line = NULL;
 	while (1)
 	{
-/* 		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO); */
-		line = readline("> ");
+		write(1, "> ", 2);
+		line = get_next_line(STDIN_FILENO);
+		// line = readline("> ");
 		if (!line)
 			error_exit("readline");
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0

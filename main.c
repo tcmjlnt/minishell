@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/12 16:28:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:05:12 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,5 @@ int main(int ac, char **av, char **envp)
 	// }
 	// else
 	// 	printf("Expected behavior: launch the executable without any other argument\n");
-	return (0);
+	return (shell->exit_status);
 }

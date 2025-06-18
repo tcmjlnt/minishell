@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 15:23:33 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:32:58 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,12 +180,12 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell)
 	}
 }
 
-void	exec_dispatcher(t_cmd *cmd, t_shell *shell)
+void	exec_dispatcher(t_cmd *cmd, t_shell *shell, t_exec *exec)
 {
 	if (!cmd)
 		return ;
 	if (!cmd->next)
-		exec_single_cmd(cmd, shell);
+		exec_single_cmd(cmd, shell, exec);
 	else
 		exec_pipeline(cmd, shell);
 }

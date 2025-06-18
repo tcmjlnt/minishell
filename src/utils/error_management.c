@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 18:33:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/14 16:41:17 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 09:55:50 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,3 +57,4 @@ void	print_builtin_pipe_warning(t_cmd *cmd)
 	}
 	ft_putstr_fd("\n      autre_commande\n", STDERR_FILENO);
 }
+

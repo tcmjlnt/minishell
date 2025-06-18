@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:25:43 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 12:04:11 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:36:54 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*find_command_path(char *cmd, t_env *env)
 		ft_strlcpy(full_path, paths[i], sizeof(full_path));
 		ft_strlcat(full_path, "/", sizeof(full_path));
 		ft_strlcat(full_path, cmd, sizeof(full_path));
-		if (access(full_path, X_OK) == 0)
+		if (access(full_path, X_OK) == 0) // ajouter &&!is_directory)
 			return (gc_strdup(full_path, GC_CMD));
 		i++;
 	}
