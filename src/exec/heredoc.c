@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 22:55:05 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 23:31:31 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,16 @@ char	*heredoc_read_loop(const char *limiter)
 	lim_len = ft_strlen(limiter);
 	while (1)
 	{
+		write(1, "heredoc ", 7); // a sup ces t pour y voir
 		write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
 			break ;
 		if (ft_strncmp(line, limiter, lim_len) == 0 && line[lim_len] == '\n')
+		{
+			printf("limiter: '%s', line: '%s'\n", limiter, line);
 			break ;
+		}
 		content = gc_strjoin(content, line, GC_TMP);
 	}
 	return (content);
@@ -121,7 +125,6 @@ static int	create_heredoc_pipe(char *limiter, int *pipe_fd)
 	}
 	close(pipe_fd[1]);
 	waitpid(pid, NULL, 0);
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
 	return (0);
 }
 
@@ -136,6 +139,12 @@ int	here_doc(char *limiter, t_cmd *cmd, t_shell *shell)
 
 	if (!limiter || !cmd || !shell)
 		return (-1);
+/* 	if (!cmd->cmd)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `<<'\n", STDERR_FILENO);
+		shell->exit_status = 2;
+		return (-1);
+	} */
 	if (create_heredoc_pipe(limiter, pipe_fd) == -1)
 	{
 		shell->exit_status = 1;
@@ -144,5 +153,6 @@ int	here_doc(char *limiter, t_cmd *cmd, t_shell *shell)
 	if (cmd->fd_in != STDIN_FILENO)
 		close(cmd->fd_in);
 	cmd->fd_in = pipe_fd[0];
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
 	return (0);
 }
