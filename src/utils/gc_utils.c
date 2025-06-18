@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:42:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 10:03:06 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:11:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,4 @@ char	**gc_split(char *str, char sep, t_gc_type type)
 	free(tmp);
 	return (gc_tab);
 }
+

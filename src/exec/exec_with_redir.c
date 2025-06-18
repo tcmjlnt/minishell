@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 16:44:27 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:03:04 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,6 @@ void	pipe_reset(int pipe_fd[2])
 {
 	pipe_fd[0] = -1;
 	pipe_fd[1] = -1;
-}
-
-void	parent_close_fds(t_exec *exec)
-{
-	if (exec->in_fd != STDIN_FILENO)
-		close(exec->in_fd);
-	if (exec->pipe_fd[1] != -1)
-		close(exec->pipe_fd[1]);
 }
 
 void	exec_external_cmd(t_cmd *cmd, t_shell *shell)
@@ -93,6 +85,10 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 			exit(shell->exit_status);
 		}
 		waitpid(pid, NULL, 0);
+/* 		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_status = 128 + WTERMSIG(status); */
 	}
 }
 
@@ -185,9 +181,45 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell)
 	}
 }
 
+
+t_bool	is_valid_command(t_cmd *cmd, t_shell *shell)
+{
+	if (!cmd || !cmd->cmd || cmd->cmd[0] == '\0')
+		return (false);
+	if (is_directory(cmd->cmd))
+		return (false);
+	if (!cmd->is_builtin && !find_command_path(cmd->cmd, shell->env))
+		return (false);
+	return (true);
+}
+
+t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell)
+{
+	t_cmd *current = cmd;
+
+	while (current)
+	{
+		if (!current->is_builtin && !is_valid_command(current, shell))
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			if (current->cmd)
+				ft_putstr_fd(current->cmd, STDERR_FILENO);
+			else
+				ft_putstr_fd("(null)", STDERR_FILENO);
+			ft_putstr_fd(": command not found\n", STDERR_FILENO);
+			shell->exit_status = 127;
+			return (true); // une erreur → on stop
+		}
+		current = current->next;
+	}
+	return (false); // tout va bien
+}
+
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd)
+		return ;
+	if (check_invalid_cmds(cmd, shell))
 		return ;
 	if (!cmd->next)
 		exec_single_cmd(cmd, shell);

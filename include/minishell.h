@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 16:03:33 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:20:08 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,6 @@ typedef struct s_builtin
 	t_builtin_func	func;
 }	t_builtin;
 
-typedef struct s_exec
-{
-	int		in_fd;
-	int		pipe_fd[2];
-	pid_t	pid;
-}	t_exec;
-
 typedef struct s_shell
 {
 	t_gc		gc;
@@ -198,7 +191,6 @@ void	print_builtin_pipe_warning(t_cmd *cmd);
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
 void	exec_external_cmd(t_cmd *cmd, t_shell *shell);
-void	parent_close_fds(t_exec *exec);
 void	pipe_reset(int pipe_fd[2]);
 void	pipe_create(int pipe_fd[2]);
 void	wait_pipeline(t_cmd *cmds);
@@ -211,10 +203,14 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell);
 void	apply_dup_redirections(t_cmd *cmd);
 void	prepare_child(t_cmd *cmd, t_shell *shell);
 void	close_redirections(t_cmd *cmd);
-int		open_file(t_token_type type, char *file, t_shell *shell);
 int		handle_single_redirection(t_cmd *cmd, t_redir *redir, t_shell *shell);
 int		apply_redirections(t_cmd *cmd, t_shell *shell);
 int		is_directory(char *file);
+t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell);
+t_bool	is_valid_command(t_cmd *cmd, t_shell *shell);
+char	*heredoc_read_loop(const char *limiter);
+int		here_doc(char *limiter, t_cmd *cmd, t_shell *shell);
+void	sigint_heredoc(int sig);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
