@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/17 18:12:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:10:45 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	new_xpnd = ft_lstnewxpnd();
 	if (!new_xpnd)
 		return (false);
-	if (strlen > 2)
+	if (strlen >= 2)
 	{
 		new_xpnd = xpnd_new_fill(substr + 1, strlen - 2, false, xpnd_quotes_curr, new_xpnd);
 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
@@ -189,7 +189,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	t_xpnd	*new_xpnd;
 
 	strlen = ft_strlen(xpnd_quotes_curr->substr);
-	if (strlen < 2)
+	if (strlen <= 2)
 	{
 		new_xpnd = ft_lstnewxpnd();
 		if (!new_xpnd)
@@ -202,7 +202,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	start = 1;
 	while (i < strlen - 1)
 	{
-		if(substr[i] == '$' && (i + 1 < strlen - 1) && is_valid_keychar(substr[i + 1]))
+		if(substr[i] == '$' && (i + 1 < strlen - 1) && (substr[i + 1] == '_' || ft_isalpha(substr[i + 1])))
 		{
 			if (i > start)
 			{
@@ -269,7 +269,7 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 	start = 0;
 	while(substr[i])
 	{
-		if(substr[i] == '$' && substr[i + 1] && is_valid_keychar(substr[i + 1]))
+		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || ft_isalpha(substr[i + 1])))
 		{
 			if (i > start)
 			{
@@ -449,10 +449,6 @@ int	handle_key_value(t_xpnd **xpnd_list, t_env *env)
 	return (true);
 }
 
-// int	new_tkn_xpnd_list()
-// {
-
-// }
 
 int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
@@ -509,7 +505,6 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 	t_xpnd	*temp_xpnd_quotes;
 	int		token_index = 0;
 
-	// (void) tkn_xpnd_list;
 
 	if (!tkn_list || !(*tkn_list))
 		return (false);
