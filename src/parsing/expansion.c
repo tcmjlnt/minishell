@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/18 14:19:10 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:30:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,46 +202,46 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	start = 1;
 	while (i < strlen - 1)
 	{
-		if(substr[i] == '$' && (i + 1 < strlen - 1) && (substr[i + 1] == '_' || ft_isalpha(substr[i + 1])))
+		if(substr[i] == '$' && (i + 1 < strlen - 1))
 		{
-			if (i > start)
+			if (substr[i + 1] == '_' || ft_isalpha(substr[i + 1]) || substr[i + 1] == '?') // valid key start
 			{
+				if (i > start)
+				{
+					new_xpnd = ft_lstnewxpnd();
+					if (!new_xpnd)
+						return (false);
+					new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+				}
+				start = ++i;
+				if (substr[i] == '?')
+					; // HANDLE $?
+				else
+				{
+					while (i < strlen - 1 && is_valid_keychar(substr[i]))
+						i++;
+				}
 				new_xpnd = ft_lstnewxpnd();
 				if (!new_xpnd)
 					return (false);
-				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
 				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+				start = i;
 			}
-			start = ++i;
-			while (i < strlen - 1 && is_valid_keychar(substr[i]))
-				i++;
-			new_xpnd = ft_lstnewxpnd();
-			if (!new_xpnd)
-				return (false);
-			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
-			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-			start = i;
+			else // invalid key start $9 $\ etc.
+			{
+				if (i > start)
+				{
+					new_xpnd = ft_lstnewxpnd();
+					if (!new_xpnd)
+						return (false);
+					new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+				}
+				start = ++i;
+			}
 		}
-		// else if (!is_valid_keychar(substr[i]) && substr[i] != '$')
-		// {
-		// 	if (i > start)
-		// 	{
-		// 		new_xpnd = ft_lstnewxpnd();
-		// 		if (!new_xpnd)
-		// 			return (false);
-		// 		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
-		// 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-		// 	}
-		// 	start = i;
-		// 	while (substr[i] != '$' && (i < strlen - 1))
-		// 		i++;
-		// 	new_xpnd = ft_lstnewxpnd();
-		// 	if (!new_xpnd)
-		// 		return (false);
-		// 	new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
-		// 	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-		// 	start = i;
-		// }
 		else
 			i++;
 	}
@@ -269,25 +269,45 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 	start = 0;
 	while(substr[i])
 	{
-		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || ft_isalpha(substr[i + 1])))
+		if(substr[i] == '$' && substr[i + 1])
 		{
-			if (i > start)
+			if (substr[i + 1] == '_' || ft_isalpha(substr[i + 1]) || substr[i + 1] == '?') // Valid expansion key
 			{
+				if (i > start)
+				{
+					new_xpnd = ft_lstnewxpnd();
+					if (!new_xpnd)
+						return (false);
+					new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+				}
+				start = ++i;
+				if (substr[i] == '?')
+					;// HANDLE EXIT STATUS
+				else
+				{
+					while (substr[i] && is_valid_keychar(substr[i]))
+						i++;
+				}
 				new_xpnd = ft_lstnewxpnd();
 				if (!new_xpnd)
 					return (false);
-				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
 				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+				start = i;
 			}
-			start = ++i;
-			while (substr[i] && is_valid_keychar(substr[i]))
-				i++;
-			new_xpnd = ft_lstnewxpnd();
-			if (!new_xpnd)
-				return (false);
-			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
-			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-			start = i;
+			else	// INVALID expansion key
+			{
+				if (i > start)
+				{
+					new_xpnd = ft_lstnewxpnd();
+					if (!new_xpnd)
+						return (false);
+					new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+				}
+				start = ++i;
+			}
 		}
 		else
 			i++;
@@ -342,6 +362,22 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 	in_single = false;
 	while (tkn_raw[i])
 	{
+		// Handle $ followed by quotes - skip the $
+		if (tkn_raw[i] == '$')
+		{
+			if (i > start) // Create node for content before $
+			{
+				current_xpnd = ft_lstnewxpnd();
+				if (!current_xpnd)
+					return (false);
+				current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+				current_xpnd->xpnd_check = false;
+				ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+			}
+			while (tkn_raw[i] == '$' && tkn_raw[i + 1] && (tkn_raw[i + 1] == '\'' || tkn_raw[i + 1] == '\"'))
+				i++; // Skip the $
+			start = i; // Start from the quote
+		}
 		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single))
 		{
 			if (i > start)
