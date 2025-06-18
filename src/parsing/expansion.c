@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/18 17:30:41 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/18 19:24:19 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,10 +261,8 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 {
 	size_t	i;
 	size_t	start;
-	size_t	strlen;
 	t_xpnd	*new_xpnd;
 
-	strlen = ft_strlen(xpnd_quotes_curr->substr);
 	i = 0;
 	start = 0;
 	while(substr[i])
@@ -306,7 +304,8 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 					new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
 					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 				}
-				start = ++i;
+				i += 2;
+				start = i;
 			}
 		}
 		else
@@ -362,22 +361,6 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 	in_single = false;
 	while (tkn_raw[i])
 	{
-		// Handle $ followed by quotes - skip the $
-		if (tkn_raw[i] == '$')
-		{
-			if (i > start) // Create node for content before $
-			{
-				current_xpnd = ft_lstnewxpnd();
-				if (!current_xpnd)
-					return (false);
-				current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
-				current_xpnd->xpnd_check = false;
-				ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
-			}
-			while (tkn_raw[i] == '$' && tkn_raw[i + 1] && (tkn_raw[i + 1] == '\'' || tkn_raw[i + 1] == '\"'))
-				i++; // Skip the $
-			start = i; // Start from the quote
-		}
 		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single))
 		{
 			if (i > start)
@@ -485,62 +468,53 @@ int	handle_key_value(t_xpnd **xpnd_list, t_env *env)
 	return (true);
 }
 
-int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current) // gemini 2
+
+int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;
 	t_token	*tkn_xpnd_curr;
-	char	*result;
 	char	*temp;
+	char	*res;
 
 	if (!xpnd_list || !(*xpnd_list))
-		return (true); // No nodes to process, do nothing.
-	result = NULL; // Initialize result to NULL.
+		return (false);
 	xpnd_curr = *xpnd_list;
-	while (xpnd_curr)
+	temp = ft_strdup(xpnd_curr->str_to_join);
+	if (!temp)
+		return (false);
+	res = ft_strdup("");
+	if (!res)
+		return (false);
+	if (xpnd_curr && !xpnd_curr->next)
 	{
-		// This is the crucial logic to skip unquoted empty variables.
-		if (xpnd_curr->xpnd_check && !xpnd_curr->in_single && !xpnd_curr->in_double
-			&& xpnd_curr->str_to_join && xpnd_curr->str_to_join[0] == '\0')
-		{
-			xpnd_curr = xpnd_curr->next;
-			continue;
-		}
-		if (result == NULL) // First non-skipped node.
-			result = ft_strdup(xpnd_curr->str_to_join);
-		else // Subsequent nodes.
-		{
-			temp = ft_strjoin(result, xpnd_curr->str_to_join);
-			free(result);
-			result = temp;
-		}
-		if (!result)
-			return (false); // Malloc failed.
+		res = ft_strdup(xpnd_curr->str_to_join);
+		if (!res)
+			return (false);
+	}
+	while (xpnd_curr && xpnd_curr->next) // besoin de check
+	{
+		res = ft_strjoin(temp, xpnd_curr->next->str_to_join);
+		if (!res)
+			return (false);
+		temp = ft_strdup(res);
+		if (!temp)
+			return (false);
 		xpnd_curr = xpnd_curr->next;
 	}
-	// If result is still NULL, it means all nodes were skipped (e.g., only $DONT).
-	// In this case, we create no token, effectively removing the argument.
-	if (result == NULL)
-		return (true);
-	// Otherwise, create a token with the resulting string.
 	tkn_xpnd_curr = ft_lstnewtoken_xpnd();
 	if (!tkn_xpnd_curr)
-	{
-		free(result);
 		return (false);
-	}
 	tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
-	tkn_xpnd_curr->token_type = tkn_current->token_type;
-	tkn_xpnd_curr->token_value = result; // Assign final string.
-	if (!tkn_xpnd_curr->token_raw)
-	{
-		free(tkn_xpnd_curr->token_value);
-		free(tkn_xpnd_curr);
+	if (!tkn_current->token_raw)
 		return (false);
-	}
+	tkn_xpnd_curr->token_type = tkn_current->token_type;
+	tkn_xpnd_curr->token_value = ft_strdup(res);
+	if (!tkn_xpnd_curr->token_value)
+		return (false);
 	ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
+
 	return (true);
 }
-
 
 int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
 {
