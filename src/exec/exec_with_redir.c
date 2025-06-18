@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 10:46:22 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:44:27 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ void	exec_external_cmd(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
 
+	if (is_directory(cmd->cmd))
+	{
+		ft_printf("minishell: %s: Is a directory\n", cmd->cmd);
+		exit(126);
+	}
 	path = find_command_path(cmd->cmd, shell->env);
 	if (!path)
 	{

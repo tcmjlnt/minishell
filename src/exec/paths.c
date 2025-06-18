@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:25:43 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 12:04:11 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:00:54 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,17 @@ static char	*check_absolute_or_relative_path(char *cmd)
 			return (gc_strdup(cmd, GC_CMD));
 	}
 	return (NULL);
+}
+
+int	is_directory(char *file)
+{
+	int	fd;
+
+	fd = open(file, O_DIRECTORY);
+	if (fd < 0)
+		return (0);
+	close(fd);
+	return (1);
 }
 
 char	*find_command_path(char *cmd, t_env *env)

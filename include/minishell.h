@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 11:39:09 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:03:33 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ void	close_redirections(t_cmd *cmd);
 int		open_file(t_token_type type, char *file, t_shell *shell);
 int		handle_single_redirection(t_cmd *cmd, t_redir *redir, t_shell *shell);
 int		apply_redirections(t_cmd *cmd, t_shell *shell);
+int		is_directory(char *file);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
