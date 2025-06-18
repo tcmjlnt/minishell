@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/18 22:24:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/18 23:49:12 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -468,6 +468,31 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	return (true);
 }
 
+int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
+{
+	t_xpnd	*xpnd_curr;
+	size_t	len;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (false);
+	xpnd_curr = *xpnd_list;
+	while (xpnd_curr)
+	{
+		len = ft_strlen(xpnd_curr->str_to_join);
+		if (xpnd_curr->str_to_join[len - 1] == '$' && !xpnd_curr->xpnd_check && xpnd_curr->next
+			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double)
+		{
+			xpnd_curr->str_to_join = ft_strndup(xpnd_curr->str_to_join, len - 1);
+			if (!xpnd_curr->str_to_join)
+				return (false);
+		}
+		xpnd_curr = xpnd_curr->next;
+	}
+	return (true);
+
+}
+
+
 int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
 {
 	t_token	*tkn_current;
@@ -490,8 +515,8 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 		xpnd_list = NULL;
 		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
 			return (false);
-		printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		printf_xpnd(&xpnd_quotes_list);
+		// printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
+		// printf_xpnd(&xpnd_quotes_list);
 		temp_xpnd_quotes = xpnd_quotes_list;
 		while (temp_xpnd_quotes)
 		{
@@ -501,14 +526,15 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 
 			temp_xpnd_quotes = temp_xpnd_quotes->next;
 		}
-		printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		printf_xpnd(&xpnd_list);
+		// printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
+		// printf_xpnd(&xpnd_list);
 
 		if (!handle_key_value(&xpnd_list, shell->env))
 			return (false);
-		printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
-		printf_xpnd(&xpnd_list);
-
+		// printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
+		// printf_xpnd(&xpnd_list);
+		if (!handle_dollarsign_before_quotes(&xpnd_list))
+			return (false);
 		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
 			return (false);
 
