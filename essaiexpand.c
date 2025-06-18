@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/13 18:27:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/17 13:46:56 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/18 21:15:53 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1016,7 +1016,7 @@ int	main(void) 	// ARRETE DOUBLIER QUE TU NE PEUX PAS UTILISER int ac, char **av
 	// char	*arg2 = "bob\'\'\"\"\"$Abba$  c ' $Bebe\"\'$Coucou\"$Didier\'$Elephant\'\"$Fanny\'\"\'$Gold\'$Hi\"Iguane";
 	// char	*arg3="\'$USER $USER\'$USER\"$USER $USER\"";
 	// char *arg5="\"echo $$USER\"";
-	char	*arg6="echo\"$US\"";
+	char	*arg6="echo\"$$US\"";
 
 	// size_t	count = count_expand(arg1);
 	// char **key;
