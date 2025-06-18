@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 22:06:18 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:55:05 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ static int	create_heredoc_pipe(char *limiter, int *pipe_fd)
 	}
 	close(pipe_fd[1]);
 	waitpid(pid, NULL, 0);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
 	return (0);
 }
 

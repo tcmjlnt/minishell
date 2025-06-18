@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 09:58:34 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 21:50:02 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:54:09 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	handle_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 
 	if (cmd->fd_in > 2)
 		close(cmd->fd_in);
-	fd = here_doc(NULL, redir->file, cmd, shell);
+	fd = here_doc(redir->file, cmd, shell);
 	if (fd == -1)
 	{
 		shell->exit_status = 1;

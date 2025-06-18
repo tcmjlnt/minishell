@@ -80,7 +80,7 @@ SRC_EXEC = \
 	exec/exec_with_redir.c \
 	exec/redir_exec.c \
 	exec/redir_handle.c \
-	exec/redir_open.c \
+	exec/heredoc.c \
 
 SRC_PARSING = \
 	parsing/parsing.c \

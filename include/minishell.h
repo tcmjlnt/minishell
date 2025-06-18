@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 22:20:08 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:58:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,7 @@ void	ft_prompt(t_shell *shell);
 void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 char	*gc_strdup(const char *src, t_gc_type type);
 char	**gc_split(char *str, char sep, t_gc_type type);
+char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type);
 
 /* ==============================    🛠️ UTILS    ================================ */
 void	error_exit(const char *message);
