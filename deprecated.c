@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/10 18:09:32 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:18:06 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,58 @@
 // anciennes fonctions ou anciens bout de fonctions
 
 
+int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current) // version 1.0 mienne
+{
+	t_xpnd	*xpnd_curr;
+	t_token	*tkn_xpnd_curr;
+	char	*temp;
+	char	*res;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (false);
+	xpnd_curr = *xpnd_list;
+	temp = ft_strdup(xpnd_curr->str_to_join);
+	if (!temp)
+		return (false);
+	res = ft_strdup("");
+	if (!res)
+		return (false);
+	if (xpnd_curr && !xpnd_curr->next)
+	{
+		res = ft_strdup(xpnd_curr->str_to_join);
+		if (!res)
+			return (false);
+	}
+	while (xpnd_curr && xpnd_curr->next) // besoin de check
+	{
+		if (xpnd_curr->xpnd_check && !xpnd_curr->in_single && !xpnd_curr->in_double
+			&& xpnd_curr->str_to_join && xpnd_curr->str_to_join[0] == '\0')
+		{
+			xpnd_curr = xpnd_curr->next;
+			continue ;
+		}
+		res = ft_strjoin(temp, xpnd_curr->next->str_to_join);
+		if (!res)
+			return (false);
+		temp = ft_strdup(res);
+		if (!temp)
+			return (false);
+		xpnd_curr = xpnd_curr->next;
+	}
+	tkn_xpnd_curr = ft_lstnewtoken_xpnd();
+	if (!tkn_xpnd_curr)
+		return (false);
+	tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
+	if (!tkn_current->token_raw)
+		return (false);
+	tkn_xpnd_curr->token_type = tkn_current->token_type;
+	tkn_xpnd_curr->token_value = res;
+	if (!tkn_xpnd_curr->token_value)
+		return (false);
+	ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
+
+	return (true);
+}
 
 int	lexer(char *prompt, t_token *token) // premiere iteration du lexer jai change de voie apres
 {
