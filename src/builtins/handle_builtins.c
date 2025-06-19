@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtins.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/14 15:36:32 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:00:04 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	handle_builtin(t_shell *shell, t_cmd *cmd, int fd)
 	{
 		if (ft_strcmp(args[0], builtins[i].name) == 0)
 		{
-			printf("handle_builtin: calling %s\n", args[0]);
+			// printf("handle_builtin: calling %s\n", args[0]);
 			return (builtins[i].func(shell, cmd, fd));
 		}
 		i++;

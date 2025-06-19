@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 09:58:47 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 08:56:40 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:02:23 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	apply_dup_redirections(t_cmd *cmd)
 {
 	if (cmd->fd_in > 2)
 	{
-		printf("dup2 input: fd_in = %d -> STDIN_FILENO (%d)\n", cmd->fd_in, STDIN_FILENO);
+		// printf("dup2 input: fd_in = %d -> STDIN_FILENO (%d)\n", cmd->fd_in, STDIN_FILENO);
 		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
 		{
 			perror("dup2 (input)");
@@ -29,14 +29,14 @@ void	apply_dup_redirections(t_cmd *cmd)
 	}
 	if (cmd->fd_out > 2)
 	{
-		printf("dup2 output: fd_out = %d -> STDOUT_FILENO (%d)\n", cmd->fd_out, STDOUT_FILENO);
+		// printf("dup2 output: fd_out = %d -> STDOUT_FILENO (%d)\n", cmd->fd_out, STDOUT_FILENO);
 		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 (output)");
 			exit(1);
 		}
 	}
-	printf("cmd->fd_in = %d\n", cmd->fd_in);
+	// printf("cmd->fd_in = %d\n", cmd->fd_in);
 }
 /*	prepare_child(cmd, shell)
 	↓
@@ -52,7 +52,7 @@ void	prepare_child(t_cmd *cmd, t_shell *shell)
 		exit(shell->exit_status);
 	}
 	apply_dup_redirections(cmd);
-	printf("dup2 apply: stdin=%d, stdout=%d\n", cmd->fd_in, cmd->fd_out);
+	// printf("dup2 apply: stdin=%d, stdout=%d\n", cmd->fd_in, cmd->fd_out);
 	close_redirections(cmd);
 }
 

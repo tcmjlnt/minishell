@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 10:43:57 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:04:14 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ char	*heredoc_read_loop(const char *limiter)
 			break ;
 		if (ft_strncmp(line, limiter, lim_len) == 0 && line[lim_len] == '\n')
 		{
-			printf("limiter: '%s', line: '%s'\n", limiter, line);
+			// printf("limiter: '%s', line: '%s'\n", limiter, line);
 			break ;
 		}
 		content = gc_strjoin(content, line, GC_TMP);
@@ -139,7 +139,7 @@ int	here_doc(char *limiter, t_cmd *cmd, t_shell *shell)
 
 	if (!limiter || !cmd || !shell)
 		return (-1);
-	print_args(cmd);
+	//  print_args(cmd);
 /* 	if (!cmd->cmd)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `<<'\n", STDERR_FILENO);
