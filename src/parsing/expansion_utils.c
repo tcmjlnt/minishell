@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 20:37:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/17 14:20:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/19 15:02:22 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,11 @@ t_xpnd	*ft_lstnewxpnd(void)
 	if (!new_xpnd)
 		return (NULL);
 	new_xpnd->substr = NULL;
+	new_xpnd->in_double = false;
+	new_xpnd->in_single = false;
 	new_xpnd->xpnd_check = -1;
 	new_xpnd->str_to_join = NULL;
+
 	new_xpnd->prev = NULL;
 	new_xpnd->next = NULL;
 
