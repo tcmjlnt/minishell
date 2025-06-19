@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/12 21:44:58 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/14 20:40:09 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,6 @@ t_cmd	*ft_lstnewcmd(void)
 	new_cmd->pid = 0;
 	new_cmd->is_builtin = false;
 	new_cmd->redir = NULL;
-
-	// if (token_type == TOKEN_PIPE || token_type == TOKEN_WORD)
-	// {
-	// 	new_cmd->args[(*j)] = ft_strdup(token->token_value);
-	// }
-	// if (token_type == TOKEN_PIPE)
-	// {
-	// 	new_cmd->cmd = ft_strdup(token->token_value);
-	// }
 	new_cmd->prev = NULL;
 	new_cmd->next = NULL;
 

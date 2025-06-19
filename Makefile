@@ -88,7 +88,8 @@ SRC_PARSING = \
 	parsing/token_utils.c \
 	parsing/parsing_cmd.c \
 	parsing/parsing_redir.c \
-	# parsing/expansion.c
+	parsing/expansion.c \
+	parsing/expansion_utils.c
 
 SRC_DEBUG = debug/debug.c \
 

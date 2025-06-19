@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 11:39:09 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:17:23 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,20 @@ typedef	struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef	struct s_xpnd
+{
+	char			*substr;
+	// char			*key;
+	t_bool			in_single;
+	t_bool			in_double;
+	t_bool			xpnd_check;
+	// char			*xpnd_value;
+	char			*str_to_join;
+	// t_token			*token_link; // jai peur que ce soit complique a gerer notamment dans les cas ou je ne veux pas expand
+	struct s_xpnd	*prev;
+	struct s_xpnd	*next;
+}	t_xpnd;
+
 /* ===========================    ♻️ PROMPT    =========================== */
 void	ft_prompt(t_shell *shell);
 
@@ -246,12 +260,24 @@ int		is_quote(char c);
 int		parse_tokens(t_cmd **cmd_list, t_token **tkn_list);
 t_cmd	*ft_lstnewcmd(void);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
-int		handle_expansion(t_token **tkn_list, t_shell *shell);
 int		is_inside_squotes(char *token_raw);
 int		is_inside_dquotes(char *token_raw);
 void	print_args(t_cmd *cmd);
 int		is_redir_operator(t_token_type token_type);
 int		fill_redir(t_redir **redir, t_token *token);
+int		is_inside_dquotes(char *token_raw);
+int		is_inside_squotes(char *token_raw);
+
+/* ========================    💰 EXPANSION    ======================== */
+int		handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell);
+t_xpnd	*ft_lstnewxpnd(void);
+void	ft_lstadd_back_xpnd(t_xpnd **xpnd, t_xpnd *new);
+t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd);
+t_token	*ft_lstnewtoken_xpnd(void);
+void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list);
+
+
+
 
 /* ========================    🚧 DEBUG    ======================== */
 void	debug_env(t_shell *shell);

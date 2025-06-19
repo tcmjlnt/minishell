@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/16 11:38:43 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 23:49:20 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,10 +214,12 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 {
 	(void)	shell;
 	t_token	*token;
-	t_token *tkn_list;
+	t_token	*tkn_list;
+	t_token	*tkn_xpnd_list;
 	// t_cmd	*cmd_list;
 
 	tkn_list = NULL;
+	tkn_xpnd_list = NULL;
 	// cmd_list = NULL;
 
 
@@ -332,12 +334,13 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	}
 	// print_token(tkn_list);
 
-	// handle_expansion(&tkn_list, shell); // eet si on faisait l'expand apres la token avant le parsing
+	handle_expansion(&tkn_list, &tkn_xpnd_list, shell); // eet si on faisait l'expand apres la token avant le parsing
 
-	// print_token(tkn_list);
+	// printf("-------------------- TOKENS AFTER EXPANSION -----------------\n");
+	// print_token(tkn_xpnd_list);
 
 
-	if (!parse_tokens(cmd_list, &tkn_list))
+	if (!parse_tokens(cmd_list, &tkn_xpnd_list))
 	{
 		printf("ici\n");
 		return (false);
