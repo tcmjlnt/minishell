@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 11:57:05 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:21:45 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,7 @@ void	update_env_value(t_env *env, const char *key, const char *new_value);
 int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
+int		ft_export(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_cd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_exit(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
@@ -271,7 +272,7 @@ void	ft_lstadd_back_xpnd(t_xpnd **xpnd, t_xpnd *new);
 t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd);
 t_token	*ft_lstnewtoken_xpnd(void);
 void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list);
-
+int		is_valid_keychar(char c);
 
 
 

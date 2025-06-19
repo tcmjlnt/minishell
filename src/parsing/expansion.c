@@ -6,13 +6,13 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/19 11:52:27 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:21:02 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int is_valid_keychar(char c)
+int is_valid_keychar(char c)
 {
 	if (ft_isalnum(c) || c == '_')
 		return (1);
