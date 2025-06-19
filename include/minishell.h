@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/17 14:17:23 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/19 08:59:55 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,21 +146,22 @@ typedef struct s_builtin
 	t_builtin_func	func;
 }	t_builtin;
 
-typedef struct s_exec
+typedef struct s_std_backup
 {
-	int		in_fd;
-	int		pipe_fd[2];
-	pid_t	pid;
-}	t_exec;
+	int	orig_stdin;
+	int	orig_stdout;
+	int	orig_stderr;
+}	t_std_backup;
 
 typedef struct s_shell
 {
-	t_gc		gc;
-	t_env		*env;
-	char		**paths;
-	t_bool		is_cmd;
-	t_builtin	builtins[8];
-	int			exit_status;
+	t_gc			gc;
+	t_env			*env;
+	char			**paths;
+	t_bool			is_cmd; // verifier car je crois que je l'utilise plus finalement
+	t_builtin		builtins[8]; // init OK
+	int				exit_status;
+	t_std_backup	std_backup; // init OK
 }	t_shell;
 
 typedef	struct s_token
@@ -195,6 +196,7 @@ void	ft_prompt(t_shell *shell);
 void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 char	*gc_strdup(const char *src, t_gc_type type);
 char	**gc_split(char *str, char sep, t_gc_type type);
+char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type);
 
 /* ==============================    🛠️ UTILS    ================================ */
 void	error_exit(const char *message);
@@ -212,7 +214,6 @@ void	print_builtin_pipe_warning(t_cmd *cmd);
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
 void	exec_external_cmd(t_cmd *cmd, t_shell *shell);
-void	parent_close_fds(t_exec *exec);
 void	pipe_reset(int pipe_fd[2]);
 void	pipe_create(int pipe_fd[2]);
 void	wait_pipeline(t_cmd *cmds);
@@ -225,9 +226,16 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell);
 void	apply_dup_redirections(t_cmd *cmd);
 void	prepare_child(t_cmd *cmd, t_shell *shell);
 void	close_redirections(t_cmd *cmd);
-int		open_file(t_token_type type, char *file, t_shell *shell);
 int		handle_single_redirection(t_cmd *cmd, t_redir *redir, t_shell *shell);
 int		apply_redirections(t_cmd *cmd, t_shell *shell);
+int		is_directory(char *file);
+t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell);
+t_bool	is_valid_command(t_cmd *cmd, t_shell *shell);
+char	*heredoc_read_loop(const char *limiter);
+int		here_doc(char *limiter, t_cmd *cmd, t_shell *shell);
+void	sigint_heredoc(int sig);
+void	save_std(t_std_backup *backup);
+void	restore_std(t_std_backup *backup);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

@@ -1,0 +1,4 @@
+cmd->fd_in = 0
+handle_builtin: calling echo
+salut
+minishell: 

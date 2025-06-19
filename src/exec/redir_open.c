@@ -6,14 +6,15 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 08:22:07 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/13 14:51:28 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/18 22:07:40 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* ouvrir un fichier selon le type de redir demande. */
-int	open_file(t_token_type type, char *file) //, t_shell *shell)
+
+/* int	open_file(t_token_type type, char *file, t_shell *shell)
 {
 	int	fd;
 
@@ -33,4 +34,4 @@ int	open_file(t_token_type type, char *file) //, t_shell *shell)
 		// shell->exit_status = 1;
 	}
 	return (fd);
-}
+} */
