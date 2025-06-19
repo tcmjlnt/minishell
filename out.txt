@@ -1,2 +1,0 @@
-cmd->fd_in = 0
-dup2 apply: stdin=0, stdout=4

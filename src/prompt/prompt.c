@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 10:30:49 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/18 23:50:49 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	free_tcmd(t_cmd *cmd_list)
 		}
 
 		free(cmd_current);
-		cmd_current = cmd_current->next;
+		cmd_current = next_cmd;
 	}
 }
 
@@ -105,7 +105,7 @@ void	ft_prompt(t_shell *shell)
 
 			// print_args(cmd_list);
 
-			free_tcmd(cmd_list);
+			// free_tcmd(cmd_list);
 			// cmd_list = NULL;
 
 		}

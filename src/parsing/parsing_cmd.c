@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/16 11:36:39 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:36:34 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,11 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 	redir_list = NULL;
 	cmd_current = NULL;
 
-	if (!tkn_list || !(*tkn_list)) // si ya pas de tkn_list nsm on se casse
+	if (!tkn_list || !(*tkn_list))  // si ya pas de tkn_list nsm on se casse
+	{
+		printf ("dabord la\n");
 		return (false);
+	}
 	// if (!cmd_list) // cmd_list est set a nul puisquon le rempli dans cette fonction meme
 	// 	return (printf("la\n"), false);
 	tkn_current = *tkn_list;
