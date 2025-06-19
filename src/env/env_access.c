@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_access.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 10:22:26 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 10:23:49 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:33:22 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,38 @@ void	update_env_value(t_env *env, const char *key, const char *new_value)
 
 char	*get_env_value(t_env *env, const char *key)
 {
+	char	*res;
+
+	res = NULL;
 	if (!key)
 		return (NULL);
 	while (env)
 	{
 		if (ft_strcmp(env->key, key) == 0 && env->equal == true) //check si a garder apres implementatin , export ?
-			return (env->value);
+		{
+			res = env->value;
+			if (!res)
+				return (NULL);
+			return (res);
+		}
 		env = env->next;
 	}
-	return (NULL);
+	res = ft_strdup("");
+	if (!res)
+		return (NULL);
+	return (res);
 }
+
+
+// char	*get_env_value2(t_env *env, const char *key) // verifier utilisation dans exec
+// {
+// 	if (!key)
+// 		return (NULL);
+// 	while (env)
+// 	{
+// 		if (ft_strcmp(env->key, key) == 0 && env->equal == true) //check si a garder apres implementatin , export ?
+// 			return (env->value);
+// 		env = env->next;
+// 	}
+// 	return (NULL);
+// }
