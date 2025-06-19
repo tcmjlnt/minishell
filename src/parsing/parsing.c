@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/18 23:49:20 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:55:04 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,7 +340,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	// print_token(tkn_xpnd_list);
 
 
-	if (!parse_tokens(cmd_list, &tkn_xpnd_list))
+	if (!parse_tokens(cmd_list, &tkn_xpnd_list, shell))
 	{
 		printf("ici\n");
 		return (false);

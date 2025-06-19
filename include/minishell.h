@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 08:59:55 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:57:05 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,6 @@ typedef enum e_token_type
 	TOKEN_REDIRECT_HEREDOC,	// <<
 	TOKEN_EOF,				// fin de la ligne/commande
 }	t_token_type;
-
-typedef enum	e_cmd_type
-{
-	CD_BT,
-	ECHO_BT,
-	ENV_BT,
-	EXIT_BT,
-	EXPORT_BT,
-	PWD_BT,
-	UNSET_BT,
-	NOT_A_BT,
-}	t_cmd_type;
 
 typedef enum	e_parsing_type
 {
@@ -265,7 +253,7 @@ t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
 int		check_token(t_token *token);
 int		is_quote(char c);
-int		parse_tokens(t_cmd **cmd_list, t_token **tkn_list);
+int		parse_tokens(t_cmd **cmd_list, t_token **tkn_list, t_shell *shell);
 t_cmd	*ft_lstnewcmd(void);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
 int		is_inside_squotes(char *token_raw);

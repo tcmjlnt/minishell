@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/19 11:42:13 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:52:27 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,7 +405,8 @@ int	handle_key_value(t_xpnd **xpnd_list, t_env *env)
 			// if (!key_value)
 			// 	return (false);
 			// xpnd_curr->str_to_join = ft_strdup(key_value); // a check si faire comme ca avec
-			xpnd_curr->str_to_join = get_env_value(env, xpnd_curr->substr);
+			xpnd_curr->str_to_join = ft_strdup(get_env_value(env, xpnd_curr->substr));
+
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
