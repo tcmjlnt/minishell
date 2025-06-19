@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 22:58:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 08:59:55 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,14 +146,22 @@ typedef struct s_builtin
 	t_builtin_func	func;
 }	t_builtin;
 
+typedef struct s_std_backup
+{
+	int	orig_stdin;
+	int	orig_stdout;
+	int	orig_stderr;
+}	t_std_backup;
+
 typedef struct s_shell
 {
-	t_gc		gc;
-	t_env		*env;
-	char		**paths;
-	t_bool		is_cmd;
-	t_builtin	builtins[8];
-	int			exit_status;
+	t_gc			gc;
+	t_env			*env;
+	char			**paths;
+	t_bool			is_cmd; // verifier car je crois que je l'utilise plus finalement
+	t_builtin		builtins[8]; // init OK
+	int				exit_status;
+	t_std_backup	std_backup; // init OK
 }	t_shell;
 
 typedef	struct s_token
@@ -212,6 +220,8 @@ t_bool	is_valid_command(t_cmd *cmd, t_shell *shell);
 char	*heredoc_read_loop(const char *limiter);
 int		here_doc(char *limiter, t_cmd *cmd, t_shell *shell);
 void	sigint_heredoc(int sig);
+void	save_std(t_std_backup *backup);
+void	restore_std(t_std_backup *backup);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

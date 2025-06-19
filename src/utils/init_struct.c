@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:25:25 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/16 10:16:50 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 08:53:07 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ void	init_shell(void)
 	shell = get_shell();
 	ft_bzero(shell, sizeof(t_shell));
 	get_builtins(shell->builtins);
+	shell->std_backup.orig_stdin = -1;
+	shell->std_backup.orig_stdout = -1;
+	shell->std_backup.orig_stderr = -1;
 }
 
 // t_token	*init_token(t_token	*token)

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 23:31:31 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 10:43:57 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ char	*heredoc_read_loop(const char *limiter)
 	lim_len = ft_strlen(limiter);
 	while (1)
 	{
-		write(1, "heredoc ", 7); // a sup ces t pour y voir
+		write(1, "heredoc ", 8); // a sup ces t pour y voir
 		write(1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
@@ -139,6 +139,7 @@ int	here_doc(char *limiter, t_cmd *cmd, t_shell *shell)
 
 	if (!limiter || !cmd || !shell)
 		return (-1);
+	print_args(cmd);
 /* 	if (!cmd->cmd)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `<<'\n", STDERR_FILENO);

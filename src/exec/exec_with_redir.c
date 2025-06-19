@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 22:03:04 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/19 10:35:21 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,23 @@ void	exec_external_cmd(t_cmd *cmd, t_shell *shell)
 /* single commande sans pipe */
 void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 {
-	pid_t	pid;
+	pid_t			pid;
+	t_std_backup	std_backup;
 
 	if (cmd->is_builtin)
 	{
+		save_std(&std_backup);
 		if (apply_redirections(cmd, shell) == -1)
 		{
 			shell->exit_status = 1;
 			close_redirections(cmd);
+			restore_std(&std_backup);
 			return ;
 		}
 		apply_dup_redirections(cmd);
 		shell->exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
 		close_redirections(cmd);
+		restore_std(&std_backup);
 	}
 	else
 	{
@@ -180,7 +184,6 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell)
 		current = current->next;
 	}
 }
-
 
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell)
 {
