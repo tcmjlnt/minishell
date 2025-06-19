@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/19 11:55:04 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/19 13:22:55 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,13 @@ int	pipes_check(char *prompt)
 	return (true);
 }
 
-int first_syntax_check(char *prompt)
+int	first_syntax_check(char *prompt, t_shell *shell)
 {
 
 	if (!closed_quotes(prompt))
 	{
 		printf("Unclosed quotes\n");
+		shell->exit_status = 2;
 		return (false);
 	}
 
@@ -223,7 +224,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	// cmd_list = NULL;
 
 
-	if (!first_syntax_check(prompt))
+	if (!first_syntax_check(prompt, shell))
 	{
 		return (false);
 	}
