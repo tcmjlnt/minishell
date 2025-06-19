@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_cmd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
 /*   Updated: 2025/06/17 16:36:34 by tjacquel         ###   ########.fr       */
@@ -12,6 +12,46 @@
 
 #include "../../include/minishell.h"
 
+static void	which_builtin(t_cmd	*cmd)
+{
+	if (!cmd)
+		return ;
+	if (ft_strcmp(cmd->cmd, "cd") == 0)
+	{
+		cmd->cmd_type = CD_BT;
+	}
+	else if (ft_strcmp(cmd->cmd, "echo") == 0)
+	{
+		cmd->cmd_type = ECHO_BT;
+	}
+	else if (ft_strcmp(cmd->cmd, "env") == 0)
+	{
+		cmd->cmd_type = ENV_BT;
+	}
+	else if (ft_strcmp(cmd->cmd, "exit") == 0)
+	{
+		cmd->cmd_type = EXIT_BT;
+	}
+	else if (ft_strcmp(cmd->cmd, "export") == 0)
+	{
+		cmd->cmd_type = EXPORT_BT;
+	}
+	else if (ft_strcmp(cmd->cmd, "pwd") == 0)
+	{
+		cmd->cmd_type = PWD_BT;
+	}
+	else if (ft_strcmp(cmd->cmd, "unset") == 0)
+	{
+		cmd->cmd_type = UNSET_BT;
+	}
+	else
+		cmd->cmd_type = NOT_A_BT;
+	if (cmd->cmd_type == NOT_A_BT)
+		cmd->is_builtin = false;
+	else
+		cmd->is_builtin = true;
+
+}
 
 int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste de token a la liste de cmd
 {
@@ -90,6 +130,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list) // passer la liste d
 				cmd_current->cmd = ft_strdup(tkn_current->token_value);
 				if (!cmd_current->cmd)
 					return (false);
+				which_builtin(cmd_current);
 			}
 			j++;
 		}

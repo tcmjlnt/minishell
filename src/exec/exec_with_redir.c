@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/10 12:43:55 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/16 10:46:22 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 
 	if (cmd->is_builtin)
 	{
-		if (apply_redirections(cmd) == -1)
+		if (apply_redirections(cmd, shell) == -1)
 		{
 			shell->exit_status = 1;
 			close_redirections(cmd);
@@ -152,6 +152,17 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell)
 {
 	t_cmd	*current;
 
+	current = cmd;
+	while (current)
+	{
+		if (is_parent_builtin(current))
+		{
+			print_builtin_pipe_warning(current);
+			shell->exit_status = 1;
+			return ;
+		}
+		current = current->next;
+	}
 	current = cmd;
 	exec_first_child(current, shell);
 	current = current->next;

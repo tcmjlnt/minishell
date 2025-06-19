@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 09:58:34 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/10 10:49:21 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/13 16:08:39 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 /* gere une seule redirection :
 ouvre le fichier + affecte fd_in ou fd_out selon le type */
-int	handle_single_redirection(t_cmd *cmd, t_redir *redir)
+int	handle_single_redirection(t_cmd *cmd, t_redir *redir, t_shell *shell)
 {
 	int	fd;
 
 	if (!redir)
 		return (0);
-	fd = open_file(redir->type, redir->file);
+	fd = open_file(redir->type, redir->file, shell);
 	if (fd == -1)
 		return (-1);
 	if (redir->type == TOKEN_REDIRECT_IN)
@@ -44,7 +44,7 @@ int	handle_single_redirection(t_cmd *cmd, t_redir *redir)
 }
 
 /* applique toutes les redirections d'une commande. */
-int	apply_redirections(t_cmd *cmd)
+int	apply_redirections(t_cmd *cmd, t_shell *shell)
 {
 	t_redir	*redir;
 	int		result;
@@ -54,7 +54,7 @@ int	apply_redirections(t_cmd *cmd)
 	redir = cmd->redir;
 	while (redir)
 	{
-		result = handle_single_redirection(cmd, redir);
+		result = handle_single_redirection(cmd, redir, shell);
 		if (result == -1)
 			return (-1);
 		redir = redir->next;

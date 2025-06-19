@@ -70,6 +70,18 @@ typedef enum e_token_type
 	TOKEN_EOF,				// fin de la ligne/commande
 }	t_token_type;
 
+typedef enum	e_cmd_type
+{
+	CD_BT,
+	ECHO_BT,
+	ENV_BT,
+	EXIT_BT,
+	EXPORT_BT,
+	PWD_BT,
+	UNSET_BT,
+	NOT_A_BT,
+}	t_cmd_type;
+
 typedef enum	e_parsing_type
 {
 	OPERATOR,
@@ -116,6 +128,7 @@ typedef struct s_cmd
 	int				pid;
 	int				pipe[2];
 	t_bool			is_builtin;
+	int				cmd_type;
 	t_redir			*redir;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;
@@ -190,11 +203,10 @@ size_t	ft_strnlen_noquotes(char *src, size_t n);
 char	*ft_strndup(char *src, size_t n);
 t_token	*ft_lstnew_token(char *value, int type, int node_num);
 void	print_token(t_token	*token);
-
-/* ===========================    🔧 BUILTINS    ============================ */
 int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
+void	print_builtin_pipe_warning(t_cmd *cmd);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 char	*find_command_path(char *cmd, t_env *env);
@@ -213,9 +225,9 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell);
 void	apply_dup_redirections(t_cmd *cmd);
 void	prepare_child(t_cmd *cmd, t_shell *shell);
 void	close_redirections(t_cmd *cmd);
-int		open_file(t_token_type type, char *file);
-int		handle_single_redirection(t_cmd *cmd, t_redir *redir);
-int		apply_redirections(t_cmd *cmd);
+int		open_file(t_token_type type, char *file, t_shell *shell);
+int		handle_single_redirection(t_cmd *cmd, t_redir *redir, t_shell *shell);
+int		apply_redirections(t_cmd *cmd, t_shell *shell);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
@@ -223,18 +235,19 @@ void	print_env_line(char *line);
 void	print_env(t_env *env);
 void	print_env_tab(char **env_tab);
 void	env_from_envp(t_shell *shell, char **envp);
-char	*get_env_value(t_env *env, const char *key);
 char	**env_to_env_tab_for_execve(t_env *env);
+char	*get_env_value(t_env *env, const char *key);
+void	update_env_value(t_env *env, const char *key, const char *new_value);
 
 /* ===========================    🔧 BUILTINS    ============================ */
 int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
+int		ft_cd(t_shell *shell, t_cmd *cmd, int fd);
+int		ft_exit(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
 t_bool	is_builtin(t_shell *shell, char *cmd_name);
-
-t_cmd	*create_cmd(char *cmd_name, char **args, int fd_in, int fd_out, t_shell *shell);
-void	add_cmd(t_cmd **head, t_cmd *new_cmd);
+t_bool	is_parent_builtin(t_cmd *cmd);
 
 /* ========================    🦄 PARSING    ======================== */
 int		parsing(char *prompt, t_cmd **cmd_list, t_shell *shell);
@@ -265,5 +278,14 @@ void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list);
 
 
 
+
+/* ========================    🚧 DEBUG    ======================== */
+void	debug_env(t_shell *shell);
+void	debug_env_tab(t_shell *shell);
+void	debug_path_for(char *cmd, t_shell *shell);
+void	debug_cmd(t_cmd *cmd);
+void	debug_cmd_list(t_cmd *cmds);
+void	debug_pipe(int in_fd, int pipe_fd[2]);
+void	debug_exec_external(t_cmd *cmd);
 
 #endif
