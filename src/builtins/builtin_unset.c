@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:23:52 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 19:42:10 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 20:37:51 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static void	del_env_node(t_env **env_list, const char *key)
 		prev_node = curr_node;
 		curr_node = curr_node->next;
 	}
-
 }
 
 int	ft_unset(t_shell *shell, t_cmd *cmd, int fd)

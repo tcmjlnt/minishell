@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/19 11:56:56 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 20:54:04 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 				// return (false); // Or rely on earlier checks
 			}
 		}
-		else if(is_redir_operator(tkn_current->token_type))
+		else if(is_redir_operator(tkn_current->token_type)) // traitement des redir
 		{
 			if(tkn_current->next && tkn_current->next->token_type == TOKEN_WORD)
 			{
