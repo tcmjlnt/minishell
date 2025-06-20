@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 11:57:31 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:21:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,32 +26,76 @@ void	print_env_export(t_env *env)
 	}
 }
 
-int check_arg_export(t_shell *shell, t_cmd *cmd)
+
+
+size_t check_key_export(t_shell *shell, char *arg)
 {
-	int	i;
-	int j;
-	t_bool	res;
+	size_t	j;
+
+	j = 0;
+
+	while(arg[j] && arg[j + 1] && arg[j + 1] != '=')
+	{
+		if(!is_valid_keychar(arg[j]) || ft_isdigit(arg[0]) || arg[0] == '=')
+		{
+			shell->exit_status = 1;
+			write(2, "minishell: export: `", 20);
+			write(2, arg, ft_strlen(arg));
+			write(2, "': not a valid identifier\n", 26);
+			return (0);
+		}
+		j++;
+	}
+	return (++j);
+}
+int	arg_to_env(t_shell *shell, char *arg, size_t n)
+{
 	(void) shell;
+	char	*key;
+	char	*value;
+	t_env	*env_new_node;
+
+	key = NULL;
+	value = NULL;
+	key = ft_strndup(arg, n);
+	value = ft_strdup(arg + n + 1);
+
+	printf("key: `%s`, value: `%s`\n", key, value);
+	env_new_node = env_new(key, value, true);
+	env_add_back((t_env **)&shell->env, env_new_node);
+
+	return (1);
+
+}
+
+int	export_args(t_shell *shell, t_cmd *cmd)
+{
+	size_t	i;
+	size_t	j;
+	t_bool	res;
 
 	i = 1;
 	j = 0;
 	res = true;
-	while(cmd->args[i])
+	while (cmd->args[i])
 	{
-		while(cmd->args[i][j] && cmd->args[i][j + 1] && cmd->args[i][j + 1] != '=')
+		if(!check_key_export(shell, cmd->args[i]))
 		{
-			if(!is_valid_keychar(cmd->args[i][j]) || ft_isdigit(cmd->args[i][0]) || cmd->args[i][0] == '=')
-			{
-				printf("export: `%s': not a valid identifier\n", cmd->args[i]);
-				res = false;
-				break ;
-			}
-			j++;
+			shell->exit_status = 1;
+			res = false;
+		}
+		else
+		{
+			j = check_key_export(shell, cmd->args[i]);
+			printf ("arg[%td]: key_strlen=%td\n", i, j);
+			arg_to_env(shell, cmd->args[i], j);
+
 		}
 		i++;
 	}
 	return (res);
 }
+
 
 int	ft_export(t_shell *shell, t_cmd *cmd, int fd)
 {
@@ -64,8 +108,8 @@ int	ft_export(t_shell *shell, t_cmd *cmd, int fd)
 	// new_env = env_new(cmd->args[1])
 	if (!cmd->args[1])
 		print_env_export(shell->env);
-	if (!check_arg_export(shell, cmd))
-			return (shell->exit_status = 1, false);
+	if (!export_args(shell, cmd))
+		return (false);
 	// split jusqauu  '='
 	// ajouter le noeud
 	// noeud add back

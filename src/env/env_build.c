@@ -6,13 +6,13 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 11:22:33 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:24:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static t_env	*env_new(char *key, char *value, t_bool equal)
+t_env	*env_new(char *key, char *value, t_bool equal)
 {
 	t_env	*new;
 
@@ -26,7 +26,7 @@ static t_env	*env_new(char *key, char *value, t_bool equal)
 	return (new);
 }
 
-static void	env_add_back(t_env **lst, t_env *new)
+void	env_add_back(t_env **lst, t_env *new)
 {
 	t_env	*tmp;
 

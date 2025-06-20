@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 16:21:45 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:21:27 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,10 @@ void	env_from_envp(t_shell *shell, char **envp);
 char	**env_to_env_tab_for_execve(t_env *env);
 char	*get_env_value(t_env *env, const char *key);
 void	update_env_value(t_env *env, const char *key, const char *new_value);
+t_env	*env_new(char *key, char *value, t_bool equal);
+void	env_add_back(t_env **lst, t_env *new);
+
+
 
 /* ===========================    🔧 BUILTINS    ============================ */
 int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
