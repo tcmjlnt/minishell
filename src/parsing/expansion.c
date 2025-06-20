@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/19 14:16:15 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 11:24:10 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 				}
 				start = ++i;
-				if (substr[i] == '?' || substr[i] == '$' || isdigit(substr[i]))
+				if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
 					i++;
 				else
 				{
@@ -227,7 +227,7 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 				}
 				start = ++i;
-				if (substr[i] == '?' || substr[i] == '$' || isdigit(substr[i]))
+				if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
 					i++;
 				else
 				{
@@ -481,7 +481,8 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 	{
 		len = ft_strlen(xpnd_curr->str_to_join);
 		if (xpnd_curr->str_to_join[len - 1] == '$' && !xpnd_curr->xpnd_check && xpnd_curr->next
-			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double)
+			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double
+			&& !xpnd_curr->in_single)
 		{
 			xpnd_curr->str_to_join = ft_strndup(xpnd_curr->str_to_join, len - 1);
 			if (!xpnd_curr->str_to_join)
