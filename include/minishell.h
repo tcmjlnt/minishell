@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 11:57:05 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 09:10:41 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,11 +219,11 @@ int		apply_redirections(t_cmd *cmd, t_shell *shell);
 int		is_directory(char *file);
 t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell);
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell);
-char	*heredoc_read_loop(const char *limiter);
-int		here_doc(char *limiter, t_cmd *cmd, t_shell *shell);
-void	sigint_heredoc(int sig);
 void	save_std(t_std_backup *backup);
 void	restore_std(t_std_backup *backup);
+int		here_doc(char *limiter, t_cmd *cmd, t_shell *shell);
+t_bool	check_heredoc_errors(t_cmd *cmd);
+t_bool	check_all_heredocs(t_cmd *cmds, t_shell *shell);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

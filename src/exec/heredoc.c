@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 12:04:14 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 09:10:47 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,144 +16,113 @@
 // tout foutre dans un tmp ??
 // a implenter apres signaux, voir Eric ??
 
-/* int	here_doc(char *limiter, t_cmd *cmd, t_shell *shell)
-{
-	int		pipe_fd[2];
-	pid_t	pid;
-	int		status;
-
-	if (pipe(pipe_fd) == -1)
-	{
-		return (error_exit("pipe"), shell->exit_status = 1, -1);
-	}
-	pid = fork();
-	if (pid == -1)
-		return (error_exit("fork"), shell->exit_status = 1, -1);
-	if (pid == 0)
-	{
-		close(pipe_fd[0]);
-		write_here_doc(pipe_fd[1], limiter);
-		shell->exit_status = 0;
-		exit(EXIT_SUCCESS);
-	}
-	close(pipe_fd[1]);
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
-		error_exit("child process failed");
-	cmd->fd_in = pipe_fd[0];
-	exec_dispatcher(cmd, shell);
-	close(pipe_fd[0]);
-	return (shell->exit_status = 0);
-}
-
-void	write_here_doc(int fd, char *limiter)
+/* lit une ligne avec readline */
+static char	*read_heredoc_line(void)
 {
 	char	*line;
 
-	line = NULL;
-	while (1)
-	{
-		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
-		// line = readline("> ");
-		if (!line)
-			error_exit("readline");
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
-			&& line[ft_strlen(limiter)] == '\n')
-		{
-			free(line);
-			break ;
-		}
-		write(fd, line, ft_strlen(line));
-		free(line);
-	}
-	close(fd);
-} */
-/* Ctrl+C dans un heredoc */
-void	sigint_heredoc(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	exit(130);
+	line = readline("heredoc> ");
+	if (!line)
+		return (NULL);
+	return (line);
 }
 
-/* Lecture de toutes les lignes de l'utilisateur jusqu'au limiter */
-char	*heredoc_read_loop(const char *limiter)
+/* join toutes les lignes jusqu'au limiter dans GC_TMP => content */
+static char	*read_heredoc_content(char *limiter)
 {
 	char	*line;
 	char	*content;
-	size_t	lim_len;
+	size_t	len;
 
 	content = NULL;
-	lim_len = ft_strlen(limiter);
+	len = ft_strlen(limiter);
 	while (1)
 	{
-		write(1, "heredoc ", 8); // a sup ces t pour y voir
-		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		line = read_heredoc_line();
 		if (!line)
 			break ;
-		if (ft_strncmp(line, limiter, lim_len) == 0 && line[lim_len] == '\n')
-		{
-			// printf("limiter: '%s', line: '%s'\n", limiter, line);
+		if (ft_strncmp(line, limiter, len) == 0 && line[len] == '\0')
 			break ;
-		}
 		content = gc_strjoin(content, line, GC_TMP);
+		content = gc_strjoin(content, "\n", GC_TMP);
 	}
 	return (content);
 }
 
-/* Gère le heredoc dans un processus enfant, écrit le contenu dans le pipe */
-static int	create_heredoc_pipe(char *limiter, int *pipe_fd)
-{
-	pid_t	pid;
-	char	*content;
-
-	if (pipe(pipe_fd) == -1)
-		return (perror("pipe"), -1);
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork"), -1);
-	if (pid == 0)
-	{
-		signal(SIGINT, sigint_heredoc);
-		content = heredoc_read_loop(limiter);
-		if (content)
-			write(pipe_fd[1], content, ft_strlen(content));
-		close(pipe_fd[1]);
-		exit(EXIT_SUCCESS);
-	}
-	close(pipe_fd[1]);
-	waitpid(pid, NULL, 0);
-	return (0);
-}
-
-/*
-Crée un pipe, lit le contenu via GNL, le remplit avec les données jusqu'au
-limiter. Retourne le descripteur à utiliser pour rediriger l'entrée.
-Met à jour cmd->fd_in.
- */
+/* Base de Pipex - cree un pipe, remplit content et return fd de lecture */
 int	here_doc(char *limiter, t_cmd *cmd, t_shell *shell)
 {
-	int	pipe_fd[2];
+	int		pipe_fd[2];
+	char	*content;
 
 	if (!limiter || !cmd || !shell)
 		return (-1);
-	//  print_args(cmd);
-/* 	if (!cmd->cmd)
+	if (pipe(pipe_fd) == -1)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `<<'\n", STDERR_FILENO);
-		shell->exit_status = 2;
-		return (-1);
-	} */
-	if (create_heredoc_pipe(limiter, pipe_fd) == -1)
-	{
+		perror("pipe");
 		shell->exit_status = 1;
 		return (-1);
 	}
-	if (cmd->fd_in != STDIN_FILENO)
-		close(cmd->fd_in);
+	content = read_heredoc_content(limiter);
+	if (content)
+		write(pipe_fd[1], content, ft_strlen(content));
+	close(pipe_fd[1]);
 	cmd->fd_in = pipe_fd[0];
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
 	return (0);
+}
+
+/* Vérifie les erreurs potentielles liées aux heredocs dans une commande :
+   - limiter manquant
+   - limiter vide (<< "")
+   - nombre excessif de heredocs (limite à 10 ? message explicatif) */
+t_bool	check_heredoc_errors(t_cmd *cmd)
+{
+	t_redir	*redir;
+	int		heredoc_count;
+
+	redir = cmd->redir;
+	heredoc_count = 0;
+	while (redir)
+	{
+		if (redir->type == TOKEN_REDIRECT_HEREDOC)
+		{
+			heredoc_count++;
+			if (!redir->file)
+			{
+				ft_putstr_fd("minishell: heredoc: missing limiter\n", STDERR_FILENO);
+				return (false);
+			}
+			if (redir->file[0] == '\0')
+			{
+				ft_putstr_fd("minishell: heredoc: empty limiter not allowed\n", STDERR_FILENO);
+				return (false);
+			}
+			if (heredoc_count > 10) // limite à 10 ? je voudrais meme mettre a 3 car c'est pas interessant de faire ca a tester
+			{
+				ft_putstr_fd("minishell: too many heredocs (limit: 10)\n", STDERR_FILENO);
+				return (false);
+			}
+		}
+		redir = redir->next;
+	}
+	return (true);
+}
+
+/* Vérifie tous les heredocs de toutes les commandes avant exécution.
+   Retourne false s’il y a une erreur, et fixe shell->exit_status */
+t_bool	check_all_heredocs(t_cmd *cmds, t_shell *shell)
+{
+	t_cmd *current;
+
+	current = cmds;
+	while (current)
+	{
+		if (!check_heredoc_errors(current))
+		{
+			shell->exit_status = 2;
+			return (false);
+		}
+		current = current->next;
+	}
+	return (true);
 }

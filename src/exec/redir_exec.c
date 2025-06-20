@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exec.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 09:58:47 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 12:02:23 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 11:19:14 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 /* applique les dup2 pour rediriger in et out
-if ( > 2) => ce n’est pas les STDIN_FILENO (0), STDOUT_FILENO (1), STDERR_FILENO (2).
+if ( > 2) => ce n’est pas les STDIN_FILENO (0),
+STDOUT_FILENO (1), STDERR_FILENO (2).
 */
-
-void	apply_dup_redirections(t_cmd *cmd)
+/* void	apply_dup_redirections(t_cmd *cmd)
 {
 	if (cmd->fd_in > 2)
 	{
-		// printf("dup2 input: fd_in = %d -> STDIN_FILENO (%d)\n", cmd->fd_in, STDIN_FILENO);
+		// printf("dup2: fd_in= %d -> STDIN_F (%d)\n", cmd->fd_in, STDIN_FILENO);
 		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
 		{
 			perror("dup2 (input)");
@@ -29,7 +29,7 @@ void	apply_dup_redirections(t_cmd *cmd)
 	}
 	if (cmd->fd_out > 2)
 	{
-		// printf("dup2 output: fd_out = %d -> STDOUT_FILENO (%d)\n", cmd->fd_out, STDOUT_FILENO);
+		// printf("dup2: fd_ot= %d, STDOT_F (%d)\n", cmd->fd_out, STDOUT_FILENO);
 		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 (output)");
@@ -37,6 +37,29 @@ void	apply_dup_redirections(t_cmd *cmd)
 		}
 	}
 	// printf("cmd->fd_in = %d\n", cmd->fd_in);
+} */
+/* applique les dup2 pour rediriger in et out
+changement condi car heredoc en pipe, pipe_fd[0] == 0
+donc je dois faire dup2() si fd_in != STDIN_FILENO
+*/
+void	apply_dup_redirections(t_cmd *cmd)
+{
+	if (cmd->fd_in != STDIN_FILENO)
+	{
+		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
+		{
+			perror("dup2 (input)");
+			exit(1);
+		}
+	}
+	if (cmd->fd_out != STDOUT_FILENO)
+	{
+		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 (output)");
+			exit(1);
+		}
+	}
 }
 /*	prepare_child(cmd, shell)
 	↓

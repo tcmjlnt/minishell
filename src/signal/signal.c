@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 19:53:20 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 19:53:55 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/20 09:00:28 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,13 @@ void	signal_handler(int signo)
 		rl_on_new_line();
 		rl_redisplay();
 	}
+}
+
+/* Ctrl+C dans un heredoc */
+void	sigint_heredoc(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	exit(130);
 }
 
