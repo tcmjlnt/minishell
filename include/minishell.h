@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 19:30:08 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 20:45:44 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,9 @@ typedef struct s_redir
 {
 	t_token_type		type; // a sup uniquement pour tester exec redir
 	char				*file;
+	char				*delim;
 	struct s_redir		*next;
+	struct s_redir		*prev;
 }	t_redir;
 
 typedef struct s_cmd
