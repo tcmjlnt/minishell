@@ -4,6 +4,7 @@
 		"libft.h": "c",
 		"type_traits": "c",
 		"minishell.h": "c",
-		"stdbool.h": "c"
+		"stdbool.h": "c",
+		"compare": "c"
 	}
 }

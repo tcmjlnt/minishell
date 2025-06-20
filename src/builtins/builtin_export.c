@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 16:17:19 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:23:50 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ int	arg_to_env(t_shell *shell, char *arg, size_t n)
 
 	key = NULL;
 	value = NULL;
-	key = ft_strndup(arg, n);
+	key = gc_strndup(arg, n, GC_ENV);
 	if (!key)
 		return (false);
-	value = ft_strdup(arg + n + 1);
+	value = gc_strdup(arg + n + 1, GC_ENV);
 	if (!value)
 		return (false);
 	env_new_node = check_existing_key(shell, key);

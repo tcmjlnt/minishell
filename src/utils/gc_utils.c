@@ -3,16 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   gc_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:42:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 22:53:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:24:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // COPIE DES FONCTIONS LIB AVEC GC
+char	*gc_strndup(char *src, size_t n, t_gc_type type)
+{
+	char	*dest;
+	size_t		i;
+
+	dest = gc_mem(GC_ALLOC, n + 1, NULL, type);
+	if (!dest)
+		return(NULL);
+	i = 0;
+	while (i < n && src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
+
 char	*gc_strdup(const char *src, t_gc_type type)
 {
 	char	*dup;

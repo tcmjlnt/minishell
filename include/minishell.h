@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 14:21:27 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:23:33 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,7 @@ void	ft_prompt(t_shell *shell);
 /* ======================     🧹 GARBAGE COLLECTOR    ====================== */
 void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 char	*gc_strdup(const char *src, t_gc_type type);
+char	*gc_strndup(char *src, size_t n, t_gc_type type);
 char	**gc_split(char *str, char sep, t_gc_type type);
 char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type);
 
