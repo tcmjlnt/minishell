@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:25:25 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 15:16:47 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 19:28:04 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	get_builtins(t_builtin	*builtins)
 	builtins[3] = (t_builtin){"cd", ft_cd};
 	builtins[4] = (t_builtin){"exit", ft_exit};
 	builtins[5] = (t_builtin){"export", ft_export};
-	builtins[6] = (t_builtin){"unset", NULL};
+	builtins[6] = (t_builtin){"unset", ft_unset};
 	builtins[7] = (t_builtin){NULL, NULL}; // NULL de fin pour boucle cond while (builtins[i].name)
 }
 

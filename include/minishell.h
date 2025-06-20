@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 16:23:33 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 19:30:08 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ typedef	struct s_token
 	char			*token_value;
 	char			*token_raw;
 	// char			**args;
-	// int				node_num;
+	// int			node_num;
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
@@ -245,6 +245,8 @@ int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_export(t_shell *shell, t_cmd *cmd, int fd);
+t_env	*check_existing_key(t_shell *shell, char *key);
+int		ft_unset(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_cd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_exit(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
