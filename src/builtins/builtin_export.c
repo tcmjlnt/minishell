@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 14:21:43 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:29:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int	export_args(t_shell *shell, t_cmd *cmd)
 			j = check_key_export(shell, cmd->args[i]);
 			printf ("arg[%td]: key_strlen=%td\n", i, j);
 			arg_to_env(shell, cmd->args[i], j);
-
 		}
 		i++;
 	}
