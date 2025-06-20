@@ -12,7 +12,7 @@
 
 #include "../../include/minishell.h"
 
-static int is_valid_keychar(char c)
+int is_valid_keychar(char c)
 {
 	if (ft_isalnum(c) || c == '_')
 		return (1);
