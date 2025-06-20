@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:31:32 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 09:01:55 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/20 20:12:23 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,17 +158,6 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell)
 	t_cmd	*current;
 
 	current = cmd;
-	while (current)
-	{
-		if (is_parent_builtin(current))
-		{
-			print_builtin_pipe_warning(current);
-			shell->exit_status = 1;
-			return ;
-		}
-		current = current->next;
-	}
-	current = cmd;
 	exec_first_child(current, shell);
 	current = current->next;
 	while (current->next)
@@ -230,4 +219,5 @@ void	exec_dispatcher(t_cmd *cmd, t_shell *shell)
 		exec_single_cmd(cmd, shell);
 	else
 		exec_pipeline(cmd, shell);
+	unlink(".heredoc_tmp");
 }

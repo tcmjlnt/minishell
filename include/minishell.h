@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 09:10:41 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/20 18:54:47 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,9 @@ typedef struct s_redir
 {
 	t_token_type		type; // a sup uniquement pour tester exec redir
 	char				*file;
+	char				*limiter;
 	struct s_redir		*next;
+	struct s_redir		*previous;
 }	t_redir;
 
 typedef struct s_cmd

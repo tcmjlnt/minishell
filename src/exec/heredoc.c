@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 09:10:47 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/20 20:03:51 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,113 +16,102 @@
 // tout foutre dans un tmp ??
 // a implenter apres signaux, voir Eric ??
 
-/* lit une ligne avec readline */
-static char	*read_heredoc_line(void)
+/* lit une ligne avec readline  */
+int	*read_heredoc_content(char *limiter, int fd)
 {
 	char	*line;
-
-	line = readline("heredoc> ");
-	if (!line)
-		return (NULL);
-	return (line);
-}
-
-/* join toutes les lignes jusqu'au limiter dans GC_TMP => content */
-static char	*read_heredoc_content(char *limiter)
-{
-	char	*line;
-	char	*content;
 	size_t	len;
 
-	content = NULL;
 	len = ft_strlen(limiter);
 	while (1)
 	{
-		line = read_heredoc_line();
+		line = readline("heredoc> ");
 		if (!line)
 			break ;
-		if (ft_strncmp(line, limiter, len) == 0 && line[len] == '\0')
+		if (ft_strncmp(line, limiter, len) == 0 && line[len] == '\n')
 			break ;
-		content = gc_strjoin(content, line, GC_TMP);
-		content = gc_strjoin(content, "\n", GC_TMP);
+		ft_putendl_fd(line, fd);
+		free(line);
 	}
-	return (content);
-}
-
-/* Base de Pipex - cree un pipe, remplit content et return fd de lecture */
-int	here_doc(char *limiter, t_cmd *cmd, t_shell *shell)
-{
-	int		pipe_fd[2];
-	char	*content;
-
-	if (!limiter || !cmd || !shell)
-		return (-1);
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("pipe");
-		shell->exit_status = 1;
-		return (-1);
-	}
-	content = read_heredoc_content(limiter);
-	if (content)
-		write(pipe_fd[1], content, ft_strlen(content));
-	close(pipe_fd[1]);
-	cmd->fd_in = pipe_fd[0];
 	return (0);
 }
 
-/* Vérifie les erreurs potentielles liées aux heredocs dans une commande :
-   - limiter manquant
-   - limiter vide (<< "")
-   - nombre excessif de heredocs (limite à 10 ? message explicatif) */
-t_bool	check_heredoc_errors(t_cmd *cmd)
+/* cree le heredoc le stock dans un tmp */
+int	here_doc(char *limiter, t_cmd *cmd, t_shell *shell)
 {
-	t_redir	*redir;
-	int		heredoc_count;
+	int		heredoc_fd_in;
+	int		heredoc_fd_out;
+	char	*content;
+	pid_t	pid;
 
-	redir = cmd->redir;
-	heredoc_count = 0;
-	while (redir)
+	if (!limiter || !cmd || !shell)
+		return (-1);
+	pid = fork();
+	if (pid == -1)
+		error_exit("fork");
+	content = read_heredoc_content(limiter, heredoc_fd_in);
+	if (content)
 	{
-		if (redir->type == TOKEN_REDIRECT_HEREDOC)
-		{
-			heredoc_count++;
-			if (!redir->file)
-			{
-				ft_putstr_fd("minishell: heredoc: missing limiter\n", STDERR_FILENO);
-				return (false);
-			}
-			if (redir->file[0] == '\0')
-			{
-				ft_putstr_fd("minishell: heredoc: empty limiter not allowed\n", STDERR_FILENO);
-				return (false);
-			}
-			if (heredoc_count > 10) // limite à 10 ? je voudrais meme mettre a 3 car c'est pas interessant de faire ca a tester
-			{
-				ft_putstr_fd("minishell: too many heredocs (limit: 10)\n", STDERR_FILENO);
-				return (false);
-			}
-		}
-		redir = redir->next;
+		ft_putstr_fd(content, heredoc_fd_out);
 	}
-	return (true);
+	heredoc_fd_in = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	close(heredoc_fd_out);
+	cmd->fd_in = heredoc_fd_in;
+	return (0);
 }
 
-/* Vérifie tous les heredocs de toutes les commandes avant exécution.
-   Retourne false s’il y a une erreur, et fixe shell->exit_status */
-t_bool	check_all_heredocs(t_cmd *cmds, t_shell *shell)
+t_redir	*get_good_redir_out(t_cmd *cmd, t_shell *shell)
 {
-	t_cmd *current;
+	t_redir	*redir_cur;
+	int		fd_in;
+	int		fd_out;
 
-	current = cmds;
-	while (current)
+	redir_cur = cmd->redir;
+	while (redir_cur)
 	{
-		if (!check_heredoc_errors(current))
+		if (redir_cur->next)
 		{
-			shell->exit_status = 2;
-			return (false);
+			redir_cur = redir_cur->next;
+			printf("j'ai un suivant, je passe au suivant");
 		}
-		current = current->next;
+		printf("je n'ai plus de suivant");
 	}
-	return (true);
+	while (redir_cur)
+	{
+		if (redir_cur->type == TOKEN_REDIRECT_OUT || redir_cur->type == TOKEN_REDIRECT_APPEND)
+		{
+			printf("je suis un redir_out");
+			break ;
+		}
+		redir_cur = redir_cur->previous;
+	}
+	return (redir_cur);
+}
+
+t_redir	*get_good_redir_in(t_cmd *cmd, t_shell *shell)
+{
+	t_redir	*redir_cur;
+	int		fd_in;
+	int		fd_out;
+
+	redir_cur = cmd->redir;
+	while (redir_cur)
+	{
+		if (redir_cur->next)
+		{
+			redir_cur = redir_cur->next;
+			printf("j'ai un suivant, je passe au suivant");
+		}
+		printf("je n'ai plus de suivant");
+	}
+	while (redir_cur)
+	{
+		if (redir_cur->type == TOKEN_REDIRECT_IN || redir_cur->type == TOKEN_REDIRECT_HEREDOC)
+		{
+			printf("je suis un redir_in");
+			break ;
+		}
+		redir_cur = redir_cur->previous;
+	}
+	return (redir_cur);
 }
