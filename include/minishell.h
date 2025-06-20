@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 11:57:05 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:23:33 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,7 @@ void	ft_prompt(t_shell *shell);
 /* ======================     🧹 GARBAGE COLLECTOR    ====================== */
 void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type);
 char	*gc_strdup(const char *src, t_gc_type type);
+char	*gc_strndup(char *src, size_t n, t_gc_type type);
 char	**gc_split(char *str, char sep, t_gc_type type);
 char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type);
 
@@ -234,11 +235,16 @@ void	env_from_envp(t_shell *shell, char **envp);
 char	**env_to_env_tab_for_execve(t_env *env);
 char	*get_env_value(t_env *env, const char *key);
 void	update_env_value(t_env *env, const char *key, const char *new_value);
+t_env	*env_new(char *key, char *value, t_bool equal);
+void	env_add_back(t_env **lst, t_env *new);
+
+
 
 /* ===========================    🔧 BUILTINS    ============================ */
 int		ft_pwd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_echo(t_shell *shell, t_cmd *cmd, int fd);
+int		ft_export(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_cd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_exit(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
@@ -271,7 +277,7 @@ void	ft_lstadd_back_xpnd(t_xpnd **xpnd, t_xpnd *new);
 t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd);
 t_token	*ft_lstnewtoken_xpnd(void);
 void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list);
-
+int		is_valid_keychar(char c);
 
 
 
