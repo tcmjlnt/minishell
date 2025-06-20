@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/19 16:21:02 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/20 14:49:34 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,10 +160,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 				}
 				start = ++i;
-				// if (substr[i] == '?')
-				// 	; // HANDLE $?
-				// else
-				if (substr[i] == '$' || isdigit(substr[i]))
+				if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
 					i++;
 				else
 				{
@@ -230,9 +227,7 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 				}
 				start = ++i;
-				// if (substr[i] == '?')
-				// 	;// HANDLE EXIT STATUS
-				if (substr[i] == '$' || isdigit(substr[i]))
+				if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
 					i++;
 				else
 				{
@@ -387,7 +382,7 @@ void	printf_xpnd(t_xpnd **xpnd_list)
 	}
 }
 
-int	handle_key_value(t_xpnd **xpnd_list, t_env *env)
+int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 {
 	t_xpnd	*xpnd_curr;
 	// char	*key_value;
@@ -405,7 +400,10 @@ int	handle_key_value(t_xpnd **xpnd_list, t_env *env)
 			// if (!key_value)
 			// 	return (false);
 			// xpnd_curr->str_to_join = ft_strdup(key_value); // a check si faire comme ca avec
-			xpnd_curr->str_to_join = ft_strdup(get_env_value(env, xpnd_curr->substr));
+			if (ft_strcmp(xpnd_curr->substr, "?") == 0)
+				xpnd_curr->str_to_join = ft_itoa(shell->exit_status);
+			else
+				xpnd_curr->str_to_join = ft_strdup(get_env_value(shell->env, xpnd_curr->substr));
 
 			if (!xpnd_curr->str_to_join)
 				return (false);
@@ -446,6 +444,8 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	}
 	while (xpnd_curr && xpnd_curr->next) // besoin de check
 	{
+		// if (xpnd_curr->str_to_join[0] == '\0') // premiere tentative de skip le noeud vide -- ca segfault pour `echo $$USER`
+		// 	xpnd_curr = xpnd_curr->next;
 		res = ft_strjoin(temp, xpnd_curr->next->str_to_join);
 		if (!res)
 			return (false);
@@ -481,7 +481,8 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 	{
 		len = ft_strlen(xpnd_curr->str_to_join);
 		if (xpnd_curr->str_to_join[len - 1] == '$' && !xpnd_curr->xpnd_check && xpnd_curr->next
-			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double)
+			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double
+			&& !xpnd_curr->in_single)
 		{
 			xpnd_curr->str_to_join = ft_strndup(xpnd_curr->str_to_join, len - 1);
 			if (!xpnd_curr->str_to_join)
@@ -530,7 +531,7 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 		// printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
 		// printf_xpnd(&xpnd_list);
 
-		if (!handle_key_value(&xpnd_list, shell->env))
+		if (!handle_key_value(&xpnd_list, shell))
 			return (false);
 		// printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
 		// printf_xpnd(&xpnd_list);
