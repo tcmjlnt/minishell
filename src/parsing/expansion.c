@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 11:47:15 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 13:19:29 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,86 +19,6 @@ int is_valid_keychar(char c)
 	else
 		return (0);
 }
-
-// static int	key_exist(char *key, t_shell *shell)
-// {
-
-// 	char *value = get_env_value(shell->env, key); // non ca c'est juste remplacer la key par la value
-// 	if (!value)
-// 		return (NULL);
-// 	// ca implique de decouper la string token_raw
-// 	// char ** avec un ft_split, le separateur c'est ' ', '\t', '$'
-// }
-
-// static int	shall_i_expand(char	*str)
-// {
-// 	int i = 0;
-// 	int in_single = 0;
-// 	int in_double = 0;
-// 	int	expand_res = 0;
-
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '\'' && !in_double) // je recontre une S_QUOTE et je NE suis PAS dans une D_QUOTE
-// 		{
-// 			in_single = !in_single;  // toggle in_single state
-// 			expand_res = 0; // il faudrait split pour avoir la valeur key la plus petite possible
-// 							// sinon $USER'$USER'"$USER" ca marche pas
-// 		}
-// 			 // toggle in_single state
-// 		else if (str[i] == '\"' && !in_single) // je rencontre une D_QUOTE et je NE suis PAS dans une S_QUOTE
-// 			in_double = !in_double; // toggle in_double state
-
-// 	}
-// }
-
-
-
-/* cette fonction compte le nombre de KEYS potentielles*/
-size_t	count_expand(char *tkn_raw)
-{
-	size_t	i;
-	size_t	count_expand;
-	t_bool	in_single;
-	t_bool	in_double;
-
-	i = 0;
-	count_expand = 0;
-	in_double = false;
-	in_single = false;
-	while(tkn_raw[i])
-	{
-		if (tkn_raw[i] == '\'' && !in_double)
-			in_single = !in_single; // toggle in_single state
-		else if (tkn_raw[i] == '\"' && !in_single)
-			in_double = !in_double; // toggle in_double state
-		if (tkn_raw[i] == '$' && tkn_raw[i + 1] && is_valid_keychar(tkn_raw[i + 1])
-				&& !in_single)
-			count_expand++;
-		i++;
-	}
-	return (count_expand);
-}
-
-// char	*expand_dquotes(char *tkn_raw, t_shell *shell)
-// {
-// 	int	i = 0;
-// 	size_t	len_noquotes = ft_strnlen_noquotes(tkn_raw);
-
-// 	while (tkn_raw[i])
-// 	{
-// 		if (tkn_raw[i] == '$')
-// 		{
-// 			i++;
-// 			while (is_valid_keychar(tkn_raw[i]))
-// 			{
-// 				// stocker chaque cle potentielle dans un char**??
-// 				// faut peut etre split en amont ??
-// 			}
-// 		}
-// 		// si ft_strcmp($KEY, cmt_delimiter??) == 0
-// 	}
-// }
 
 t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd)
 {
@@ -149,45 +69,29 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	{
 		if(substr[i] == '$' && (i + 1 < strlen - 1) && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$'))
 		{
-			// if (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?'|| substr[i + 1] == '$') // valid key start
-			// {
-				if (i > start)
-				{
-					new_xpnd = ft_lstnewxpnd();
-					if (!new_xpnd)
-						return (false);
-					new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
-					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-				}
-				start = ++i;
-				if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
-					i++;
-				else
-				{
-					while (i < strlen - 1 && is_valid_keychar(substr[i]))
-					i++;
-				}
-
+			if (i > start)
+			{
 				new_xpnd = ft_lstnewxpnd();
 				if (!new_xpnd)
 					return (false);
-				new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
 				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-				start = i;
-			// }
-			// else // invalid key start $9 $\ etc. MAIS AUSSI BLANKS
-			// {
-			// 	if (i > start)
-			// 	{
-			// 		new_xpnd = ft_lstnewxpnd();
-			// 		if (!new_xpnd)
-			// 			return (false);
-			// 		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
-			// 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-			// 	}
-			// 	i += 2;
-			// 	start = i;
-			// }
+			}
+			start = ++i;
+			if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
+				i++;
+			else
+			{
+				while (i < strlen - 1 && is_valid_keychar(substr[i]))
+				i++;
+			}
+
+			new_xpnd = ft_lstnewxpnd();
+			if (!new_xpnd)
+				return (false);
+			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			start = i;
 		}
 		else
 			i++;
@@ -200,7 +104,6 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 	}
-
 	return (true);
 }
 
@@ -216,44 +119,28 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 	{
 		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$'))
 		{
-			// if (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?') // || substr[i + 1] == '$') // Valid expansion key
-			// {
-				if (i > start)
-				{
-					new_xpnd = ft_lstnewxpnd();
-					if (!new_xpnd)
-						return (false);
-					new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
-					ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-				}
-				start = ++i;
-				if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
-					i++;
-				else
-				{
-					while (substr[i] && is_valid_keychar(substr[i]))
-						i++;
-				}
+			if (i > start)
+			{
 				new_xpnd = ft_lstnewxpnd();
 				if (!new_xpnd)
 					return (false);
-				new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
 				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-				start = i;
-			// }
-			// else	// INVALID expansion key
-			// {
-			// 	if (i > start)
-			// 	{
-			// 		new_xpnd = ft_lstnewxpnd();
-			// 		if (!new_xpnd)
-			// 			return (false);
-			// 		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
-			// 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-			// 	}
-			// 	i += 2;
-			// 	start = i;
-			// }
+			}
+			start = ++i;
+			if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
+				i++;
+			else
+			{
+				while (substr[i] && is_valid_keychar(substr[i]))
+					i++;
+			}
+			new_xpnd = ft_lstnewxpnd();
+			if (!new_xpnd)
+				return (false);
+			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			start = i;
 		}
 		else
 			i++;
@@ -385,21 +272,15 @@ void	printf_xpnd(t_xpnd **xpnd_list)
 int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 {
 	t_xpnd	*xpnd_curr;
-	// char	*key_value;
 
 	if (!xpnd_list || !(*xpnd_list))
 		return (false);
 	xpnd_curr = *xpnd_list;
-	// key_value = NULL;
 
 	while (xpnd_curr)
 	{
 		if (xpnd_curr->xpnd_check == true)
 		{
-			// key_value = get_env_value(env, xpnd_curr->substr);
-			// if (!key_value)
-			// 	return (false);
-			// xpnd_curr->str_to_join = ft_strdup(key_value); // a check si faire comme ca avec
 			if (ft_strcmp(xpnd_curr->substr, "?") == 0)
 				xpnd_curr->str_to_join = ft_itoa(shell->exit_status);
 			else
@@ -476,6 +357,7 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 		xpnd_curr = xpnd_curr->next;
 	}
 	if (check_empty_xpnd_node(xpnd_list) != 0)
+	//	|| (check_empty_xpnd_node(xpnd_list) == 0 && tkn_current && !tkn_current->next)) // pas sur en fait ! je veux pas passer empty string arg a l'exec ?
 	{
 		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
 		if (!tkn_xpnd_curr)
