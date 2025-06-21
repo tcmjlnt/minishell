@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_tab_build.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 13:16:06 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/16 14:37:27 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:16:28 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static char	*fill_env_tab(t_env *entry)
 	size_t	len;
 
 	len = ft_strlen(entry->key) + 1 + ft_strlen(entry->value) + 1;
-	line = gc_mem(GC_ALLOC, len, NULL, GC_CMD);
+	line = gc_mem(GC_ALLOC, len, NULL, GC_CMD); // pk le gc_type c'est GC_CMD ici et pas GC_ENV ??
 	if (!line)
 		error_exit("fill_env_tab: allocation failed");
 	ft_strlcpy(line, entry->key, len);
@@ -48,7 +48,7 @@ char	**env_to_env_tab_for_execve(t_env *env)
 	char	**env_tab;
 
 	count = count_env_tab(env);
-	env_tab = gc_mem(GC_ALLOC, sizeof(char *) * (count + 1), NULL, GC_CMD);
+	env_tab = gc_mem(GC_ALLOC, sizeof(char *) * (count + 1), NULL, GC_CMD);  // pk le gc_type c'est GC_CMD ici et pas GC_ENV ??
 	if (!env_tab)
 		error_exit("env_to_env_tab_for_execve: alloc failed");
 	i = 0;

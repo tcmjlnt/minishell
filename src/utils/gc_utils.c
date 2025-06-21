@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:42:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 16:24:41 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:03:01 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,57 @@ char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type)
 	}
 	joined[i + j] = '\0';
 	return (joined);
+}
+
+static size_t	count_size(long nb)
+{
+	size_t	size;
+
+	size = 0;
+	if (nb < 0)
+	{
+	nb = nb * (-1);
+		size = 1;
+	}
+	if (nb == 0)
+		size = 1;
+	else
+	{
+		while (nb)
+		{
+			nb = nb / 10;
+			size++;
+		}
+	}
+	return (size);
+}
+
+char	*gc_itoa(int n, t_gc_type type)
+{
+	size_t	size;
+	long	nb;
+	char	*str;
+	int		is_negative;
+
+	size = count_size((long) n);
+	str = gc_mem(GC_ALLOC, (size + 1), NULL, type);
+	// str = (char *) malloc(sizeof(char) * (size + 1));
+	if (str == NULL)
+		return (NULL);
+	nb = (long) n;
+	is_negative = 0;
+	if (nb < 0)
+	{
+		nb = nb * (-1);
+		str[0] = '-';
+		is_negative = 1;
+	}
+	str[size] = '\0';
+	while (size > (size_t) is_negative)
+	{
+		str[size - 1] = nb % 10 + '0';
+		nb = nb / 10;
+		size--;
+	}
+	return (str);
 }

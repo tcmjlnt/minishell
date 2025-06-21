@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/14 20:40:09 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:11:40 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ t_cmd	*ft_lstnewcmd(void)
 {
 	t_cmd	*new_cmd;
 
-	new_cmd = malloc(sizeof(t_cmd));
+	new_cmd = gc_mem(GC_ALLOC, sizeof(t_cmd), NULL, GC_CMD);
+	// new_cmd = malloc(sizeof(t_cmd));
 	if (!new_cmd)
 		return (NULL);
-	new_cmd->args = malloc(sizeof(char *) * (MAX_ARGS + 1));
+	new_cmd->args = gc_mem(GC_ALLOC, (sizeof(char *) * (MAX_ARGS + 1)), NULL, GC_CMD);
+	// new_cmd->args = malloc(sizeof(char *) * (MAX_ARGS + 1));
 	if (!new_cmd->args)
 	{
 		// free etc.
@@ -68,15 +70,16 @@ t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type)
 {
 	t_token *new_token;
 
-	new_token = malloc(sizeof(t_token));
+	new_token = gc_mem(GC_ALLOC, sizeof(t_token), NULL, GC_TKN);
+	// new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 	new_token->token_type = token_type;
 	if (token_type != TOKEN_WORD)
-		new_token->token_value = ft_strndup(prompt, n);
+		new_token->token_value = gc_strndup(prompt, n, GC_TKN);
 	else
-		new_token->token_value = ft_strndup_noquotes(prompt, n);
-	new_token->token_raw = ft_strndup(prompt, n);
+		new_token->token_value = gc_strndup_noquotes(prompt, n, GC_TKN);
+	new_token->token_raw = gc_strndup(prompt, n, GC_TKN);
 
 	// if (new_token->prev && new_token->node_num != 0)
 	// 	new_token->node_num = new_token->prev->node_num++; // ca segfault

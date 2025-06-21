@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 20:37:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 13:52:02 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:42:48 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ t_token	*ft_lstnewtoken_xpnd(void)
 {
 	t_token *new_token;
 
-	new_token = malloc(sizeof(t_token));
+	new_token = gc_mem(GC_ALLOC, sizeof(t_token), NULL, GC_TKN);
+	// new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 	new_token->token_type = -1;
@@ -58,7 +59,8 @@ t_xpnd	*ft_lstnewxpnd(void)
 {
 	t_xpnd	*new_xpnd;
 
-	new_xpnd = malloc(sizeof(t_xpnd));
+	new_xpnd = gc_mem(GC_ALLOC, sizeof(t_xpnd), NULL, GC_TKN);
+	// new_xpnd = malloc(sizeof(t_xpnd));
 	if (!new_xpnd)
 		return (NULL);
 	new_xpnd->substr = NULL;

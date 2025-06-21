@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 10:22:26 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 16:07:43 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:56:51 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	update_env_value(t_env *env, const char *key, const char *new_value)
 	{
 		if (ft_strcmp(env->key, key) == 0)
 		{
-			free(env->value); // a supprimer potentiellement a ne pas faire la mais GC
+			gc_mem(GC_FREE_ONE, 0, env->value, GC_ENV);
+			// free(env->value); // a supprimer potentiellement a ne pas faire la mais GC
 			env->equal = true;
 			env->value = gc_strdup(new_value, GC_ENV);
 			return ;
@@ -29,7 +30,7 @@ void	update_env_value(t_env *env, const char *key, const char *new_value)
 }
 
 
-char	*get_env_value(t_env *env, const char *key)
+char	*get_env_value(t_env *env, const char *key, t_gc_type type)
 {
 	char	*res;
 
@@ -47,7 +48,7 @@ char	*get_env_value(t_env *env, const char *key)
 		}
 		env = env->next;
 	}
-	res = ft_strdup("");
+	res = gc_strdup("", type); // hmm jutilise cette fonction dans la creation des xpd, est-ce que le type c'est GC_ENV ou GC_TKN ?
 	if (!res)
 		return (NULL);
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 15:08:39 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:11:58 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int is_valid_keychar(char c)
 
 t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd)
 {
-	new_xpnd->substr = ft_strndup(src, n);
+	new_xpnd->substr = gc_strndup(src, n, GC_TKN);
 	new_xpnd->xpnd_check = xpnd_check;
 	new_xpnd->in_single = xpnd_quotes_curr->in_single;
 	new_xpnd->in_double = xpnd_quotes_curr->in_double;
@@ -202,7 +202,7 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 				current_xpnd = ft_lstnewxpnd();
 				if (!current_xpnd)
 					return (false);
-				current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+				current_xpnd->substr = gc_strndup(tkn_raw + start, i - start, GC_TKN);
 				current_xpnd->xpnd_check = false;
 				ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
 			}
@@ -231,7 +231,7 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 				}
 				i++;
 			}
-			current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+			current_xpnd->substr = gc_strndup(tkn_raw + start, i - start, GC_TKN);
 			current_xpnd->xpnd_check = false;
 			ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
 			start = i;
@@ -243,7 +243,7 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 		current_xpnd = ft_lstnewxpnd();
 		if (!current_xpnd)
 			return (false);
-		current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+		current_xpnd->substr = gc_strndup(tkn_raw + start, i - start, GC_TKN);
 		current_xpnd->xpnd_check = false;
 		ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
 	}
@@ -282,16 +282,16 @@ int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 		if (xpnd_curr->xpnd_check == true)
 		{
 			if (ft_strcmp(xpnd_curr->substr, "?") == 0)
-				xpnd_curr->str_to_join = ft_itoa(shell->exit_status);
+				xpnd_curr->str_to_join = gc_itoa(shell->exit_status, GC_TKN);
 			else
-				xpnd_curr->str_to_join = ft_strdup(get_env_value(shell->env, xpnd_curr->substr));
+				xpnd_curr->str_to_join = gc_strdup(get_env_value(shell->env, xpnd_curr->substr, GC_TKN), GC_TKN);
 
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
 		else
 		{
-			xpnd_curr->str_to_join = ft_strdup(xpnd_curr->substr);
+			xpnd_curr->str_to_join = gc_strdup(xpnd_curr->substr, GC_TKN);
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
@@ -332,7 +332,7 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	if (!xpnd_list || !(*xpnd_list))
 		return (true);
 	xpnd_curr = *xpnd_list;
-	res = ft_strdup("");
+	res = gc_strdup("", GC_TKN);
 	if (!res)
 		return (false);
 	while (xpnd_curr)
@@ -352,7 +352,7 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 			free(res);
 			return (false);
 		}
-		tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
+		tkn_xpnd_curr->token_raw = gc_strdup(tkn_current->token_raw, GC_TKN);
 		if (!tkn_xpnd_curr->token_raw)
 		{
 			free(res);
@@ -360,7 +360,7 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 			return (false);
 		}
 		tkn_xpnd_curr->token_type = tkn_current->token_type;
-		tkn_xpnd_curr->token_value = ft_strdup(res);
+		tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
 		if (!tkn_xpnd_curr->token_value)
 		{
 			free(res);
@@ -389,7 +389,7 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double
 			&& !xpnd_curr->in_single)
 		{
-			xpnd_curr->str_to_join = ft_strndup(xpnd_curr->str_to_join, len - 1);
+			xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len - 1, GC_TKN);
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
