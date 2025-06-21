@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 20:45:44 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 11:52:24 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ typedef struct s_cmd
 	int				pid;
 	int				pipe[2];
 	t_bool			is_builtin;
-	int				cmd_type;
 	t_redir			*redir;
 	struct s_cmd	*next;
 	struct s_cmd	*prev;

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 20:54:04 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 13:04:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 
 	if (!tkn_list || !(*tkn_list))  // si ya pas de tkn_list nsm on se casse
 	{
-		printf ("dabord la\n");
+		printf ("dabord la  --- empty tkn_list ou *tkn_list in parse_tokens()\n");
 		return (false);
 	}
 	// if (!cmd_list) // cmd_list est set a nul puisquon le rempli dans cette fonction meme

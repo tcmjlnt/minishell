@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 21:23:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 13:25:31 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	print_args(t_cmd *cmd)
 	}
 	while (temp)
 	{
-		printf("-----------------\nCommand %d: `%s` ; is_builtin=%d ; cmd_type=%d\n", i, temp->cmd, temp->is_builtin, temp->cmd_type);
+		printf("-----------------\nCommand %d: `%s` ; is_builtin=%d\n", i, temp->cmd, temp->is_builtin);
 		if (temp->args)
 		{
 			j = 0;
@@ -343,7 +343,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 
 	if (!parse_tokens(cmd_list, &tkn_xpnd_list, shell))
 	{
-		printf("ici\n");
+		printf("ici  - parse_tokens() failure\n");
 		return (false);
 	}
 

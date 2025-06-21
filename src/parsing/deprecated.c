@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/10 18:09:32 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 10:44:13 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,66 @@
 
 // anciennes fonctions ou anciens bout de fonctions
 
+
+int	join_xpnd_gem2(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current) // gemini 2
+{
+	t_xpnd	*xpnd_curr;
+	t_token	*tkn_xpnd_curr;
+	char	*result;
+	char	*temp;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (true); // No nodes to process, do nothing.
+	result = NULL; // Initialize result to NULL.
+
+	xpnd_curr = *xpnd_list;
+	while (xpnd_curr)
+	{
+		// This is the crucial logic to skip unquoted empty variables.
+		if (xpnd_curr->xpnd_check && !xpnd_curr->in_single && !xpnd_curr->in_double
+			&& xpnd_curr->str_to_join && xpnd_curr->str_to_join[0] == '\0')
+		{
+			xpnd_curr = xpnd_curr->next;
+			continue;
+		}
+		if (result == NULL) // First non-skipped node.
+			result = ft_strdup(xpnd_curr->str_to_join);
+		else // Subsequent nodes.
+		{
+			temp = ft_strjoin(result, xpnd_curr->str_to_join);
+			free(result);
+			result = temp;
+		}
+		if (!result)
+			return (false); // Malloc failed.
+		xpnd_curr = xpnd_curr->next;
+	}
+
+	// If result is still NULL, it means all nodes were skipped (e.g., only $DONT).
+	// In this case, we create no token, effectively removing the argument.
+	if (result == NULL)
+		return (true);
+
+	// Otherwise, create a token with the resulting string.
+	tkn_xpnd_curr = ft_lstnewtoken_xpnd();
+	if (!tkn_xpnd_curr)
+	{
+		free(result);
+		return (false);
+	}
+
+	tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
+	tkn_xpnd_curr->token_type = tkn_current->token_type;
+	tkn_xpnd_curr->token_value = result; // Assign final string.
+	if (!tkn_xpnd_curr->token_raw)
+	{
+		free(tkn_xpnd_curr->token_value);
+		free(tkn_xpnd_curr);
+		return (false);
+	}
+	ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
+	return (true);
+}
 
 
 int	lexer(char *prompt, t_token *token) // premiere iteration du lexer jai change de voie apres
