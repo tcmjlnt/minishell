@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 21:23:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 11:53:31 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ void	print_args(t_cmd *cmd)
 	}
 	while (temp)
 	{
-		printf("-----------------\nCommand %d: `%s` ; is_builtin=%d ; cmd_type=%d\n", i, temp->cmd, temp->is_builtin, temp->cmd_type);
+		printf("-----------------\nCommand %d: `%s` ; is_builtin=%d\n", i, temp->cmd, temp->is_builtin);
 		if (temp->args)
 		{
 			j = 0;
@@ -333,12 +333,12 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	{
 		return (false);
 	}
-	// print_token(tkn_list);
+	print_token(tkn_list);
 
 	handle_expansion(&tkn_list, &tkn_xpnd_list, shell); // eet si on faisait l'expand apres la token avant le parsing
 
-	// printf("-------------------- TOKENS AFTER EXPANSION -----------------\n");
-	// print_token(tkn_xpnd_list);
+	printf("-------------------- TOKENS AFTER EXPANSION -----------------\n");
+	print_token(tkn_xpnd_list);
 
 
 	if (!parse_tokens(cmd_list, &tkn_xpnd_list, shell))
@@ -347,7 +347,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		return (false);
 	}
 
-	// print_args(*cmd_list);
+	print_args(*cmd_list);
 	// handle_expansion(&cmd_list, &tkn_list, shell);
 	// expand
 	// redirections --> penser a creer un liste chainee pour les redirections

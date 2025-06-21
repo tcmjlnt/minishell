@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 14:49:34 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 11:47:15 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,6 +420,27 @@ int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 }
 
 
+int	check_empty_xpnd_node(t_xpnd **xpnd_list)
+{
+	t_xpnd	*xpnd_curr;
+	int	keep_node;
+
+	keep_node = 0;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (true);
+	xpnd_curr = *xpnd_list;
+
+	while(xpnd_curr)
+	{
+		if (xpnd_curr->str_to_join[0] != '\0' || xpnd_curr->in_double || xpnd_curr->in_single)
+			keep_node++;
+		xpnd_curr = xpnd_curr->next;
+	}
+	return (keep_node);
+
+}
+
 int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;
@@ -428,7 +449,7 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	char	*res;
 
 	if (!xpnd_list || !(*xpnd_list))
-		return (false);
+		return (true);
 	xpnd_curr = *xpnd_list;
 	temp = ft_strdup(xpnd_curr->str_to_join);
 	if (!temp)
@@ -454,17 +475,20 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 			return (false);
 		xpnd_curr = xpnd_curr->next;
 	}
-	tkn_xpnd_curr = ft_lstnewtoken_xpnd();
-	if (!tkn_xpnd_curr)
-		return (false);
-	tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
-	if (!tkn_current->token_raw)
-		return (false);
-	tkn_xpnd_curr->token_type = tkn_current->token_type;
-	tkn_xpnd_curr->token_value = ft_strdup(res);
-	if (!tkn_xpnd_curr->token_value)
-		return (false);
-	ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
+	if (check_empty_xpnd_node(xpnd_list) != 0)
+	{
+		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
+		if (!tkn_xpnd_curr)
+			return (false);
+		tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
+		if (!tkn_current->token_raw)
+			return (false);
+		tkn_xpnd_curr->token_type = tkn_current->token_type;
+		tkn_xpnd_curr->token_value = ft_strdup(res);
+		if (!tkn_xpnd_curr->token_value)
+			return (false);
+		ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
+	}
 
 	return (true);
 }
@@ -546,9 +570,6 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 
 		token_index++;
 		tkn_current = tkn_current->next;
-
-
 	}
-
 	return (true);
 }
