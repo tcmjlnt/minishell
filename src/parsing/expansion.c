@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 13:19:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 15:08:39 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -326,52 +326,51 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;
 	t_token	*tkn_xpnd_curr;
-	char	*temp;
 	char	*res;
+	char	*temp_join;
 
 	if (!xpnd_list || !(*xpnd_list))
 		return (true);
 	xpnd_curr = *xpnd_list;
-	temp = ft_strdup(xpnd_curr->str_to_join);
-	if (!temp)
-		return (false);
 	res = ft_strdup("");
 	if (!res)
 		return (false);
-	if (xpnd_curr && !xpnd_curr->next)
+	while (xpnd_curr)
 	{
-		res = ft_strdup(xpnd_curr->str_to_join);
-		if (!res)
+		temp_join = ft_strjoin(res, xpnd_curr->str_to_join);
+		free(res);
+		if (!temp_join)
 			return (false);
-	}
-	while (xpnd_curr && xpnd_curr->next) // besoin de check
-	{
-		// if (xpnd_curr->str_to_join[0] == '\0') // premiere tentative de skip le noeud vide -- ca segfault pour `echo $$USER`
-		// 	xpnd_curr = xpnd_curr->next;
-		res = ft_strjoin(temp, xpnd_curr->next->str_to_join);
-		if (!res)
-			return (false);
-		temp = ft_strdup(res);
-		if (!temp)
-			return (false);
+		res = temp_join;
 		xpnd_curr = xpnd_curr->next;
 	}
 	if (check_empty_xpnd_node(xpnd_list) != 0)
-	//	|| (check_empty_xpnd_node(xpnd_list) == 0 && tkn_current && !tkn_current->next)) // pas sur en fait ! je veux pas passer empty string arg a l'exec ?
 	{
 		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
 		if (!tkn_xpnd_curr)
+		{
+			free(res);
 			return (false);
+		}
 		tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
-		if (!tkn_current->token_raw)
+		if (!tkn_xpnd_curr->token_raw)
+		{
+			free(res);
+			free(tkn_xpnd_curr);
 			return (false);
+		}
 		tkn_xpnd_curr->token_type = tkn_current->token_type;
 		tkn_xpnd_curr->token_value = ft_strdup(res);
 		if (!tkn_xpnd_curr->token_value)
+		{
+			free(res);
+			free(tkn_xpnd_curr->token_raw);
+			free(tkn_xpnd_curr);
 			return (false);
+		}
 		ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
 	}
-
+	free (res);
 	return (true);
 }
 
