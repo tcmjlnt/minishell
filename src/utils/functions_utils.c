@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/10 16:25:03 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:26:24 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ size_t	ft_strnlen_noquotes(char *src, size_t n)
 	return (j);
 }
 
-char	*ft_strndup_noquotes(char *src, size_t n)
+char	*gc_strndup_noquotes(char *src, size_t n, t_gc_type type)
 {
 	char		*dest;
 	size_t		i;
@@ -55,7 +55,8 @@ char	*ft_strndup_noquotes(char *src, size_t n)
 	int	in_double = 0;
 
 	len_noquotes = ft_strnlen_noquotes(src, n);
-	dest = malloc(sizeof(char) * (len_noquotes + 1));
+	// dest = malloc(sizeof(char) * (len_noquotes + 1));
+	dest = gc_mem(GC_ALLOC, len_noquotes + 1, NULL, type);
 	if (!dest)
 		return(NULL);
 	i = 0;

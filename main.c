@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 10:14:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 20:20:08 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int main(int ac, char **av, char **envp)
 
 		env_from_envp(shell, envp);
 		ft_prompt(shell);
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_ENV);
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	// print_envp(envp);
 	// print_env_line(envp[5]);
 	// print_env(shell->env);

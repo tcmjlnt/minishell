@@ -47,6 +47,7 @@ typedef enum e_gc_type
 {
 	GC_NONE,
 	GC_ENV,
+	GC_TKN,
 	GC_CMD,
 	GC_TMP
 }	t_gc_type;
@@ -188,10 +189,12 @@ char	*gc_strdup(const char *src, t_gc_type type);
 char	*gc_strndup(char *src, size_t n, t_gc_type type);
 char	**gc_split(char *str, char sep, t_gc_type type);
 char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type);
+char	*gc_itoa(int n, t_gc_type type);
+
 
 /* ==============================    🛠️ UTILS    ================================ */
 void	error_exit(const char *message);
-char	*ft_strndup_noquotes(char *src, size_t n);
+char	*gc_strndup_noquotes(char *src, size_t n, t_gc_type type);
 size_t	ft_strnlen_noquotes(char *src, size_t n);
 char	*ft_strndup(char *src, size_t n);
 t_token	*ft_lstnew_token(char *value, int type, int node_num);
@@ -230,7 +233,7 @@ void	print_env(t_env *env);
 void	print_env_tab(char **env_tab);
 void	env_from_envp(t_shell *shell, char **envp);
 char	**env_to_env_tab_for_execve(t_env *env);
-char	*get_env_value(t_env *env, const char *key);
+char	*get_env_value(t_env *env, const char *key, t_gc_type type);
 void	update_env_value(t_env *env, const char *key, const char *new_value);
 t_env	*env_new(char *key, char *value, t_bool equal);
 void	env_add_back(t_env **lst, t_env *new);

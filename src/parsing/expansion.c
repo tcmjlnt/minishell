@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 13:19:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 20:25:09 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int is_valid_keychar(char c)
 
 t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd)
 {
-	new_xpnd->substr = ft_strndup(src, n);
+	new_xpnd->substr = gc_strndup(src, n, GC_TKN);
 	new_xpnd->xpnd_check = xpnd_check;
 	new_xpnd->in_single = xpnd_quotes_curr->in_single;
 	new_xpnd->in_double = xpnd_quotes_curr->in_double;
@@ -202,7 +202,7 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 				current_xpnd = ft_lstnewxpnd();
 				if (!current_xpnd)
 					return (false);
-				current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+				current_xpnd->substr = gc_strndup(tkn_raw + start, i - start, GC_TKN);
 				current_xpnd->xpnd_check = false;
 				ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
 			}
@@ -231,7 +231,7 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 				}
 				i++;
 			}
-			current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+			current_xpnd->substr = gc_strndup(tkn_raw + start, i - start, GC_TKN);
 			current_xpnd->xpnd_check = false;
 			ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
 			start = i;
@@ -243,7 +243,7 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 		current_xpnd = ft_lstnewxpnd();
 		if (!current_xpnd)
 			return (false);
-		current_xpnd->substr = ft_strndup(tkn_raw + start, i - start);
+		current_xpnd->substr = gc_strndup(tkn_raw + start, i - start, GC_TKN);
 		current_xpnd->xpnd_check = false;
 		ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
 	}
@@ -282,16 +282,16 @@ int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 		if (xpnd_curr->xpnd_check == true)
 		{
 			if (ft_strcmp(xpnd_curr->substr, "?") == 0)
-				xpnd_curr->str_to_join = ft_itoa(shell->exit_status);
+				xpnd_curr->str_to_join = gc_itoa(shell->exit_status, GC_TKN);
 			else
-				xpnd_curr->str_to_join = ft_strdup(get_env_value(shell->env, xpnd_curr->substr));
+				xpnd_curr->str_to_join = gc_strdup(get_env_value(shell->env, xpnd_curr->substr, GC_TKN), GC_TKN);
 
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
 		else
 		{
-			xpnd_curr->str_to_join = ft_strdup(xpnd_curr->substr);
+			xpnd_curr->str_to_join = gc_strdup(xpnd_curr->substr, GC_TKN);
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
@@ -326,52 +326,51 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;
 	t_token	*tkn_xpnd_curr;
-	char	*temp;
 	char	*res;
+	char	*temp_join;
 
 	if (!xpnd_list || !(*xpnd_list))
 		return (true);
 	xpnd_curr = *xpnd_list;
-	temp = ft_strdup(xpnd_curr->str_to_join);
-	if (!temp)
-		return (false);
-	res = ft_strdup("");
+	res = gc_strdup("", GC_TKN);
 	if (!res)
 		return (false);
-	if (xpnd_curr && !xpnd_curr->next)
+	while (xpnd_curr)
 	{
-		res = ft_strdup(xpnd_curr->str_to_join);
-		if (!res)
+		temp_join = gc_strjoin(res, xpnd_curr->str_to_join, GC_TKN);
+		// free(res);
+		if (!temp_join)
 			return (false);
-	}
-	while (xpnd_curr && xpnd_curr->next) // besoin de check
-	{
-		// if (xpnd_curr->str_to_join[0] == '\0') // premiere tentative de skip le noeud vide -- ca segfault pour `echo $$USER`
-		// 	xpnd_curr = xpnd_curr->next;
-		res = ft_strjoin(temp, xpnd_curr->next->str_to_join);
-		if (!res)
-			return (false);
-		temp = ft_strdup(res);
-		if (!temp)
-			return (false);
+		res = temp_join;
 		xpnd_curr = xpnd_curr->next;
 	}
 	if (check_empty_xpnd_node(xpnd_list) != 0)
-	//	|| (check_empty_xpnd_node(xpnd_list) == 0 && tkn_current && !tkn_current->next)) // pas sur en fait ! je veux pas passer empty string arg a l'exec ?
 	{
 		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
 		if (!tkn_xpnd_curr)
+		{
+			// free(res);
 			return (false);
-		tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
-		if (!tkn_current->token_raw)
+		}
+		tkn_xpnd_curr->token_raw = gc_strdup(tkn_current->token_raw, GC_TKN);
+		if (!tkn_xpnd_curr->token_raw)
+		{
+			// free(res);
+			// free(tkn_xpnd_curr);
 			return (false);
+		}
 		tkn_xpnd_curr->token_type = tkn_current->token_type;
-		tkn_xpnd_curr->token_value = ft_strdup(res);
+		tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
 		if (!tkn_xpnd_curr->token_value)
+		{
+			// free(res);
+			// free(tkn_xpnd_curr->token_raw);
+			// free(tkn_xpnd_curr);
 			return (false);
+		}
 		ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
 	}
-
+	// free (res);
 	return (true);
 }
 
@@ -386,11 +385,11 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 	while (xpnd_curr)
 	{
 		len = ft_strlen(xpnd_curr->str_to_join);
-		if (xpnd_curr->str_to_join[len - 1] == '$' && !xpnd_curr->xpnd_check && xpnd_curr->next
+		if (len > 0 && xpnd_curr->str_to_join[len - 1] == '$' && !xpnd_curr->xpnd_check && xpnd_curr->next
 			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double
 			&& !xpnd_curr->in_single)
 		{
-			xpnd_curr->str_to_join = ft_strndup(xpnd_curr->str_to_join, len - 1);
+			xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len - 1, GC_TKN);
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
@@ -446,8 +445,8 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
 			return (false);
 
-		free_t_xpnd_list(xpnd_quotes_list);
-		free_t_xpnd_list(xpnd_list);
+		// free_t_xpnd_list(xpnd_quotes_list);
+		// free_t_xpnd_list(xpnd_list);
 
 
 		token_index++;

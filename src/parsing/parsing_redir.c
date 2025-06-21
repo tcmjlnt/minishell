@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:53:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 21:09:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:43:47 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ t_redir	*ft_lstnewredir(void)
 {
 	t_redir	*new_redir;
 
-	new_redir = malloc(sizeof(t_redir));
+	new_redir = gc_mem(GC_ALLOC, sizeof(t_redir), NULL, GC_CMD);
+	// new_redir = malloc(sizeof(t_redir));
 	if (!new_redir)
 		return (NULL);
 	new_redir->file = NULL;

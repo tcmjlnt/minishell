@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:25:43 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 16:00:54 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:57:59 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*find_command_path(char *cmd, t_env *env)
 	absolute = check_absolute_or_relative_path(cmd);
 	if (absolute)
 		return (absolute);
-	path_env = get_env_value(env, "PATH");
+	path_env = get_env_value(env, "PATH", GC_CMD);
 	if (!path_env)
 		return (NULL);
 	paths = gc_split(path_env, ':', GC_CMD);

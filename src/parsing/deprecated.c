@@ -6,13 +6,69 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 10:44:13 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 15:09:22 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // anciennes fonctions ou anciens bout de fonctions
+
+int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
+{
+	t_xpnd	*xpnd_curr;
+	t_token	*tkn_xpnd_curr;
+	char	*temp;
+	char	*res;
+
+	if (!xpnd_list || !(*xpnd_list))
+		return (true);
+	xpnd_curr = *xpnd_list;
+	temp = ft_strdup(xpnd_curr->str_to_join);
+	if (!temp)
+		return (false);
+	res = ft_strdup("");
+	if (!res)
+		return (false);
+	if (xpnd_curr && !xpnd_curr->next)
+	{
+		res = ft_strdup(xpnd_curr->str_to_join);
+		if (!res)
+			return (false);
+	}
+	while (xpnd_curr && xpnd_curr->next) // besoin de check
+	{
+		// if (xpnd_curr->str_to_join[0] == '\0') // premiere tentative de skip le noeud vide -- ca segfault pour `echo $$USER`
+		// 	xpnd_curr = xpnd_curr->next;
+		res = ft_strjoin(temp, xpnd_curr->next->str_to_join);
+		free (temp);
+		if (!res)
+			return (false);
+		temp = ft_strdup(res);
+		if (!temp)
+			return (false);
+		xpnd_curr = xpnd_curr->next;
+	}
+	free (temp);
+	if (check_empty_xpnd_node(xpnd_list) != 0)
+	//	|| (check_empty_xpnd_node(xpnd_list) == 0 && tkn_current && !tkn_current->next)) // pas sur en fait ! je veux pas passer empty string arg a l'exec ?
+	{
+		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
+		if (!tkn_xpnd_curr)
+			return (false);
+		tkn_xpnd_curr->token_raw = ft_strdup(tkn_current->token_raw);
+		if (!tkn_current->token_raw)
+			return (false);
+		tkn_xpnd_curr->token_type = tkn_current->token_type;
+		tkn_xpnd_curr->token_value = ft_strdup(res);
+		if (!tkn_xpnd_curr->token_value)
+			return (false);
+		ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
+	}
+	free (res);
+
+	return (true);
+}
 
 
 int	join_xpnd_gem2(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current) // gemini 2
