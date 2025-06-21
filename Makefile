@@ -77,10 +77,12 @@ SRC_ENV = \
 
 SRC_EXEC = \
 	exec/paths.c \
-	exec/exec_with_redir.c \
-	exec/redir_exec.c \
-	exec/redir_handle.c \
-	exec/heredoc.c \
+	exec/checks_full_cmd.c \
+	exec/exec_dispatcher.c \
+	exec/exec_single_cmd.c \
+	exec/heredocs.c \
+	exec/pipes.c \
+	exec/redirections.c \
 
 SRC_PARSING = \
 	parsing/parsing.c \
