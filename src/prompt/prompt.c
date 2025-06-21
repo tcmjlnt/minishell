@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 23:50:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:14:18 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	ft_prompt(t_shell *shell)
 			// printf("  fd_out = %d\n", cmd_list->fd_out);
 
 			exec_dispatcher(cmd_list, shell);
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 			// ceci est un commentaire pour le merge
 			// printf("%d\n", x);
 			// printf("Tu as tapé : %s\n", prompt); // a sup
@@ -109,6 +110,6 @@ void	ft_prompt(t_shell *shell)
 			// cmd_list = NULL;
 
 		}
-		free(prompt);
+		// free(prompt);
 	}
 }

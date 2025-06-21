@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 17:06:02 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:12:11 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 				printf("blabla faut pas abuser le nombre d'args stp\n");
 				return (false);
 			}
-			cmd_current->args[j] = gc_strdup(tkn_current->token_value, GC_TKN);
+			cmd_current->args[j] = gc_strdup(tkn_current->token_value, GC_CMD);
 			if (!cmd_current->args[j]) // ft_strdup malloc failure
 				return (false);
 			if (j == 0)
 			{
-				cmd_current->cmd = gc_strdup(tkn_current->token_value, GC_TKN);
+				cmd_current->cmd = gc_strdup(tkn_current->token_value, GC_CMD);
 				if (!cmd_current->cmd)
 					return (false);
 				cmd_current->is_builtin = is_builtin(shell, cmd_current->cmd);

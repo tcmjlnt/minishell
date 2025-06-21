@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 17:11:58 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:24:11 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,8 +337,8 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 		return (false);
 	while (xpnd_curr)
 	{
-		temp_join = ft_strjoin(res, xpnd_curr->str_to_join);
-		free(res);
+		temp_join = gc_strjoin(res, xpnd_curr->str_to_join, GC_TKN);
+		// free(res);
 		if (!temp_join)
 			return (false);
 		res = temp_join;
@@ -349,28 +349,28 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
 		if (!tkn_xpnd_curr)
 		{
-			free(res);
+			// free(res);
 			return (false);
 		}
 		tkn_xpnd_curr->token_raw = gc_strdup(tkn_current->token_raw, GC_TKN);
 		if (!tkn_xpnd_curr->token_raw)
 		{
-			free(res);
-			free(tkn_xpnd_curr);
+			// free(res);
+			// free(tkn_xpnd_curr);
 			return (false);
 		}
 		tkn_xpnd_curr->token_type = tkn_current->token_type;
 		tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
 		if (!tkn_xpnd_curr->token_value)
 		{
-			free(res);
-			free(tkn_xpnd_curr->token_raw);
-			free(tkn_xpnd_curr);
+			// free(res);
+			// free(tkn_xpnd_curr->token_raw);
+			// free(tkn_xpnd_curr);
 			return (false);
 		}
 		ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
 	}
-	free (res);
+	// free (res);
 	return (true);
 }
 
@@ -445,8 +445,8 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
 			return (false);
 
-		free_t_xpnd_list(xpnd_quotes_list);
-		free_t_xpnd_list(xpnd_list);
+		// free_t_xpnd_list(xpnd_quotes_list);
+		// free_t_xpnd_list(xpnd_list);
 
 
 		token_index++;
