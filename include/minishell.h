@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 11:52:24 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:36:25 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,31 +201,26 @@ void	init_shell(void);
 void	print_builtin_pipe_warning(t_cmd *cmd);
 
 /* ===========================    🚀 EXECUTION    =========================== */
+void	exec_dispatcher(t_cmd *cmd, t_shell *shell);
+int		handle_all_heredocs(t_cmd *cmd_list);
+int		handle_heredoc(t_redir *redir);
+void	exec_single_cmd(t_cmd *cmd, t_shell *shell);
+int		apply_redirections(t_cmd *cmd, t_shell *shell);
+void	save_std(t_std_backup *backup);
+void	restore_std(t_std_backup *backup);
+void	exec_external_cmd(t_cmd *cmd, t_shell *shell);
+void	exec_pipeline(t_cmd *cmd, t_shell *shell);
+void	close_all_pipes(t_cmd *command);
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
-void	exec_external_cmd(t_cmd *cmd, t_shell *shell);
-void	pipe_reset(int pipe_fd[2]);
-void	pipe_create(int pipe_fd[2]);
-void	wait_pipeline(t_cmd *cmds);
-void	exec_dispatcher(t_cmd *cmds, t_shell *shell);
-void	exec_single_cmd(t_cmd *cmd, t_shell *shell);
-void	exec_first_child(t_cmd *cmd, t_shell *shell);
-void	exec_middle_child(t_cmd *cmd, t_shell *shell);
-void	exec_last_child(t_cmd *cmd, t_shell *shell);
-void	exec_pipeline(t_cmd *cmd, t_shell *shell);
+void	wait_pipeline(t_cmd *cmds, t_shell *shell);
 void	apply_dup_redirections(t_cmd *cmd);
-void	prepare_child(t_cmd *cmd, t_shell *shell);
 void	close_redirections(t_cmd *cmd);
-int		handle_single_redirection(t_cmd *cmd, t_redir *redir, t_shell *shell);
-int		apply_redirections(t_cmd *cmd, t_shell *shell);
 int		is_directory(char *file);
 t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell);
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell);
-char	*heredoc_read_loop(const char *limiter);
-int		here_doc(char *limiter, t_cmd *cmd, t_shell *shell);
-void	sigint_heredoc(int sig);
-void	save_std(t_std_backup *backup);
-void	restore_std(t_std_backup *backup);
+int		check_redirections_consistency(t_cmd *cmd, t_shell *shell);
+int		open_file(t_redir *redir, t_shell *shell);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
