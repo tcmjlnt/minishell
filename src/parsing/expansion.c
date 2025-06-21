@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 18:24:11 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/21 20:25:09 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,7 +385,7 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 	while (xpnd_curr)
 	{
 		len = ft_strlen(xpnd_curr->str_to_join);
-		if (xpnd_curr->str_to_join[len - 1] == '$' && !xpnd_curr->xpnd_check && xpnd_curr->next
+		if (len > 0 && xpnd_curr->str_to_join[len - 1] == '$' && !xpnd_curr->xpnd_check && xpnd_curr->next
 			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double
 			&& !xpnd_curr->in_single)
 		{
