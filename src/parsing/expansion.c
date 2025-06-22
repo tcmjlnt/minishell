@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 20:25:09 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/22 23:03:53 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,11 +157,11 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 
 }
 
-int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_current)
 {
 	if (!xpnd_quotes_curr || !xpnd_quotes_curr->substr)
 		return (true);
-	if (xpnd_quotes_curr->in_single)
+	if (xpnd_quotes_curr->in_single) //|| (tkn_current->prev && tkn_current->prev->token_type == TOKEN_REDIRECT_HEREDOC)) --> NON CA CREER DAUTRES PRBLM cat << $E
 	{
 		if (!tkn_xpnd_segmentation2_squotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
 			return (false);
@@ -177,6 +177,24 @@ int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
 			return (false);
 	}
 	return (true);
+}
+
+void	expansion_heredoc_check(t_xpnd **xpnd_list, t_token *tkn_curr)
+{
+		t_xpnd	*xpnd_curr;
+
+		if (!xpnd_list || !(*xpnd_list) || !tkn_curr)
+			return ;
+
+		xpnd_curr = *xpnd_list;
+		while (xpnd_curr)
+		{
+			if (tkn_curr->prev && tkn_curr->prev->token_type == TOKEN_REDIRECT_HEREDOC)
+				xpnd_curr->xpnd_check = false;
+			xpnd_curr = xpnd_curr->next;
+		}
+
+
 }
 
 int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
@@ -328,7 +346,11 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	t_token	*tkn_xpnd_curr;
 	char	*res;
 	char	*temp_join;
+	int		i;
+	int		start;
 
+	i = 0;
+	start = 0;
 	if (!xpnd_list || !(*xpnd_list))
 		return (true);
 	xpnd_curr = *xpnd_list;
@@ -360,6 +382,14 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 			return (false);
 		}
 		tkn_xpnd_curr->token_type = tkn_current->token_type;
+		// if (!xpnd_curr->in_double && !xpnd_curr->in_single && tkn_current->prev && !is_redir_operator(tkn_current->prev))
+		// {
+		// 	while (res[i])
+		// 	{
+		// 		start = i;
+		// 		while (res[i] && is)
+		// 	}
+		// }
 		tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
 		if (!tkn_xpnd_curr->token_value)
 		{
@@ -400,6 +430,8 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 }
 
 
+
+
 int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
 {
 	t_token	*tkn_current;
@@ -420,26 +452,31 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 
 		xpnd_quotes_list = NULL;
 		xpnd_list = NULL;
+		if (tkn_current->prev && tkn_current->prev->token_type == TOKEN_REDIRECT_HEREDOC)
+		{
+			if (tkn_current->next)
+				tkn_current = tkn_current->next;
+				continue ;
+		}
 		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
 			return (false);
-		// printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_quotes_list);
+		printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_quotes_list);
 		temp_xpnd_quotes = xpnd_quotes_list;
 		while (temp_xpnd_quotes)
 		{
-			if (!tkn_xpnd_segmentation2(temp_xpnd_quotes, &xpnd_list))
+			if (!tkn_xpnd_segmentation2(temp_xpnd_quotes, &xpnd_list, tkn_current))
 				return (false);
-
 
 			temp_xpnd_quotes = temp_xpnd_quotes->next;
 		}
-		// printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_list);
-
+		printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_list);
+		// expansion_heredoc_check(&xpnd_list, tkn_current);
 		if (!handle_key_value(&xpnd_list, shell))
 			return (false);
-		// printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_list);
+		printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_list);
 		if (!handle_dollarsign_before_quotes(&xpnd_list))
 			return (false);
 		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
