@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 17:11:40 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/22 20:13:48 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,15 @@ t_cmd	*ft_lstnewcmd(void)
 	}
 	new_cmd->cmd = NULL;
 	new_cmd->args[0] = NULL;
-	new_cmd->fd_in = STDIN_FILENO;
-	new_cmd->fd_out = STDOUT_FILENO;
+	new_cmd->fd_in = -1;
+	new_cmd->fd_out = -1;
+	new_cmd->pipe[0] = -1;
+	new_cmd->pipe[1] = -1;
 	new_cmd->pid = 0;
 	new_cmd->is_builtin = false;
 	new_cmd->redir = NULL;
 	new_cmd->prev = NULL;
 	new_cmd->next = NULL;
-
 	return (new_cmd);
 
 }

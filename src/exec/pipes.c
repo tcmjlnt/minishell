@@ -6,40 +6,48 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 18:01:02 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/22 21:13:36 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	create_pipes(t_cmd *cmd)
-{
-	t_cmd	*command;
-
-	command = cmd;
-	while (command->next)
-	{
-		if (pipe(command->pipe) == -1)
-		{
-			close_all_pipes(command->prev);
-			return (-1);
-		}
-			command = command->next;
-	}
-	return (0);
-}
 
 void	close_all_pipes(t_cmd *command)
 {
 	t_cmd	*tmp;
 
 	tmp = command;
-	while (tmp)
+	while (tmp->prev)
+	{
+		tmp = tmp->prev;
+	}
+	while (tmp->next)
 	{
 		close(tmp->pipe[0]);
 		close(tmp->pipe[1]);
-		tmp = tmp->prev;
+		tmp = tmp->next;
 	}
+}
+
+int	create_pipes(t_cmd *cmd)
+{
+	t_cmd	*command;
+	// int i = 0;
+
+	command = cmd;
+	while (command->next)
+	{
+		if (pipe(command->pipe) == -1)
+		{
+			close_all_pipes(cmd);
+			return (-1);
+		}
+		//printf("Création du pipe [%d,%d] pour cmd %s | cmd %s\n", command->pipe[0], command->pipe[1], command->cmd, command->next->cmd);
+		command = command->next;
+		//	i++;
+
+	}
+	return (0);
 }
 
 void	wait_pipeline(t_cmd *cmds, t_shell *shell)
@@ -66,7 +74,7 @@ Ne fait **pas** de `dup2` pour `STDIN` (il garde l'entrée standard du shell).
 Fait un `dup2` pour `STDOUT` vers le pipe de droite (`pipes[0][1]`).
 
 - Dernier enfant** (`i == cmd_count - 1`) :
-Fait un `dup2` pour `STDIN` depuis le pipe de gauche (`pipes[i-1][0]`).
+Fait un `dup2` pour `STDIN` depuis le pipe de gauche (`cmd->prev->pipes[0]`).
 Ne fait **pas** de `dup2` pour `STDOUT` (il garde la sortie standard du shell).
 
 - Enfants du milieu** (`0 < i < cmd_count - 1`) :
@@ -74,18 +82,22 @@ Fait un `dup2` pour `STDIN` depuis le pipe de gauche (`pipes[i-1][0]`).
 Fait un `dup2` pour `STDOUT` vers le pipe de droite (`pipes[i][1]`).
 */
 
-void	pipeline_child_life(t_cmd *cmd, t_cmd *prev_cmd, t_shell *shell, t_cmd *cmd_list)
+void	pipeline_child_life(t_cmd *cmd, t_shell *shell, t_cmd *cmd_list)
 {
 	// proteger les dup2
-	if (prev_cmd && cmd->next)
+	if (cmd->prev && cmd->next)
 	{
-		dup2(prev_cmd->pipe[1], STDIN_FILENO);
-		dup2(cmd->pipe[0], STDOUT_FILENO);
+		dup2(cmd->prev->pipe[0], STDIN_FILENO);
+		dup2(cmd->pipe[1], STDOUT_FILENO);
 	}
 	else if (cmd->next == NULL)
-		dup2(prev_cmd->pipe[1], STDIN_FILENO);
-	else if (prev_cmd == NULL)
-		dup2(cmd->pipe[0], STDOUT_FILENO);
+	{
+		dup2(cmd->prev->pipe[0], STDIN_FILENO);
+	}
+	else if (cmd->prev == NULL)
+	{
+		dup2(cmd->pipe[1], STDOUT_FILENO);
+	}
 	close_all_pipes(cmd_list);
 	if (apply_redirections(cmd, shell) == -1)
 		ft_exit(shell, cmd_list, -99);
@@ -97,33 +109,47 @@ void	pipeline_child_life(t_cmd *cmd, t_cmd *prev_cmd, t_shell *shell, t_cmd *cmd
 	}
 	else
 		exec_external_cmd(cmd, shell);
-	exit(1);
+	// exit(1);
 }
 
 void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 {
-	int		cmd_count;
-	t_cmd	*cmd;
-	int		i;
+	t_cmd	*cmd_curr;
+	pid_t	PID_parent;
 
-	i = 0;
-	cmd_count = 0;
-	cmd = cmd_list;
-	cmd_count = ft_lstsize((t_list *)cmd_list);
-	create_pipes(cmd_list);
+	cmd_curr = cmd_list;
 	if (create_pipes(cmd_list) == -1)
 	{
 		shell->exit_status = 1;
 		ft_exit(shell, cmd_list, -99);
 	}
-	while (cmd)
+	PID_parent = getpid();
+	// printf("PID Parent %i\n", PID_parent);
+	int i = 0;
+	while (cmd_curr)
 	{
-		cmd->pid = fork();
-		if (cmd->pid == 0)
-			pipeline_child_life(cmd, cmd->prev, shell, cmd_list);
-		cmd = cmd->next;
+		//printf("%d     %d\n", cmd_list->pipe[0], cmd_list->pipe[1]);
+		cmd_curr->pid = fork(); // valeur de retour de fork = 0 si tout se passe bien ATTENTIOON pas le PID
+		if (getpid() != PID_parent)
+		{
+			// printf("PID Enfant[%d] getpid() %i\n", i, getpid());
+			// printf("PID Enfant[%d] cmd_curr->pid %i\n", i, cmd_curr->pid);
+		}
+		if (cmd_curr->pid == 0)
+			pipeline_child_life(cmd_curr, shell, cmd_list);
 		i++;
+		cmd_curr = cmd_curr->next;
 	}
 	close_all_pipes(cmd_list);
 	wait_pipeline(cmd_list, shell);
 }
+
+/* 	if (cmd->prev && cmd->next)
+	{
+		dup2(prev_cmd->pipe[1], STDIN_FILENO);
+		dup2(cmd->pipe[0], STDOUT_FILENO);
+	}
+	else if (cmd->next == NULL)
+		dup2(prev_cmd->pipe[1], STDIN_FILENO);
+	else if (prev_cmd == NULL)
+		dup2(cmd->pipe[0], STDOUT_FILENO); */
