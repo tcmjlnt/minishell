@@ -6,13 +6,13 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/22 14:05:44 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/22 15:37:44 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*gen_tmp_filename(void)
+static char	*gen_tmp_filename(void)
 {
 	static int	id = 0;
 	char		*name;
