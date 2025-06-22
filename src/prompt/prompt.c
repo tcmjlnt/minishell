@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 20:42:16 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/22 22:15:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	ft_prompt(t_shell *shell)
 	{
 		cmd_list = NULL;
 
-		prompt = readline("minishell: ");
+		prompt = readline(MAGENTA "minishell:" RESET);
 		if (!prompt)
 		{
 			error_exit("readline");

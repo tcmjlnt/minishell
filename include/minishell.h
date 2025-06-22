@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 19:25:25 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/22 22:14:38 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 # define MINISHELL_H
 
 # define MAX_ARGS 255
+
+# define RED "\001\e[1;91m\002"
+# define YELLOW "\001\e[1;93m\002"
+# define CYAN "\001\e[1;96m\002"
+# define GREEN "\001\e[1;92m\002"
+# define MAGENTA "\001\e[1;95m\002"
+# define RESET "\001\033[0m\002 "
 
 /* ==========================    📚 INCLUDES    ========================== */
 
