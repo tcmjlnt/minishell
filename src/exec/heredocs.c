@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 18:54:58 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/22 11:19:41 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	handle_heredoc(t_redir *redir)
 	int		fd;
 	size_t	len;
 
-	redir->delim = ft_strdup("DEL"); // A ENLEVER
 	len = ft_strlen(redir->delim);
 	redir->file = gen_tmp_filename();
 	if (!redir->file)

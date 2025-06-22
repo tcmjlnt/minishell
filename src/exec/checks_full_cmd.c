@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 10:07:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 17:42:14 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/22 11:43:38 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_bool	is_valid_command(t_cmd *cmd, t_shell *shell)
 t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell)
 {
 	t_cmd *current = cmd;
+	t_bool	found_error = false;
 
 	while (current)
 	{
@@ -38,11 +39,11 @@ t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell)
 				ft_putstr_fd("(null)", STDERR_FILENO);
 			ft_putstr_fd(": command not found\n", STDERR_FILENO);
 			shell->exit_status = 127;
-			return (true); // une erreur → on stop
+			found_error = true;
 		}
 		current = current->next;
 	}
-	return (false); // tout va bien
+	return (found_error);
 }
 
 int	open_file(t_redir *redir, t_shell *shell)

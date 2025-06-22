@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 13:45:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 17:53:00 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/22 11:29:51 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	exec_dispatcher(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd)
 		return ;
-/* 	if (check_invalid_cmds(cmd, shell))
-		return ; */
+	if (check_invalid_cmds(cmd, shell))
+		return ;
 	if (handle_all_heredocs(cmd) == -1)
 		return ;
 	if (!cmd->next)
