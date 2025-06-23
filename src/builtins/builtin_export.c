@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 16:23:50 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:44:58 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,5 @@ int	ft_export(t_shell *shell, t_cmd *cmd, int fd)
 		print_env_export(shell->env);
 	if (!export_args(shell, cmd))
 		return (false);
-	return (true);
+	return (0);
 }
-
-// Attention a la valeur de retour ft_export, je ne sais pas a l'heure actuelle ce que je dois retourner pour gestion dune erreur en amont

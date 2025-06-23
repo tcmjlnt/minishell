@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:23:52 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/20 20:37:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:44:11 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	del_env_node(t_env **env_list, const char *key)
 
 int	ft_unset(t_shell *shell, t_cmd *cmd, int fd)
 {
-	(void) fd;
+	(void)	fd;
 	size_t	i;
 
 	i = 1;
@@ -63,5 +63,5 @@ int	ft_unset(t_shell *shell, t_cmd *cmd, int fd)
 		}
 	}
 	shell->exit_status = 0;
-	return (true);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 12:27:38 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:22:32 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path)
 		*status = 127;
 		return (false);
 	}
-	if (is_directory(cmd->cmd))
+	else if (is_directory(cmd->cmd))
 	{
 		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
 		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
@@ -59,7 +59,7 @@ t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path)
 		return (false);
 	}
 	*path = find_command_path(cmd->cmd, shell->env);
-	if (!cmd->is_builtin && path == NULL)
+	if (!cmd->is_builtin && *path == NULL)
 	{
 		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
