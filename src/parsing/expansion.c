@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/22 23:03:53 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:10:30 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quote
 	return (new_xpnd);
 }
 
+int	heredoc_delim_check(t_token *tkn_curr)
+{
+	if (tkn_curr->prev && tkn_curr->prev->token_type == TOKEN_REDIRECT_HEREDOC)
+		return (true);
+	return (false);
+}
+
 int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list) // gere les subtokens single quotes
 {
 	size_t	strlen;
@@ -46,7 +53,7 @@ int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	return (true);
 }
 
-int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	size_t	i;
 	size_t	start;
@@ -67,7 +74,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	start = 1;
 	while (i < strlen - 1)
 	{
-		if(substr[i] == '$' && (i + 1 < strlen - 1) && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$'))
+		if(substr[i] == '$' && (i + 1 < strlen - 1) && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$') && !heredoc_delim_check(tkn_curr))
 		{
 			if (i > start)
 			{
@@ -107,7 +114,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	return (true);
 }
 
-int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	size_t	i;
 	size_t	start;
@@ -117,7 +124,7 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 	start = 0;
 	while(substr[i])
 	{
-		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$'))
+		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$') && !heredoc_delim_check(tkn_curr))
 		{
 			if (i > start)
 			{
@@ -168,17 +175,17 @@ int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token
 	}
 	else if (xpnd_quotes_curr->in_double)
 	{
-		if (!tkn_xpnd_segmentation2_dquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+		if (!tkn_xpnd_segmentation2_dquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list, tkn_current))
 			return (false);
 	}
 	else
 	{
-		if (!tkn_xpnd_segmentation2_noquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+		if (!tkn_xpnd_segmentation2_noquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list, tkn_current))
 			return (false);
 	}
 	return (true);
 }
-
+/*
 void	expansion_heredoc_check(t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 		t_xpnd	*xpnd_curr;
@@ -195,9 +202,9 @@ void	expansion_heredoc_check(t_xpnd **xpnd_list, t_token *tkn_curr)
 		}
 
 
-}
+} */
 
-int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
+int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list, t_token *tkn_current)
 {
 	size_t	i;
 	size_t	start;
@@ -213,7 +220,7 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 	in_single = false;
 	while (tkn_raw[i])
 	{
-		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single))
+		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single)) //  || (tkn_current->prev && tkn_current->prev->token_type != TOKEN_REDIRECT_HEREDOC))
 		{
 			if (i > start)
 			{
@@ -430,7 +437,20 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 }
 
 
+/* void	disable_xpnd_heredoc_delim(t_xpnd **xpnd_list)
+{
+	 t_xpnd *xpnd_curr;
 
+	if (!xpnd_list || !(*xpnd_list))
+		return;
+
+	xpnd_curr = *xpnd_list;
+	while (xpnd_curr)
+	{
+		xpnd_curr->xpnd_check = false; // Disable expansion
+		xpnd_curr = xpnd_curr->next;
+	}
+} */
 
 int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
 {
@@ -439,6 +459,8 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 	t_xpnd	*xpnd_list;
 	t_xpnd	*temp_xpnd_quotes;
 	int		token_index = 0;
+	// t_bool	is_heredoc_delim;
+
 
 
 	if (!tkn_list || !(*tkn_list))
@@ -449,16 +471,16 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 
 	while (tkn_current)
 	{
-
+		// is_heredoc_delim = heredoc_delim_check(tkn_current);
 		xpnd_quotes_list = NULL;
 		xpnd_list = NULL;
-		if (tkn_current->prev && tkn_current->prev->token_type == TOKEN_REDIRECT_HEREDOC)
-		{
-			if (tkn_current->next)
-				tkn_current = tkn_current->next;
-				continue ;
-		}
-		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
+		// if (tkn_current->prev && tkn_current->prev->token_type == TOKEN_REDIRECT_HEREDOC) --> BA NON CA SAUTE LE TOKEN CA LE SAUVEGARDE PAS
+		// {
+		// 	if (tkn_current->next)
+		// 		tkn_current = tkn_current->next;
+		// 	continue ;
+		// }
+		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list, tkn_current))
 			return (false);
 		printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
 		printf_xpnd(&xpnd_quotes_list);
@@ -472,6 +494,8 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 		}
 		printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
 		printf_xpnd(&xpnd_list);
+		// if (is_heredoc_delim)
+		// 	disable_xpnd_heredoc_delim(&xpnd_list);
 		// expansion_heredoc_check(&xpnd_list, tkn_current);
 		if (!handle_key_value(&xpnd_list, shell))
 			return (false);
