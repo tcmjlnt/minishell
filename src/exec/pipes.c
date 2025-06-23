@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/22 21:13:36 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:29:03 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	create_pipes(t_cmd *cmd)
 	return (0);
 }
 
-void	wait_pipeline(t_cmd *cmds, t_shell *shell)
+void	wait_for_children(t_cmd *cmds, t_shell *shell)
 {
 	t_cmd	*current;
 	int		status;
@@ -84,6 +84,11 @@ Fait un `dup2` pour `STDOUT` vers le pipe de droite (`pipes[i][1]`).
 
 void	pipeline_child_life(t_cmd *cmd, t_shell *shell, t_cmd *cmd_list)
 {
+	int	exit_status;
+	char	*path;
+
+	exit_status = 0;
+	path = NULL;
 	// proteger les dup2
 	if (cmd->prev && cmd->next)
 	{
@@ -100,16 +105,17 @@ void	pipeline_child_life(t_cmd *cmd, t_shell *shell, t_cmd *cmd_list)
 	}
 	close_all_pipes(cmd_list);
 	if (apply_redirections(cmd, shell) == -1)
-		ft_exit(shell, cmd_list, -99);
-	check_invalid_cmds(cmd_list, shell);
+		exit (1);
+	if (!cmd->is_builtin && is_valid_command(cmd, shell, &exit_status, &path))
+		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
 	if (cmd->is_builtin)
 	{
-		shell->exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
-		exit (shell->exit_status);
+		exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+		exit (exit_status);
 	}
-	else
-		exec_external_cmd(cmd, shell);
-	// exit(1);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+	exit(exit_status);
 }
 
 void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
@@ -141,7 +147,7 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 		cmd_curr = cmd_curr->next;
 	}
 	close_all_pipes(cmd_list);
-	wait_pipeline(cmd_list, shell);
+	wait_for_children(cmd_list, shell);
 }
 
 /* 	if (cmd->prev && cmd->next)

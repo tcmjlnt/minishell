@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtins.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/19 15:57:33 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:11:54 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ int	handle_builtin(t_shell *shell, t_cmd *cmd, int fd)
 		}
 		i++;
 	}
-	shell->exit_status = 0;
-	return (shell->exit_status);
+	return (0);
 }
 
 // a intreger au parsing ?? (dès que tu as le t_cmd)	is_builtin() ➔ remplir cmd->is_builtin

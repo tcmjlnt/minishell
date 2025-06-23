@@ -6,45 +6,12 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 10:07:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/22 15:54:11 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:12:11 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_bool	is_valid_command(t_cmd *cmd, t_shell *shell)
-{
-	if (!cmd || !cmd->cmd || cmd->cmd[0] == '\0')
-		return (false);
-	if (is_directory(cmd->cmd))
-		return (false);
-	if (!cmd->is_builtin && !find_command_path(cmd->cmd, shell->env))
-		return (false);
-	return (true);
-}
-
-t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell)
-{
-	t_cmd	*current;
-
-	current = cmd;
-	while (current)
-	{
-		if (!current->is_builtin && !is_valid_command(current, shell))
-		{
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			if (current->cmd)
-				ft_putstr_fd(current->cmd, STDERR_FILENO);
-			else
-				ft_putstr_fd("(null)", STDERR_FILENO);
-			ft_putstr_fd(": command not found\n", STDERR_FILENO);
-			shell->exit_status = 127;
-			return (false);
-		}
-		current = current->next;
-	}
-	return (true);
-}
 
 int	open_file(t_redir *redir, t_shell *shell)
 {
