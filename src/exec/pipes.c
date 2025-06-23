@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 14:59:12 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:39:06 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ Fait un `dup2` pour `STDIN` depuis le pipe de gauche (`pipes[i-1][0]`).
 Fait un `dup2` pour `STDOUT` vers le pipe de droite (`pipes[i][1]`).
 */
 
-void	pipeline_child_life(t_cmd *cmd, t_shell *shell, t_cmd *cmd_list)
+void	pipeline_child_life(t_cmd *cmd, t_shell *shell)
 {
 	int	exit_status;
 	char	*path;
@@ -135,7 +135,7 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 	{
 		cmd_curr->pid = fork(); // valeur de retour de fork = 0 si tout se passe bien ATTENTIOON pas le PID
 		if (cmd_curr->pid == 0)
-			pipeline_child_life(cmd_curr, shell, cmd_list);
+			pipeline_child_life(cmd_curr, shell);
 		i++;
 		cmd_curr = cmd_curr->next;
 	}
