@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/22 22:14:38 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:28:19 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,12 +224,12 @@ void	exec_pipeline(t_cmd *cmd, t_shell *shell);
 void	close_all_pipes(t_cmd *command);
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
-void	wait_pipeline(t_cmd *cmds, t_shell *shell);
+void	wait_for_children(t_cmd *cmds, t_shell *shell);
 void	apply_dup_redirections(t_cmd *cmd);
 void	close_redirections(t_cmd *cmd);
-int		is_directory(char *file);
+t_bool	is_directory(char *file);
 t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell);
-t_bool	is_valid_command(t_cmd *cmd, t_shell *shell);
+t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path);
 int		check_redirections_consistency(t_cmd *cmd, t_shell *shell);
 int		open_file(t_redir *redir, t_shell *shell);
 

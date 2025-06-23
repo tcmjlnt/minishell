@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/22 21:13:36 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:59:12 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	create_pipes(t_cmd *cmd)
 	return (0);
 }
 
-void	wait_pipeline(t_cmd *cmds, t_shell *shell)
+void	wait_for_children(t_cmd *cmds, t_shell *shell)
 {
 	t_cmd	*current;
 	int		status;
@@ -84,6 +84,11 @@ Fait un `dup2` pour `STDOUT` vers le pipe de droite (`pipes[i][1]`).
 
 void	pipeline_child_life(t_cmd *cmd, t_shell *shell, t_cmd *cmd_list)
 {
+	int	exit_status;
+	char	*path;
+
+	exit_status = 0;
+	path = NULL;
 	// proteger les dup2
 	if (cmd->prev && cmd->next)
 	{
@@ -98,18 +103,19 @@ void	pipeline_child_life(t_cmd *cmd, t_shell *shell, t_cmd *cmd_list)
 	{
 		dup2(cmd->pipe[1], STDOUT_FILENO);
 	}
-	close_all_pipes(cmd_list);
+	close_all_pipes(cmd);
 	if (apply_redirections(cmd, shell) == -1)
-		ft_exit(shell, cmd_list, -99);
-	check_invalid_cmds(cmd_list, shell);
-	if (cmd->is_builtin)
+		exit (1);
+	if (!cmd->is_builtin && is_valid_command(cmd, shell, &exit_status, &path))
+		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
+	else if (cmd->is_builtin)
 	{
-		shell->exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
-		exit (shell->exit_status);
+		exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+		exit (exit_status);
 	}
-	else
-		exec_external_cmd(cmd, shell);
-	// exit(1);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+	exit(exit_status);
 }
 
 void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
@@ -124,25 +130,44 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 		ft_exit(shell, cmd_list, -99);
 	}
 	PID_parent = getpid();
-	// printf("PID Parent %i\n", PID_parent);
 	int i = 0;
 	while (cmd_curr)
 	{
-		//printf("%d     %d\n", cmd_list->pipe[0], cmd_list->pipe[1]);
 		cmd_curr->pid = fork(); // valeur de retour de fork = 0 si tout se passe bien ATTENTIOON pas le PID
-		if (getpid() != PID_parent)
-		{
-			// printf("PID Enfant[%d] getpid() %i\n", i, getpid());
-			// printf("PID Enfant[%d] cmd_curr->pid %i\n", i, cmd_curr->pid);
-		}
 		if (cmd_curr->pid == 0)
 			pipeline_child_life(cmd_curr, shell, cmd_list);
 		i++;
 		cmd_curr = cmd_curr->next;
 	}
 	close_all_pipes(cmd_list);
-	wait_pipeline(cmd_list, shell);
+	wait_for_children(cmd_list, shell);
 }
+
+/* void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
+{
+	t_cmd	*cmd_curr;
+
+	cmd_curr = cmd_list;
+	if (create_pipes(cmd_list) == -1)
+	{
+		shell->exit_status = 1;
+		ft_exit(shell, cmd_list, -99);
+	}
+	while (cmd_curr)
+	{
+		cmd_curr->pid = fork(); // valeur de retour de fork = 0 si tout se passe bien ATTENTIOON pas le PID
+		cmd_curr = cmd_curr->next;
+	}
+	cmd_curr = cmd_list;
+	while (cmd_curr)
+	{
+		if (cmd_curr->pid == 0)
+			pipeline_child_life(cmd_curr, shell, cmd_list);
+		cmd_curr = cmd_curr->next;
+	}
+	close_all_pipes(cmd_list);
+	wait_for_children(cmd_list, shell);
+} */
 
 /* 	if (cmd->prev && cmd->next)
 	{

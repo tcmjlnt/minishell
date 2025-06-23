@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 19:53:20 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/18 19:53:55 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/22 22:25:05 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,3 +29,21 @@ void	signal_handler(int signo)
 	}
 }
 
+// 🔁 Rouage complet (vue schématique)
+/* MAIN LOOP (parent)
+│
+├─ Setup signaux parent (SIGINT = propre, SIGQUIT = ignorer)
+│
+├─ readline()
+│   └─ si CTRL+C → effacer ligne + prompt propre
+│
+├─ si commande normale
+│   ├─ fork()
+│   │   ├─ parent : waitpid()
+│   │   └─ enfant : setup signaux défaut → execve(cmd)
+│
+└─ si heredoc
+    ├─ fork() ou logique spéciale
+    ├─ setup signaux heredoc
+    └─ si SIGINT → interrompre lecture, fermer stdin
+ */
