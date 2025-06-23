@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/23 14:42:48 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:08:12 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quote
 int	heredoc_delim_check(t_token *tkn_curr)
 {
 	if (tkn_curr->prev && tkn_curr->prev->token_type == TOKEN_REDIRECT_HEREDOC)
+		return (true);
+	return (false);
+}
+
+int	redir_prev_tkn_check(t_token *tkn_curr)
+{
+	if (tkn_curr->prev && (tkn_curr->prev->token_type == TOKEN_REDIRECT_APPEND
+		|| tkn_curr->prev->token_type == TOKEN_REDIRECT_IN || tkn_curr->prev->token_type == TOKEN_REDIRECT_OUT))
 		return (true);
 	return (false);
 }
@@ -308,7 +316,7 @@ int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 }
 
 
-int	check_empty_xpnd_node(t_xpnd **xpnd_list)
+int	check_empty_xpnd_node(t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	t_xpnd	*xpnd_curr;
 	int	keep_node;
@@ -321,7 +329,8 @@ int	check_empty_xpnd_node(t_xpnd **xpnd_list)
 
 	while(xpnd_curr)
 	{
-		if (xpnd_curr->str_to_join[0] != '\0' || xpnd_curr->in_double || xpnd_curr->in_single)
+		if (xpnd_curr->str_to_join[0] != '\0' || xpnd_curr->in_double || xpnd_curr->in_single
+			|| redir_prev_tkn_check(tkn_curr) != 0)
 			keep_node++;
 		xpnd_curr = xpnd_curr->next;
 	}
@@ -355,7 +364,7 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 		res = temp_join;
 		xpnd_curr = xpnd_curr->next;
 	}
-	if (check_empty_xpnd_node(xpnd_list) != 0)
+	if (check_empty_xpnd_node(xpnd_list, tkn_current) != 0)
 	{
 		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
 		if (!tkn_xpnd_curr)
