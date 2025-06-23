@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/22 20:13:48 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/23 21:12:49 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	print_token(t_token	*token)
+void	print_token(t_token	*token_list)
 {
 	t_token	*temp;
 
 
-	if (!token)
+	if (!token_list)
 		return ;
-	temp = token;
+	temp = token_list;
 	while(temp->prev)
 	{
 		temp = temp->prev;

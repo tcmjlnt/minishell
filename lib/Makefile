@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+         #
+#    By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/09 07:11:04 by aumartin          #+#    #+#              #
-#    Updated: 2025/06/09 17:59:02 by aumartin         ###   ########.fr        #
+#    Updated: 2025/06/23 21:39:31 by tjacquel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,6 @@ LIBFT		= libft/ft_atoi.c\
 		libft/ft_putnbr_fd.c\
 		libft/ft_putstr_fd.c\
 		libft/ft_split.c\
-		libft/ft_splitTJ.c\
 		libft/ft_strchr.c\
 		libft/ft_strdup.c\
 		libft/ft_striteri.c\

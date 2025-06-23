@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:43:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/11 19:15:02 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:43:33 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,23 +85,39 @@ int	is_operator_token(t_token *token)
 		return (false);
 }
 
-int	check_token(t_token *token)
+int	is_redir_operator(t_token_type token_type)
+{
+	if (token_type == TOKEN_REDIRECT_IN || token_type == TOKEN_REDIRECT_OUT
+		|| token_type == TOKEN_REDIRECT_APPEND
+		|| token_type == TOKEN_REDIRECT_HEREDOC)
+		return (true);
+	return (false);
+}
+
+int	check_token(t_token **token_list)
 {
 	t_token	*temp;
 
-	if (!token)
+	if (!token_list || !(*token_list))
 		return (false);
-	temp = token;
+	temp = *token_list;
 	while (temp->prev)
 		temp = temp->prev;
 	while (temp)
 	{
-		if (is_operator_token(temp) && temp->next && is_operator_token(temp->next))
+		if ((is_redir_operator(temp->token_type) && temp->next && is_redir_operator(temp->next->token_type))
+			|| (is_operator_token(temp) && temp->next && temp->next->token_type == TOKEN_PIPE))
 		{
 			printf("minishell: syntax error near unexpected token `%s'\n", token_type_string(temp->next->token_type));
 			return (false);
 		}
-		if (is_operator_token(temp) && !temp->next)
+		else if (is_operator_token(temp) && temp->next && is_operator_token(temp->next)
+				&& temp->next->next && is_operator_token(temp->next->next))
+		{
+			printf("minishell: syntax error near unexpected token `%s'\n", token_type_string(temp->next->token_type));
+			return (false);
+		}
+		else if (is_operator_token(temp) && !temp->next)
 		{
 			printf("minishell: syntax error near unexpected token `newline'\n");
 			return (false);
@@ -111,11 +127,4 @@ int	check_token(t_token *token)
 	return (true);
 }
 
-int	is_redir_operator(t_token_type token_type)
-{
-	if (token_type == TOKEN_REDIRECT_IN || token_type == TOKEN_REDIRECT_OUT
-		|| token_type == TOKEN_REDIRECT_APPEND
-		|| token_type == TOKEN_REDIRECT_HEREDOC)
-		return (true);
-	return (false);
-}
+

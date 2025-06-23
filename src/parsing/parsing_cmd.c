@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 18:12:11 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 21:11:45 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 		{
 			cmd_current = ft_lstnewcmd();
 			if (!cmd_current)
+			{
 				return (false);
+			}
 			ft_lstadd_back_cmd(cmd_list_head, cmd_current);
 			j = 0;
 			redir_list = NULL; // need to reset redir_list for new command
@@ -50,13 +52,17 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 			if (j < 256)
 				cmd_current->args[j] = NULL;
 			else
-				return (false); // too many args
+			{
+				return (false);
+			} // too many args
 			cmd_current->redir = redir_list;
 			cmd_current = NULL;
 			j = 0;
 			if (!tkn_current->next || tkn_current->next->token_type == TOKEN_PIPE)
 			{
+				printf("PIPE AT THE eND, exit status = 0\n");
 				return (false);
+
 				// This indicates a syntax error that should have been caught earlier.
 				// printf("Syntax error near pipe handled by parse_tokens (should be earlier)\n");
 				// return (false); // Or rely on earlier checks
@@ -82,13 +88,17 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 				return (false);
 			}
 			cmd_current->args[j] = gc_strdup(tkn_current->token_value, GC_CMD);
-			if (!cmd_current->args[j]) // ft_strdup malloc failure
+			if (!cmd_current->args[j])
+			{
 				return (false);
+			}
 			if (j == 0)
 			{
 				cmd_current->cmd = gc_strdup(tkn_current->token_value, GC_CMD);
 				if (!cmd_current->cmd)
+				{
 					return (false);
+				}
 				cmd_current->is_builtin = is_builtin(shell, cmd_current->cmd);
 			}
 			j++;
@@ -113,7 +123,9 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 		if (j < 256)
 			cmd_current->args[j] = NULL;
 		else
+		{
 			return (false);
+		}
 	}
 	// if (!add_arg(temp, *cmd_list, cmd))
 	// 	return (printf("la2\n"), false);

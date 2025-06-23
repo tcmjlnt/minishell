@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 15:50:13 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 21:13:06 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ char	*gc_strndup_noquotes(char *src, size_t n, t_gc_type type);
 size_t	ft_strnlen_noquotes(char *src, size_t n);
 char	*ft_strndup(char *src, size_t n);
 t_token	*ft_lstnew_token(char *value, int type, int node_num);
-void	print_token(t_token	*token);
+void	print_token(t_token	*token_list);
 int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
@@ -266,7 +266,7 @@ t_token	*ft_lstlast_token(t_token *token);
 void	ft_lstadd_back_token(t_token **token, t_token *new);
 t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
-int		check_token(t_token *token);
+int		check_token(t_token **token_list);
 int		is_quote(char c);
 int		parse_tokens(t_cmd **cmd_list, t_token **tkn_list, t_shell *shell);
 t_cmd	*ft_lstnewcmd(void);
