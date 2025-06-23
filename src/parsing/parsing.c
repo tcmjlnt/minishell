@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 13:25:31 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 10:09:19 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	is_quote(char c)
 	return (c == '\'' || c == '\"');
 }
 
-static int	is_blank(int c)
+int	is_blank(int c)
 {
 	if (c == ' ' || c == '\t')
 		return (1);
@@ -333,13 +333,14 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	{
 		return (false);
 	}
-	// print_token(tkn_list);
+	print_token(tkn_list);
 
-	handle_expansion(&tkn_list, &tkn_xpnd_list, shell); // eet si on faisait l'expand apres la token avant le parsing
+	handle_expansion(&tkn_list, &tkn_xpnd_list, shell);
 
-	// printf("-------------------- TOKENS AFTER EXPANSION -----------------\n");
-	// print_token(tkn_xpnd_list);
+	printf("-------------------- TOKENS AFTER EXPANSION -----------------\n");
+	print_token(tkn_xpnd_list);
 
+	// IMPLEMENTER POST EXPANSION TOKEN_CHECK ??
 
 	if (!parse_tokens(cmd_list, &tkn_xpnd_list, shell))
 	{
@@ -347,7 +348,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		return (false);
 	}
 
-	// print_args(*cmd_list);
+	print_args(*cmd_list);
 	// handle_expansion(&cmd_list, &tkn_list, shell);
 	// expand
 	// redirections --> penser a creer un liste chainee pour les redirections

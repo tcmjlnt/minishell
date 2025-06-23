@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 12:28:19 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:50:13 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,6 +278,8 @@ int		is_redir_operator(t_token_type token_type);
 int		fill_redir(t_redir **redir, t_token *token);
 int		is_inside_dquotes(char *token_raw);
 int		is_inside_squotes(char *token_raw);
+int		is_blank(int c);
+
 
 /* ========================    💰 EXPANSION    ======================== */
 int		handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell);

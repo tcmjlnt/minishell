@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 20:25:09 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 15:08:12 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,21 @@ t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quote
 	return (new_xpnd);
 }
 
+int	heredoc_delim_check(t_token *tkn_curr)
+{
+	if (tkn_curr->prev && tkn_curr->prev->token_type == TOKEN_REDIRECT_HEREDOC)
+		return (true);
+	return (false);
+}
+
+int	redir_prev_tkn_check(t_token *tkn_curr)
+{
+	if (tkn_curr->prev && (tkn_curr->prev->token_type == TOKEN_REDIRECT_APPEND
+		|| tkn_curr->prev->token_type == TOKEN_REDIRECT_IN || tkn_curr->prev->token_type == TOKEN_REDIRECT_OUT))
+		return (true);
+	return (false);
+}
+
 int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list) // gere les subtokens single quotes
 {
 	size_t	strlen;
@@ -46,7 +61,7 @@ int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	return (true);
 }
 
-int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	size_t	i;
 	size_t	start;
@@ -67,7 +82,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	start = 1;
 	while (i < strlen - 1)
 	{
-		if(substr[i] == '$' && (i + 1 < strlen - 1) && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$'))
+		if(substr[i] == '$' && (i + 1 < strlen - 1) && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$') && !heredoc_delim_check(tkn_curr))
 		{
 			if (i > start)
 			{
@@ -107,7 +122,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	return (true);
 }
 
-int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	size_t	i;
 	size_t	start;
@@ -117,7 +132,7 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 	start = 0;
 	while(substr[i])
 	{
-		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$'))
+		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$') && !heredoc_delim_check(tkn_curr))
 		{
 			if (i > start)
 			{
@@ -157,7 +172,7 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 
 }
 
-int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
+int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_current)
 {
 	if (!xpnd_quotes_curr || !xpnd_quotes_curr->substr)
 		return (true);
@@ -168,12 +183,12 @@ int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list)
 	}
 	else if (xpnd_quotes_curr->in_double)
 	{
-		if (!tkn_xpnd_segmentation2_dquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+		if (!tkn_xpnd_segmentation2_dquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list, tkn_current))
 			return (false);
 	}
 	else
 	{
-		if (!tkn_xpnd_segmentation2_noquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+		if (!tkn_xpnd_segmentation2_noquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list, tkn_current))
 			return (false);
 	}
 	return (true);
@@ -301,7 +316,7 @@ int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 }
 
 
-int	check_empty_xpnd_node(t_xpnd **xpnd_list)
+int	check_empty_xpnd_node(t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	t_xpnd	*xpnd_curr;
 	int	keep_node;
@@ -314,7 +329,8 @@ int	check_empty_xpnd_node(t_xpnd **xpnd_list)
 
 	while(xpnd_curr)
 	{
-		if (xpnd_curr->str_to_join[0] != '\0' || xpnd_curr->in_double || xpnd_curr->in_single)
+		if (xpnd_curr->str_to_join[0] != '\0' || xpnd_curr->in_double || xpnd_curr->in_single
+			|| redir_prev_tkn_check(tkn_curr) != 0)
 			keep_node++;
 		xpnd_curr = xpnd_curr->next;
 	}
@@ -328,7 +344,11 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	t_token	*tkn_xpnd_curr;
 	char	*res;
 	char	*temp_join;
+	int		i;
+	int		start;
 
+	i = 0;
+	start = 0;
 	if (!xpnd_list || !(*xpnd_list))
 		return (true);
 	xpnd_curr = *xpnd_list;
@@ -344,7 +364,7 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 		res = temp_join;
 		xpnd_curr = xpnd_curr->next;
 	}
-	if (check_empty_xpnd_node(xpnd_list) != 0)
+	if (check_empty_xpnd_node(xpnd_list, tkn_current) != 0)
 	{
 		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
 		if (!tkn_xpnd_curr)
@@ -360,6 +380,14 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 			return (false);
 		}
 		tkn_xpnd_curr->token_type = tkn_current->token_type;
+		// if (!xpnd_curr->in_double && !xpnd_curr->in_single && tkn_current->prev && !is_redir_operator(tkn_current->prev))
+		// {
+		// 	while (res[i])
+		// 	{
+		// 		start = i;
+		// 		while (res[i] && is)
+		// 	}
+		// }
 		tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
 		if (!tkn_xpnd_curr->token_value)
 		{
@@ -374,7 +402,25 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	return (true);
 }
 
-int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
+int	trailing_dollar_count(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			count++;
+		else
+			count = 0;
+		i++;
+	}
+	return (count);
+}
+
+int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;
 	size_t	len;
@@ -389,7 +435,10 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double
 			&& !xpnd_curr->in_single)
 		{
-			xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len - 1, GC_TKN);
+			if (heredoc_delim_check(tkn_current) && xpnd_curr->str_to_join[len - 2] && xpnd_curr->str_to_join[len - 2] == '$' && trailing_dollar_count(xpnd_curr->str_to_join) % 2 == 0) // SKIP 1 $ si nombre de $ impair -- AUCUN SKIP SI PAIR
+				xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len, GC_TKN);
+			else
+				xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len - 1, GC_TKN);
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
@@ -398,7 +447,6 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 	return (true);
 
 }
-
 
 int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
 {
@@ -417,30 +465,27 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 
 	while (tkn_current)
 	{
-
 		xpnd_quotes_list = NULL;
 		xpnd_list = NULL;
 		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
 			return (false);
-		// printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_quotes_list);
+		printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_quotes_list);
 		temp_xpnd_quotes = xpnd_quotes_list;
 		while (temp_xpnd_quotes)
 		{
-			if (!tkn_xpnd_segmentation2(temp_xpnd_quotes, &xpnd_list))
+			if (!tkn_xpnd_segmentation2(temp_xpnd_quotes, &xpnd_list, tkn_current))
 				return (false);
-
 
 			temp_xpnd_quotes = temp_xpnd_quotes->next;
 		}
-		// printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_list);
-
+		printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_list);
 		if (!handle_key_value(&xpnd_list, shell))
 			return (false);
-		// printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_list);
-		if (!handle_dollarsign_before_quotes(&xpnd_list))
+		printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
+		printf_xpnd(&xpnd_list);
+		if (!handle_dollarsign_before_quotes(&xpnd_list, tkn_current))
 			return (false);
 		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
 			return (false);
