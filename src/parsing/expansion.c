@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/23 11:10:30 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/23 14:42:48 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token
 {
 	if (!xpnd_quotes_curr || !xpnd_quotes_curr->substr)
 		return (true);
-	if (xpnd_quotes_curr->in_single) //|| (tkn_current->prev && tkn_current->prev->token_type == TOKEN_REDIRECT_HEREDOC)) --> NON CA CREER DAUTRES PRBLM cat << $E
+	if (xpnd_quotes_curr->in_single)
 	{
 		if (!tkn_xpnd_segmentation2_squotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
 			return (false);
@@ -185,26 +185,8 @@ int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token
 	}
 	return (true);
 }
-/*
-void	expansion_heredoc_check(t_xpnd **xpnd_list, t_token *tkn_curr)
-{
-		t_xpnd	*xpnd_curr;
 
-		if (!xpnd_list || !(*xpnd_list) || !tkn_curr)
-			return ;
-
-		xpnd_curr = *xpnd_list;
-		while (xpnd_curr)
-		{
-			if (tkn_curr->prev && tkn_curr->prev->token_type == TOKEN_REDIRECT_HEREDOC)
-				xpnd_curr->xpnd_check = false;
-			xpnd_curr = xpnd_curr->next;
-		}
-
-
-} */
-
-int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list, t_token *tkn_current)
+int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 {
 	size_t	i;
 	size_t	start;
@@ -220,7 +202,7 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list, t_token *tkn
 	in_single = false;
 	while (tkn_raw[i])
 	{
-		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single)) //  || (tkn_current->prev && tkn_current->prev->token_type != TOKEN_REDIRECT_HEREDOC))
+		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single))
 		{
 			if (i > start)
 			{
@@ -411,7 +393,25 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	return (true);
 }
 
-int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
+int	trailing_dollar_count(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			count++;
+		else
+			count = 0;
+		i++;
+	}
+	return (count);
+}
+
+int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;
 	size_t	len;
@@ -426,7 +426,10 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double
 			&& !xpnd_curr->in_single)
 		{
-			xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len - 1, GC_TKN);
+			if (heredoc_delim_check(tkn_current) && xpnd_curr->str_to_join[len - 2] && xpnd_curr->str_to_join[len - 2] == '$' && trailing_dollar_count(xpnd_curr->str_to_join) % 2 == 0) // SKIP 1 $ si nombre de $ impair -- AUCUN SKIP SI PAIR
+				xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len, GC_TKN);
+			else
+				xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len - 1, GC_TKN);
 			if (!xpnd_curr->str_to_join)
 				return (false);
 		}
@@ -436,22 +439,6 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list)
 
 }
 
-
-/* void	disable_xpnd_heredoc_delim(t_xpnd **xpnd_list)
-{
-	 t_xpnd *xpnd_curr;
-
-	if (!xpnd_list || !(*xpnd_list))
-		return;
-
-	xpnd_curr = *xpnd_list;
-	while (xpnd_curr)
-	{
-		xpnd_curr->xpnd_check = false; // Disable expansion
-		xpnd_curr = xpnd_curr->next;
-	}
-} */
-
 int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
 {
 	t_token	*tkn_current;
@@ -459,8 +446,6 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 	t_xpnd	*xpnd_list;
 	t_xpnd	*temp_xpnd_quotes;
 	int		token_index = 0;
-	// t_bool	is_heredoc_delim;
-
 
 
 	if (!tkn_list || !(*tkn_list))
@@ -471,16 +456,9 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 
 	while (tkn_current)
 	{
-		// is_heredoc_delim = heredoc_delim_check(tkn_current);
 		xpnd_quotes_list = NULL;
 		xpnd_list = NULL;
-		// if (tkn_current->prev && tkn_current->prev->token_type == TOKEN_REDIRECT_HEREDOC) --> BA NON CA SAUTE LE TOKEN CA LE SAUVEGARDE PAS
-		// {
-		// 	if (tkn_current->next)
-		// 		tkn_current = tkn_current->next;
-		// 	continue ;
-		// }
-		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list, tkn_current))
+		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
 			return (false);
 		printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
 		printf_xpnd(&xpnd_quotes_list);
@@ -494,14 +472,11 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 		}
 		printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
 		printf_xpnd(&xpnd_list);
-		// if (is_heredoc_delim)
-		// 	disable_xpnd_heredoc_delim(&xpnd_list);
-		// expansion_heredoc_check(&xpnd_list, tkn_current);
 		if (!handle_key_value(&xpnd_list, shell))
 			return (false);
 		printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
 		printf_xpnd(&xpnd_list);
-		if (!handle_dollarsign_before_quotes(&xpnd_list))
+		if (!handle_dollarsign_before_quotes(&xpnd_list, tkn_current))
 			return (false);
 		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
 			return (false);
