@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 20:20:08 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 09:39:10 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,22 @@
 int main(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
-	(void)ac;
 	(void)av;
 
+	if (ac != 1)
+		return (ft_putstr_fd("minsihell error, try ./minishell", 2), -1);
 	// write(1, "Let's goooooo\n\n\n", 15); // a sup
 
 	// if (ac == 1)
 	// {
 
-		init_shell();
-		shell = get_shell();
+	init_shell();
+	shell = get_shell();
 
-		env_from_envp(shell, envp);
-		ft_prompt(shell);
-		gc_mem(GC_FREE_ALL, 0, NULL, GC_ENV);
-		gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+	env_from_envp(shell, envp);
+	ft_prompt(shell);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_ENV);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	// print_envp(envp);
 	// print_env_line(envp[5]);
 	// print_env(shell->env);

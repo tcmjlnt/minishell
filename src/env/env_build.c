@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_build.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/20 14:24:43 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 09:50:29 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static t_env	*parse_env_line(char *line)
 		key = gc_mem(GC_ALLOC, key_len + 1, NULL, GC_ENV);
 		val = gc_mem(GC_ALLOC, ft_strlen(equal + 1) + 1, NULL, GC_ENV);
 		if (!key || !val)
-			error_exit("alloc key or val");
+			error_exit("alloc key ou value");
 		ft_strlcpy(key, line, key_len + 1);
 		ft_strlcpy(val, equal + 1, ft_strlen(equal + 1) + 1);
 		return (env_new(key, val, true));
@@ -72,11 +72,18 @@ void	env_from_envp(t_shell *shell, char **envp)
 	int		i;
 	t_env	*new;
 
+	if (!envp || !*envp)
+	{
+		exit(1);
+		return ;
+	}
 	shell->env = NULL;
 	i = 0;
 	while (envp[i])
 	{
 		new = parse_env_line(envp[i]);
+		if (!new)
+			error_exit("alloc parse env");
 		env_add_back(&shell->env, new);
 		i++;
 	}
