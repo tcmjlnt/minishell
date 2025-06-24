@@ -6,29 +6,29 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 15:46:56 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:43:09 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static char	*gen_tmp_filename(void)
+char	*gen_tmp_filename(void)
 {
 	static int	id = 0;
-	char		*name;
 	char		*id_str;
+	char		*tmp_path;
+	char		*filename;
 
-	id_str = ft_itoa(id++);
+	id_str = gc_itoa(id++, GC_TMP);
 	if (!id_str)
 		return (NULL);
-	name = malloc(40);
-	if (!name)
-		return (free(id_str), NULL);
-	ft_strlcpy(name, "/tmp/minishell_heredoc_", (ft_strlen(name) + 24));
-	ft_strlcat(name, id_str, (ft_strlen(name) + ft_strlen (id_str) + 1));
-	ft_strlcat(name, ".tmp", (ft_strlen(name) + 5));
-	free(id_str);
-	return (name);
+	tmp_path = gc_strjoin("/tmp/minishell_heredoc_", id_str, GC_TMP);
+	if (!tmp_path)
+		return (NULL);
+	filename = gc_strjoin(tmp_path, ".tmp", GC_TMP);
+	if (!filename)
+		return (NULL);
+	return (filename);
 }
 
 int	handle_heredoc(t_redir *redir)

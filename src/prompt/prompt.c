@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 11:24:13 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:31:11 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void	ft_prompt(t_shell *shell)
 		if (!prompt)
 		{
 			error_exit("readline");
+			// il me semble qu'on la change mais a check si cest juste car branche pas a jour
+			// gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE) ??
 		}
 		if (*prompt)
 		{
@@ -112,6 +114,6 @@ void	ft_prompt(t_shell *shell)
 			// cmd_list = NULL;
 
 		}
-		free(prompt);
+		// free(prompt);
 	}
 }
