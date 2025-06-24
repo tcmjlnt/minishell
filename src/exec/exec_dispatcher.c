@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 13:45:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 20:11:15 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 22:14:47 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	exec_dispatcher(t_cmd *cmd, t_shell *shell)
 		return ;
 	if (handle_all_heredocs(cmd) == -1)
 		return ;
-	init_signals();
+	//init_signals();
 	// signal(SIGINT, SIG_IGN);
 	if (!cmd->next)
 		exec_single_cmd(cmd, shell);

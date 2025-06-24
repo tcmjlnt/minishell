@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 15:50:24 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 22:10:42 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,6 +298,8 @@ void	signal_handler(int sig);
 void	signal_handler_exec(int sig);
 void	set_signals_interactive(void);
 void	set_signals_exec(void);
+void	signal_handler_heredoc(int sig);
+
 
 
 /* ========================    🚧 DEBUG    ======================== */
