@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 18:25:48 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:14:31 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,18 @@ void	ft_prompt(t_shell *shell)
 	char		*prompt;
 	t_cmd		*cmd_list;
 
-	init_signals();
+	// init_signals();
 
 	while (1)
 	{
 		cmd_list = NULL;
 
 		prompt = readline(MAGENTA "minishell:" RESET);
-		if (g_sig == 1)
-		{
-			shell->exit_status = 130;
-			g_sig = 0;
-		}
+		// if (g_sig == 1)
+		// {
+		// 	shell->exit_status = 130;
+		// 	g_sig = 0;
+		// }
 		if (!prompt)
 		{
 			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
@@ -111,17 +111,18 @@ void	ft_prompt(t_shell *shell)
 			// print_args(cmd_list);
 			// printf("  fd_in  = %d\n", cmd_list->fd_in);
 			// printf("  fd_out = %d\n", cmd_list->fd_out);
-			set_signals_exec();
+
+			// set_signals_exec();
 
 			exec_dispatcher(cmd_list, shell);
 
-			if (g_sig == 1)
-			{
-				shell->exit_status = 130;
-				g_sig = 0;
-			}
+			// if (g_sig == 1)
+			// {
+			// 	shell->exit_status = 130;
+			// 	g_sig = 0;
+			// }
 
-			set_signals_interactive();
+			// set_signals_interactive();
 
 
 			gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);

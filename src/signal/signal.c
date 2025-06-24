@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 19:53:20 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 15:48:58 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:25:55 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	init_signals(void)
 {
+	g_sig = 0;
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
@@ -21,7 +22,7 @@ void	init_signals(void)
 void	signal_handler(int sig)
 {
 	(void) sig;
-	g_sig = 1;
+	g_sig = SIGINT;
 	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();

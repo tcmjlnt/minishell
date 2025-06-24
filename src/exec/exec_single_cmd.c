@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 19:17:15 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:21:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,9 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 			exit(exit_status);
 		}
 		wait_for_children(cmd, shell);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+
 		// remettre les signaux en configuration par defaut du minishell
 	}
 }
