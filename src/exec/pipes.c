@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 18:29:26 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:09:56 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,27 +60,27 @@ void	wait_for_children(t_cmd *cmds, t_shell *shell)
 	while (current)
 	{
 		waitpid(current->pid, &status, 0);
-		// if (WIFEXITED(status))
-		// 	shell->exit_status = WEXITSTATUS(status);
-		// else if (WIFSIGNALED(status))
-		// 	shell->exit_status = 128 + WTERMSIG(status);
-		// if (WIFSIGNALED(status))
-		// {
-		// 	if (WTERMSIG(status) == SIGINT)
-		// 		shell->exit_status = 130;
-		// 	else if (WTERMSIG(status) == SIGQUIT)
-		// 		shell->exit_status = 131;
-		// }
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_status = 128 + WTERMSIG(status);
+		if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGINT)
+				shell->exit_status = 130;
+			else if (WTERMSIG(status) == SIGQUIT)
+				shell->exit_status = 131;
+		}
 		current = current->next;
 	}
-	// if (shell->exit_status == 130)
-	// 	write(2, "\n", 1);
-	// else if (shell->exit_status == 131)
-	// 	write(2, "Quit (core dumped)\n", 19);
-	if (WIFEXITED(status))
-		shell->exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		shell->exit_status = 128 + WTERMSIG(status);
+	if (shell->exit_status == 130)
+		write(2, "\n", 1);
+	else if (shell->exit_status == 131)
+		write(2, "Quit (core dumped)\n", 19);
+	// if (WIFEXITED(status))
+	// 	shell->exit_status = WEXITSTATUS(status);
+	// else if (WIFSIGNALED(status))
+	// 	shell->exit_status = 128 + WTERMSIG(status);
 }
 
 /*
