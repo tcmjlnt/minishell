@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 21:13:06 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:12:45 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,9 +212,8 @@ void	init_shell(void);
 void	print_builtin_pipe_warning(t_cmd *cmd);
 
 /* ===========================    🚀 EXECUTION    =========================== */
-void	exec_dispatcher(t_cmd *cmd, t_shell *shell);
-int		handle_all_heredocs(t_cmd *cmd_list);
-int		handle_heredoc(t_redir *redir);
+int		exec_dispatcher(t_cmd *cmd, t_shell *shell);
+int	handle_all_heredocs(t_cmd *cmd_list, int *exit_status, t_shell *shell);
 void	exec_single_cmd(t_cmd *cmd, t_shell *shell);
 int		apply_redirections(t_cmd *cmd, t_shell *shell);
 void	save_std(t_std_backup *backup);
