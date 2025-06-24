@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 21:05:28 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 21:32:49 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	handle_heredoc(t_redir *redir)
 	if (fd == -1)
 	{
 		perror("open heredoc temp");
-		gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
+		// gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
 		return (-1);
 	}
 	while (1)
@@ -63,7 +63,6 @@ int	handle_heredoc(t_redir *redir)
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
 	close(fd);
 	return (0); // verif le exit status
 }
