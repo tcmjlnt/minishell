@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 20:48:49 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 21:05:28 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*gen_tmp_filename(void)
 	char		*tmp_path;
 	char		*filename;
 
+	tmp_path = NULL;
 	id_str = gc_itoa(id++, GC_TMP);
 	if (!id_str)
 		return (NULL);
