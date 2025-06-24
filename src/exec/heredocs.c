@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 20:43:09 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:48:49 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,11 @@ int	handle_heredoc(t_redir *redir)
 		return (perror("malloc name"), -1);
 	fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd == -1)
-		return (perror("open heredoc temp"), free(redir->file), -1); //GC
+	{
+		perror("open heredoc temp");
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
+		return (-1);
+	}
 	while (1)
 	{
 		line = readline("heredoc> ");
@@ -58,7 +62,7 @@ int	handle_heredoc(t_redir *redir)
 		ft_putendl_fd(line, fd);
 		free(line);
 	}
-	//free(line);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
 	close(fd);
 	return (0); // verif le exit status
 }
