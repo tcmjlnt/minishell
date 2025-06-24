@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:20:15 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 17:29:20 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:32:02 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,8 @@ void	close_redirections(t_cmd *cmd)
 
 int	apply_redirections(t_cmd *cmd, t_shell *shell)
 {
-	t_redir	*redir;
-
 	if (!cmd || !cmd->redir)
 		return (0);
-	redir = cmd->redir;
 	if (check_redirections_consistency(cmd, shell) == -1)
 		return (-1);
 	apply_dup_redirections(cmd);

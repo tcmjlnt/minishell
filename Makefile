@@ -11,7 +11,7 @@ NAME = minishell
 
 # Compilation
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS = -Wall -Wextra - Werror -g3 #-fsanitize=address
 OS = $(shell uname | tr '[:upper:]' '[:lower:]')
 
 MAKE = make -sC
@@ -158,12 +158,14 @@ $(OBJS_DIR)%.o: $(SRC_DIR)%.c $(INCLUDE)
 $(OBJS_DIR)main.o: main.c $(INCLUDE) | $(OBJS_DIR)
 	@$(CC) $(CFLAGS) $(INCLUDE_FLAG) -c $< -o $(OBJS_DIR)main.o
 
+MSG_MAKE = \
+	echo "✅ minishell a été créé avec succès (✔)" \
+	|| { echo "❌ Erreur : Compilation de minishell échouée (✘)"; exit 1; }
+
 # Compilation du binaire
 $(NAME): $(OBJS) $(LIB)
 	@echo "🚀 Compilation de $(NAME)..."
 	@$(CC) $(CFLAGS) $(OBJS) $(LINKER) -o $(NAME) \
-	&& echo "✅ $(NAME) a été créé avec succès (✔)" \
-	|| { echo "❌ Erreur : Compilation de $(NAME) échouée (✘)"; exit 1; }
 
 # Nettoyage
 clean:

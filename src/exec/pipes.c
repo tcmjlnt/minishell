@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 15:39:06 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 17:31:08 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ void	pipeline_child_life(t_cmd *cmd, t_shell *shell)
 void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 {
 	t_cmd	*cmd_curr;
-	pid_t	PID_parent;
 
 	cmd_curr = cmd_list;
 	if (create_pipes(cmd_list) == -1)
@@ -129,7 +128,6 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 		shell->exit_status = 1;
 		ft_exit(shell, cmd_list, -99);
 	}
-	PID_parent = getpid();
 	int i = 0;
 	while (cmd_curr)
 	{
