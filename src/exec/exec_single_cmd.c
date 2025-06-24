@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 14:22:32 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:20:08 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 		pid = fork();
 		if (pid == 0)
 		{
+			// gerer les signaux ici notamment commande bloquantes cat, sleep etc
 			if (apply_redirections(cmd, shell) == -1)
 				exit (1);
 			if (is_valid_command(cmd, shell, &exit_status, &path))
@@ -114,5 +115,6 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 			exit(exit_status);
 		}
 		wait_for_children(cmd, shell);
+		// remettre les signaux en configuration par defaut du minishell
 	}
 }

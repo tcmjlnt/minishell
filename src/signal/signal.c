@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 19:53:20 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/22 22:25:05 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:48:58 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,35 @@ void	init_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	signal_handler(int signo)
+void	signal_handler(int sig)
 {
-	if (signo == SIGINT)
+	(void) sig;
+	g_sig = 1;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
+void	signal_handler_exec(int sig)
+{
+	if (sig == SIGINT)
 	{
+		g_sig = 1;
 		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
 	}
+}
+
+void	set_signals_interactive(void)
+{
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	set_signals_exec(void)
+{
+	signal(SIGINT, signal_handler_exec);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 // 🔁 Rouage complet (vue schématique)
