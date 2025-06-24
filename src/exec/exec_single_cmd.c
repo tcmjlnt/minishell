@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 14:22:32 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:09:50 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@
 void	save_std(t_std_backup *backup)
 {
 	backup->orig_stdin = dup(STDIN_FILENO);
+	close(backup->orig_stdin);
 	backup->orig_stdout = dup(STDOUT_FILENO);
+	close(backup->orig_stdout);
 	backup->orig_stderr = dup(STDERR_FILENO);
+	close(backup->orig_stderr);
 }
 
 /* restaure les descripteurs STDIN/STDOUT depuis la sauvegarde */

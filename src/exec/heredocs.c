@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/22 15:37:44 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 15:46:56 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	handle_heredoc(t_redir *redir)
 	{
 		line = readline("heredoc> ");
 		if (!line)
-			break ;
+			ft_putstr_fd("", STDERR_FILENO);
 		if (ft_strncmp(line, redir->delim, len) == 0 && line[len] == '\0')
 		{
 			free(line);
