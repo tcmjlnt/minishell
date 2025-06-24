@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 09:39:10 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 10:05:58 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int main(int ac, char **av, char **envp)
 	(void)av;
 
 	if (ac != 1)
-		return (ft_putstr_fd("minsihell error, try ./minishell", 2), -1);
+		return (ft_putstr_fd("minsihell error, try ./minishell\n", 2), -1);
+	
 	// write(1, "Let's goooooo\n\n\n", 15); // a sup
 
 	// if (ac == 1)

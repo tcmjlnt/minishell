@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/23 21:14:32 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 10:01:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,7 +330,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	{
 		return (false);
 	}
-	// print_token(&tkn_list);
+	// print_token(tkn_list);
 
 	handle_expansion(&tkn_list, &tkn_xpnd_list, shell);
 
