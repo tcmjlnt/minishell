@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 23:29:43 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:38:02 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,12 +286,30 @@ int	check_empty_xpnd_node(t_xpnd **xpnd_list, t_token *tkn_curr)
 	return (keep_node);
 }
 
+int	create_expanded_token(t_token **tkn_xpnd_list, t_token *tkn_current,
+							t_xpnd **xpnd_list, char *res)
+{
+	t_token	*tkn_xpnd_curr;
 
+	if (check_empty_xpnd_node(xpnd_list, tkn_current) == 0)
+		return (true);
+	tkn_xpnd_curr = ft_lstnewtoken_xpnd();
+	if (!tkn_xpnd_curr)
+		return (false);
+	tkn_xpnd_curr->token_raw = gc_strdup(tkn_current->token_raw, GC_TKN);
+	if (!tkn_xpnd_curr->token_raw)
+		return (false);
+	tkn_xpnd_curr->token_type = tkn_current->token_type;
+	tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
+	if (!tkn_xpnd_curr->token_value)
+		return (false);
+	ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
+	return (true);
+}
 
 int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;
-	t_token	*tkn_xpnd_curr;
 	char	*res;
 	char	*temp_join;
 	int		i;
@@ -311,20 +329,8 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 		res = temp_join;
 		xpnd_curr = xpnd_curr->next;
 	}
-	if (check_empty_xpnd_node(xpnd_list, tkn_current) != 0)
-	{
-		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
-		if (!tkn_xpnd_curr)
-			return (false);
-		tkn_xpnd_curr->token_raw = gc_strdup(tkn_current->token_raw, GC_TKN);
-		if (!tkn_xpnd_curr->token_raw)
-			return (false);
-		tkn_xpnd_curr->token_type = tkn_current->token_type;
-		tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
-		if (!tkn_xpnd_curr->token_value)
-			return (false);
-		ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
-	}
+	if (!create_expanded_token(tkn_xpnd_list, tkn_current, xpnd_list, res))
+		return (false);
 	return (true);
 }
 
