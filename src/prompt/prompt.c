@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 10:48:51 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 14:15:31 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ void	ft_prompt(t_shell *shell)
 			if (!parsing(prompt, &cmd_list, shell))
 			{
 				free(prompt);
+				gc_mem(GC_FREE_ALL, 0 , NULL, GC_TKN);
+				gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 				cmd_list = NULL;
 				continue ;
 			}
