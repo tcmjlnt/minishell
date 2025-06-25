@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 11:16:41 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 11:34:14 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,8 +252,8 @@ int	handle_all_heredocs(t_cmd *cmd_list, int *exit_status, t_shell *shell)
 	while (cmd)
 	{
 		if (!is_valid_command(cmd, shell, exit_status, &path))
-			return (1);
-			// res = 1;
+			res = 1;
+			//return (1);
 		cmd = cmd->next;
 	}
 	return (res);
