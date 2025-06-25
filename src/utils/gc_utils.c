@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:42:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 17:03:01 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:52:12 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 char	*gc_strndup(char *src, size_t n, t_gc_type type)
 {
 	char	*dest;
-	size_t		i;
+	size_t	i;
 
 	dest = gc_mem(GC_ALLOC, n + 1, NULL, type);
 	if (!dest)
-		return(NULL);
+		return (NULL);
 	i = 0;
 	while (i < n && src[i])
 	{
@@ -75,37 +75,20 @@ char	**gc_split(char *str, char sep, t_gc_type type)
 
 char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type)
 {
-	char	*joined;
-	size_t	len1;
-	size_t	len2;
-	size_t	i;
-	size_t	j;
+	char	*join;
+	size_t	len_s1;
+	size_t	len_s2;
 
-	if (!s1 && !s2)
+	if (!s2)
 		return (NULL);
-	len1 = 0;
-	len2 = 0;
-	if (s1)
-		len1 = ft_strlen(s1);
-	if (s2)
-		len2 = ft_strlen(s2);
-	joined = gc_mem(GC_ALLOC, sizeof(char) * (len1 + len2 + 1), NULL, type);
-	if (!joined)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s1 && s1[i])
-	{
-		joined[i] = s1[i];
-		i++;
-	}
-	while (s2 && s2[j])
-	{
-		joined[i + j] = s2[j];
-		j++;
-	}
-	joined[i + j] = '\0';
-	return (joined);
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	join = gc_mem(GC_ALLOC, (len_s1 + len_s2 + 1) * sizeof(char), NULL, type);
+	if (!join)
+		return (error_exit("gc_strjoin: allocation failed"), NULL);
+	ft_strlcpy(join, s1, (len_s1 + 1));
+	ft_strlcat(join, s2, len_s1 + len_s2 + 1);
+	return (join);
 }
 
 static size_t	count_size(long nb)
@@ -115,7 +98,7 @@ static size_t	count_size(long nb)
 	size = 0;
 	if (nb < 0)
 	{
-	nb = nb * (-1);
+		nb = nb * (-1);
 		size = 1;
 	}
 	if (nb == 0)
