@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 18:33:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 21:58:29 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:52:55 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	error_exit(const char *message)
 	perror(message);
 	exit(EXIT_FAILURE);
 }
+
 // a implemnter ??
 int	get_exit_status(int status)
 {
