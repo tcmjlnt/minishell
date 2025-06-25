@@ -6,14 +6,14 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 22:27:35 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:54:24 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 
-int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list) // gere les subtokens single quotes
+int	squotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list) // gere les subtokens single quotes
 {
 	size_t	strlen;
 	t_xpnd	*new_xpnd;
@@ -30,7 +30,7 @@ int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	return (true);
 }
 
-int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
+int	dquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	size_t	i;
 	size_t	start;
@@ -91,7 +91,7 @@ int	tkn_xpnd_segmentation2_dquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpn
 	return (true);
 }
 
-int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
+int	noquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	size_t	i;
 	size_t	start;
@@ -141,29 +141,29 @@ int	tkn_xpnd_segmentation2_noquotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xp
 
 }
 
-int	tkn_xpnd_segmentation2(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_current)
+int	scnd_segmentation(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_current)
 {
 	if (!xpnd_quotes_curr || !xpnd_quotes_curr->substr)
 		return (true);
 	if (xpnd_quotes_curr->in_single)
 	{
-		if (!tkn_xpnd_segmentation2_squotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
+		if (!squotes_scnd_segmentation(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list))
 			return (false);
 	}
 	else if (xpnd_quotes_curr->in_double)
 	{
-		if (!tkn_xpnd_segmentation2_dquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list, tkn_current))
+		if (!dquotes_scnd_segmentation(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list, tkn_current))
 			return (false);
 	}
 	else
 	{
-		if (!tkn_xpnd_segmentation2_noquotes(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list, tkn_current))
+		if (!noquotes_scnd_segmentation(xpnd_quotes_curr->substr, xpnd_quotes_curr, xpnd_list, tkn_current))
 			return (false);
 	}
 	return (true);
 }
 
-int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
+int	quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 {
 	size_t	i;
 	size_t	start;
@@ -233,25 +233,6 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 	}
 	return (true);
 }
-
-// void	printf_xpnd(t_xpnd **xpnd_list)
-// {
-// 	t_xpnd *xpnd_current;
-// 	int i = 0;
-
-// 	xpnd_current = *xpnd_list;
-// 	if (!xpnd_current)
-// 		return ;
-// 	while (xpnd_current && xpnd_current->prev)
-// 		xpnd_current = xpnd_current->prev;
-// 	while (xpnd_current)
-// 	{
-// 		printf("xpnd_current->substr[%d]: `%s`	;	in_single: %d	;	in_double: %d	;	xpnd_check: %d	;	str_to_join: `%s`\n",
-// 			 i, xpnd_current->substr, xpnd_current->in_single, xpnd_current->in_double, xpnd_current->xpnd_check, xpnd_current->str_to_join);
-// 		i++;
-// 		xpnd_current = xpnd_current->next;
-// 	}
-// }
 
 int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 {
@@ -327,7 +308,6 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	while (xpnd_curr)
 	{
 		temp_join = gc_strjoin(res, xpnd_curr->str_to_join, GC_TKN);
-		// free(res);
 		if (!temp_join)
 			return (false);
 		res = temp_join;
@@ -337,37 +317,18 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	{
 		tkn_xpnd_curr = ft_lstnewtoken_xpnd();
 		if (!tkn_xpnd_curr)
-		{
-			// free(res);
 			return (false);
-		}
 		tkn_xpnd_curr->token_raw = gc_strdup(tkn_current->token_raw, GC_TKN);
 		if (!tkn_xpnd_curr->token_raw)
-		{
-			// free(res);
-			// free(tkn_xpnd_curr);
+
 			return (false);
-		}
 		tkn_xpnd_curr->token_type = tkn_current->token_type;
-		// if (!xpnd_curr->in_double && !xpnd_curr->in_single && tkn_current->prev && !is_redir_operator(tkn_current->prev))
-		// {
-		// 	while (res[i])
-		// 	{
-		// 		start = i;
-		// 		while (res[i] && is)
-		// 	}
-		// }
+
 		tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
 		if (!tkn_xpnd_curr->token_value)
-		{
-			// free(res);
-			// free(tkn_xpnd_curr->token_raw);
-			// free(tkn_xpnd_curr);
 			return (false);
-		}
 		ft_lstadd_back_token(tkn_xpnd_list, tkn_xpnd_curr);
 	}
-	// free (res);
 	return (true);
 }
 
@@ -417,53 +378,53 @@ int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list, t_token *tkn_current)
 
 }
 
+int scnd_segmentation_loop(t_xpnd *xpnd_quotes_list, t_xpnd **xpnd_list, t_token *tkn_current)
+{
+	t_xpnd	*temp_xpnd_quotes;
+
+	if (!xpnd_quotes_list)
+		return (false);
+	temp_xpnd_quotes = xpnd_quotes_list;
+	while (temp_xpnd_quotes)
+	{
+		if (!scnd_segmentation(temp_xpnd_quotes, xpnd_list, tkn_current))
+			return (false);
+		temp_xpnd_quotes = temp_xpnd_quotes->next;
+	}
+	return (true);
+}
+
+int	handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current, t_xpnd **xpnd_list, t_shell *shell)
+{
+
+		if (!handle_key_value(xpnd_list, shell))
+			return (false);
+		if (!handle_dollarsign_before_quotes(xpnd_list, tkn_current))
+			return (false);
+		if (!join_xpnd(xpnd_list, tkn_xpnd_list, tkn_current))
+			return (false);
+		return (true);
+}
+
 int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
 {
 	t_token	*tkn_current;
 	t_xpnd	*xpnd_quotes_list;
 	t_xpnd	*xpnd_list;
-	t_xpnd	*temp_xpnd_quotes;
-	int		token_index = 0;
-
 
 	if (!tkn_list || !(*tkn_list))
 		return (false);
 	tkn_current = *tkn_list;
-	while (tkn_current && tkn_current->prev)
-		tkn_current = tkn_current->prev;
-
 	while (tkn_current)
 	{
 		xpnd_quotes_list = NULL;
 		xpnd_list = NULL;
-		if (!tkn_xpnd_quotes_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
+		if (!quotes_first_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
 			return (false);
-		// printf("================= ENTERING XPND QUOTES LIST 	  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_quotes_list);
-		temp_xpnd_quotes = xpnd_quotes_list;
-		while (temp_xpnd_quotes)
-		{
-			if (!tkn_xpnd_segmentation2(temp_xpnd_quotes, &xpnd_list, tkn_current))
-				return (false);
-
-			temp_xpnd_quotes = temp_xpnd_quotes->next;
-		}
-		// printf("================= ENTERING XPND LIST 		  FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_list);
-		if (!handle_key_value(&xpnd_list, shell))
+		if (!scnd_segmentation_loop(xpnd_quotes_list, &xpnd_list, tkn_current))
 			return (false);
-		// printf("================= ENTERING XPND LIST W/ KEY_VALUE FROM TOKEN[%d] PRINTF =================\n", token_index);
-		// printf_xpnd(&xpnd_list);
-		if (!handle_dollarsign_before_quotes(&xpnd_list, tkn_current))
+		if (!handle_post_segmentation(tkn_xpnd_list, tkn_current, &xpnd_list, shell))
 			return (false);
-		if (!join_xpnd(&xpnd_list, tkn_xpnd_list, tkn_current))
-			return (false);
-
-		// free_t_xpnd_list(xpnd_quotes_list);
-		// free_t_xpnd_list(xpnd_list);
-
-
-		token_index++;
 		tkn_current = tkn_current->next;
 	}
 	return (true);
