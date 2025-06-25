@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 19:38:12 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 10:56:06 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ void	wait_for_children(t_cmd *cmds, t_shell *shell)
 			shell->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			shell->exit_status = 128 + WTERMSIG(status);
-		if (WIFSIGNALED(status))
-		{
-			if (WTERMSIG(status) == SIGINT)
-				shell->exit_status = 130;
-			else if (WTERMSIG(status) == SIGQUIT)
-				shell->exit_status = 131;
-		}
+		// if (WIFSIGNALED(status))
+		// {
+		// 	if (WTERMSIG(status) == SIGINT)
+		// 		shell->exit_status = 130;
+		// 	else if (WTERMSIG(status) == SIGQUIT)
+		// 		shell->exit_status = 131;
+		// }
 		current = current->next;
 	}
 	if (shell->exit_status == 130)
@@ -150,7 +150,11 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 	{
 		cmd_curr->pid = fork(); // valeur de retour de fork = 0 si tout se passe bien ATTENTIOON pas le PID
 		if (cmd_curr->pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			pipeline_childhood(cmd_curr, shell);
+		}
 		i++;
 		cmd_curr = cmd_curr->next;
 	}
