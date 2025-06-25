@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 23:45:46 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:51:13 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,27 @@ int	quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 	return (true);
 }
 
+int	process_key_value(t_xpnd *xpnd_curr, t_shell *shell)
+{
+	if (xpnd_curr->xpnd_check == true)
+	{
+		if (ft_strcmp(xpnd_curr->substr, "?") == 0)
+			xpnd_curr->str_to_join = gc_itoa(shell->exit_status, GC_TKN);
+		else
+			xpnd_curr->str_to_join = gc_strdup(get_env_value(shell->env,
+						xpnd_curr->substr, GC_TKN), GC_TKN);
+		if (!xpnd_curr->str_to_join)
+			return (false);
+	}
+	else
+	{
+		xpnd_curr->str_to_join = gc_strdup(xpnd_curr->substr, GC_TKN);
+		if (!xpnd_curr->str_to_join)
+			return (false);
+	}
+	return (true);
+}
+
 int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 {
 	t_xpnd	*xpnd_curr;
@@ -241,25 +262,10 @@ int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 	if (!xpnd_list || !(*xpnd_list))
 		return (false);
 	xpnd_curr = *xpnd_list;
-
 	while (xpnd_curr)
 	{
-		if (xpnd_curr->xpnd_check == true)
-		{
-			if (ft_strcmp(xpnd_curr->substr, "?") == 0)
-				xpnd_curr->str_to_join = gc_itoa(shell->exit_status, GC_TKN);
-			else
-				xpnd_curr->str_to_join = gc_strdup(get_env_value(shell->env, xpnd_curr->substr, GC_TKN), GC_TKN);
-
-			if (!xpnd_curr->str_to_join)
-				return (false);
-		}
-		else
-		{
-			xpnd_curr->str_to_join = gc_strdup(xpnd_curr->substr, GC_TKN);
-			if (!xpnd_curr->str_to_join)
-				return (false);
-		}
+		if (!process_key_value(xpnd_curr, shell))
+			return (false);
 		xpnd_curr = xpnd_curr->next;
 	}
 	return (true);
