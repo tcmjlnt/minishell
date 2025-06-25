@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
 /*   Updated: 2025/06/25 17:13:04 by tjacquel         ###   ########.fr       */
+
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +17,8 @@
 void	save_std(t_std_backup *backup)
 {
 	backup->orig_stdin = dup(STDIN_FILENO);
-	close(backup->orig_stdin);
 	backup->orig_stdout = dup(STDOUT_FILENO);
-	close(backup->orig_stdout);
 	backup->orig_stderr = dup(STDERR_FILENO);
-	close(backup->orig_stderr);
 }
 
 /* restaure les descripteurs STDIN/STDOUT depuis la sauvegarde */
@@ -41,6 +39,9 @@ void	restore_std(t_std_backup *backup)
 		dup2(backup->orig_stderr, STDERR_FILENO);
 		close(backup->orig_stderr);
 	}
+	close(backup->orig_stdin);
+	close(backup->orig_stdout);
+	close(backup->orig_stderr);
 }
 
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path)

@@ -81,17 +81,18 @@ void	ft_prompt(t_shell *shell)
 		cmd_list = NULL;
 		// init_signals();
 		prompt = readline(MAGENTA "minishell:" RESET);
-		if (g_sig == 1)
+		if (g_sig == SIGINT)
 		{
 			shell->exit_status = 130;
 			g_sig = 0;
 		}
 		if (!prompt)
 		{
+			int res = shell->exit_status;
 			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 			rl_clear_history();
 			ft_putstr_fd("exit\n", 2);
-			exit(shell->exit_status);
+			exit(res);
 			// error_exit("readline");
 		}
 /* 		else if (prompt[0] == '\0') // c'est cense gerer les ctrl + '\'
@@ -120,7 +121,7 @@ void	ft_prompt(t_shell *shell)
 
 			exec_dispatcher(cmd_list, shell);
 
-			if (g_sig == 1)
+			if (g_sig == SIGINT)
 			{
 				shell->exit_status = 130;
 				g_sig = 0;

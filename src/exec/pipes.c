@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 10:56:06 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:02:09 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,11 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 	{
 		pid = fork();
 		if (pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			pipeline_childhood(cmd_curr, shell);
+		}
 		cmd_curr = cmd_curr->next;
 	}
 	close_all_pipes(cmd_list);

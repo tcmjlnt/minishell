@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 22:10:42 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:07:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # define GREEN "\001\e[1;92m\002"
 # define MAGENTA "\001\e[1;95m\002"
 # define RESET "\001\033[0m\002 "
+# define STDIN_EOF_WARNING "minishell: warning: "
+# define STDIN_EOF_MSG "here-document delimited by end-of-file (wanted `"
 
 /* ==========================    📚 INCLUDES    ========================== */
 
