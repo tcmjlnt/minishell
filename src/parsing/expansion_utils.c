@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 22:08:18 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 22:26:54 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:12:08 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,3 +58,22 @@ void	printf_xpnd(t_xpnd **xpnd_list)
 		xpnd_current = xpnd_current->next;
 	}
 }
+
+int	trailing_dollar_count(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			count++;
+		else
+			count = 0;
+		i++;
+	}
+	return (count);
+}
+

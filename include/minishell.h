@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:20:43 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:59:27 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,6 +294,8 @@ int		is_valid_keychar(char c);
 int		heredoc_delim_check(t_token *tkn_curr);
 int		redir_prev_tkn_check(t_token *tkn_curr);
 void	printf_xpnd(t_xpnd **xpnd_list);
+int		trailing_dollar_count(char *str);
+
 
 
 

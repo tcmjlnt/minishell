@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 22:54:24 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:29:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,24 +269,24 @@ int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 int	check_empty_xpnd_node(t_xpnd **xpnd_list, t_token *tkn_curr)
 {
 	t_xpnd	*xpnd_curr;
-	int	keep_node;
+	int		keep_node;
 
 	keep_node = 0;
-
 	if (!xpnd_list || !(*xpnd_list))
 		return (true);
 	xpnd_curr = *xpnd_list;
-
 	while(xpnd_curr)
 	{
-		if (xpnd_curr->str_to_join[0] != '\0' || xpnd_curr->in_double || xpnd_curr->in_single
+		if (xpnd_curr->str_to_join[0] != '\0'
+			|| xpnd_curr->in_double || xpnd_curr->in_single
 			|| redir_prev_tkn_check(tkn_curr) != 0)
 			keep_node++;
 		xpnd_curr = xpnd_curr->next;
 	}
 	return (keep_node);
-
 }
+
+
 
 int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
@@ -295,10 +295,8 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	char	*res;
 	char	*temp_join;
 	int		i;
-	int		start;
 
 	i = 0;
-	start = 0;
 	if (!xpnd_list || !(*xpnd_list))
 		return (true);
 	xpnd_curr = *xpnd_list;
@@ -320,10 +318,8 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 			return (false);
 		tkn_xpnd_curr->token_raw = gc_strdup(tkn_current->token_raw, GC_TKN);
 		if (!tkn_xpnd_curr->token_raw)
-
 			return (false);
 		tkn_xpnd_curr->token_type = tkn_current->token_type;
-
 		tkn_xpnd_curr->token_value = gc_strdup(res, GC_TKN);
 		if (!tkn_xpnd_curr->token_value)
 			return (false);
@@ -332,53 +328,48 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	return (true);
 }
 
-int	trailing_dollar_count(char *str)
+int	process_trailing_dollar_loop(t_xpnd *xpnd_curr, t_token *tkn_current)
 {
-	int	i;
-	int	count;
+	size_t	len;
 
-	i = 0;
-	count = 0;
-	while (str[i])
+	len = ft_strlen(xpnd_curr->str_to_join);
+	if (len > 0 && xpnd_curr->str_to_join[len - 1] == '$'
+		&& !xpnd_curr->xpnd_check && xpnd_curr->next
+		&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double)
+		&& !xpnd_curr->in_double && !xpnd_curr->in_single)
 	{
-		if (str[i] == '$')
-			count++;
+		if (heredoc_delim_check(tkn_current) && xpnd_curr->str_to_join[len - 2]
+			&& xpnd_curr->str_to_join[len - 2] == '$'
+			&& trailing_dollar_count(xpnd_curr->str_to_join) % 2 == 0)
+			xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len,
+					GC_TKN);
 		else
-			count = 0;
-		i++;
+			xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len - 1,
+					GC_TKN);
+		if (!xpnd_curr->str_to_join)
+			return (false);
 	}
-	return (count);
+	return (true);
 }
 
 int	handle_dollarsign_before_quotes(t_xpnd **xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;
-	size_t	len;
 
 	if (!xpnd_list || !(*xpnd_list))
 		return (false);
 	xpnd_curr = *xpnd_list;
 	while (xpnd_curr)
 	{
-		len = ft_strlen(xpnd_curr->str_to_join);
-		if (len > 0 && xpnd_curr->str_to_join[len - 1] == '$' && !xpnd_curr->xpnd_check && xpnd_curr->next
-			&& (xpnd_curr->next->in_single || xpnd_curr->next->in_double) && !xpnd_curr->in_double
-			&& !xpnd_curr->in_single)
-		{
-			if (heredoc_delim_check(tkn_current) && xpnd_curr->str_to_join[len - 2] && xpnd_curr->str_to_join[len - 2] == '$' && trailing_dollar_count(xpnd_curr->str_to_join) % 2 == 0) // SKIP 1 $ si nombre de $ impair -- AUCUN SKIP SI PAIR
-				xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len, GC_TKN);
-			else
-				xpnd_curr->str_to_join = gc_strndup(xpnd_curr->str_to_join, len - 1, GC_TKN);
-			if (!xpnd_curr->str_to_join)
-				return (false);
-		}
+		if (!process_trailing_dollar_loop(xpnd_curr, tkn_current))
+			return (false);
 		xpnd_curr = xpnd_curr->next;
 	}
 	return (true);
-
 }
 
-int scnd_segmentation_loop(t_xpnd *xpnd_quotes_list, t_xpnd **xpnd_list, t_token *tkn_current)
+int	scnd_segmentation_loop(t_xpnd *xpnd_quotes_list, t_xpnd **xpnd_list,
+							t_token *tkn_current)
 {
 	t_xpnd	*temp_xpnd_quotes;
 
@@ -394,19 +385,20 @@ int scnd_segmentation_loop(t_xpnd *xpnd_quotes_list, t_xpnd **xpnd_list, t_token
 	return (true);
 }
 
-int	handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current, t_xpnd **xpnd_list, t_shell *shell)
+int	handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current,
+								t_xpnd **xpnd_list, t_shell *shell)
 {
-
-		if (!handle_key_value(xpnd_list, shell))
-			return (false);
-		if (!handle_dollarsign_before_quotes(xpnd_list, tkn_current))
-			return (false);
-		if (!join_xpnd(xpnd_list, tkn_xpnd_list, tkn_current))
-			return (false);
-		return (true);
+	if (!handle_key_value(xpnd_list, shell))
+		return (false);
+	if (!handle_dollarsign_before_quotes(xpnd_list, tkn_current))
+		return (false);
+	if (!join_xpnd(xpnd_list, tkn_xpnd_list, tkn_current))
+		return (false);
+	return (true);
 }
 
-int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell)
+int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list,
+						t_shell *shell)
 {
 	t_token	*tkn_current;
 	t_xpnd	*xpnd_quotes_list;
@@ -419,11 +411,13 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list, t_shell *shell
 	{
 		xpnd_quotes_list = NULL;
 		xpnd_list = NULL;
-		if (!quotes_first_segmentation(tkn_current->token_raw, &xpnd_quotes_list))
+		if (!quotes_first_segmentation(tkn_current->token_raw,
+				&xpnd_quotes_list))
 			return (false);
 		if (!scnd_segmentation_loop(xpnd_quotes_list, &xpnd_list, tkn_current))
 			return (false);
-		if (!handle_post_segmentation(tkn_xpnd_list, tkn_current, &xpnd_list, shell))
+		if (!handle_post_segmentation(tkn_xpnd_list, tkn_current, &xpnd_list,
+				shell))
 			return (false);
 		tkn_current = tkn_current->next;
 	}
