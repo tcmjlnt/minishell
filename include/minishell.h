@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:09:35 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:33:39 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,8 +220,6 @@ int		handle_all_heredocs(t_cmd *cmd_list);
 int		handle_heredoc(t_redir *redir);
 void	exec_single_cmd(t_cmd *cmd, t_shell *shell);
 int		apply_redirections(t_cmd *cmd, t_shell *shell);
-void	save_std(t_std_backup *backup);
-void	restore_std(t_std_backup *backup);
 void	exec_external_cmd(t_cmd *cmd, t_shell *shell);
 void	exec_pipeline(t_cmd *cmd, t_shell *shell);
 void	close_all_pipes(t_cmd *command);
@@ -259,7 +257,6 @@ int		ft_cd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_exit(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
 t_bool	is_builtin(t_shell *shell, char *cmd_name);
-t_bool	is_parent_builtin(t_cmd *cmd);
 
 /* ========================    🦄 PARSING    ======================== */
 int		parsing(char *prompt, t_cmd **cmd_list, t_shell *shell);

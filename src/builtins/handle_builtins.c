@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 12:11:54 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:22:26 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	handle_builtin(t_shell *shell, t_cmd *cmd, int fd)
 	return (0);
 }
 
-// a intreger au parsing ?? (dès que tu as le t_cmd)	is_builtin() ➔ remplir cmd->is_builtin
+/* a intreger au parsing (dès que tu as le t_cmd)
+is_builtin() ➔ remplir cmd->is_builtin */
 t_bool	is_builtin(t_shell *shell, char *cmd_name)
 {
 	int			i;
@@ -53,16 +54,3 @@ t_bool	is_builtin(t_shell *shell, char *cmd_name)
 	}
 	return (false);
 }
-
-t_bool	is_parent_builtin(t_cmd *cmd)
-{
-	if (!cmd || !cmd->args || !cmd->args[0])
-		return (false);
-	return (
-		ft_strcmp(cmd->args[0], "cd") == 0
-		|| ft_strcmp(cmd->args[0], "exit") == 0
-		|| ft_strcmp(cmd->args[0], "export") == 0
-		|| ft_strcmp(cmd->args[0], "unset") == 0
-	);
-}
-
