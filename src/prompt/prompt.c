@@ -6,12 +6,11 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 20:31:11 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 10:48:51 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 void	free_tcmd(t_cmd *cmd_list)
 {
@@ -73,19 +72,30 @@ void	ft_prompt(t_shell *shell)
 	char		*prompt;
 	t_cmd		*cmd_list;
 
-
+	init_signals();
 
 	while (1)
 	{
 		cmd_list = NULL;
-
+		// init_signals();
 		prompt = readline(MAGENTA "minishell:" RESET);
+		if (g_sig == 1)
+		{
+			shell->exit_status = 130;
+			g_sig = 0;
+		}
 		if (!prompt)
 		{
-			error_exit("readline");
-			// il me semble qu'on la change mais a check si cest juste car branche pas a jour
-			// gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE) ??
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+			rl_clear_history();
+			ft_putstr_fd("exit\n", 2);
+			exit(shell->exit_status);
+			// error_exit("readline");
 		}
+/* 		else if (prompt[0] == '\0') // c'est cense gerer les ctrl + '\'
+		{
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+		} */
 		if (*prompt)
 		{
 			add_history(prompt);
@@ -96,12 +106,25 @@ void	ft_prompt(t_shell *shell)
 				cmd_list = NULL;
 				continue ;
 			}
+
 			gc_mem(GC_FREE_ALL, 0, NULL, GC_TKN);
 			// print_args(cmd_list);
 			// printf("  fd_in  = %d\n", cmd_list->fd_in);
 			// printf("  fd_out = %d\n", cmd_list->fd_out);
 
+			set_signals_exec();
+
 			exec_dispatcher(cmd_list, shell);
+
+			if (g_sig == 1)
+			{
+				shell->exit_status = 130;
+				g_sig = 0;
+			}
+
+			set_signals_interactive();
+
+
 			gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 
 			// ceci est un commentaire pour le merge

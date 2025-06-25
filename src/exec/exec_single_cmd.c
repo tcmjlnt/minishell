@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 20:09:50 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 11:23:30 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path)
 	*path = find_command_path(cmd->cmd, shell->env);
 	if (!cmd->is_builtin && *path == NULL)
 	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		*status = 127;
@@ -110,6 +111,9 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 		pid = fork();
 		if (pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
+			// gerer les signaux ici notamment commande bloquantes cat, sleep etc
 			if (apply_redirections(cmd, shell) == -1)
 				exit (1);
 			if (is_valid_command(cmd, shell, &exit_status, &path))
@@ -117,5 +121,9 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 			exit(exit_status);
 		}
 		wait_for_children(cmd, shell);
+		// signal(SIGINT, SIG_DFL);
+		// signal(SIGQUIT, SIG_DFL);
+
+		// remettre les signaux en configuration par defaut du minishell
 	}
 }

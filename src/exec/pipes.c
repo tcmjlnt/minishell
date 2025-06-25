@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 21:31:57 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 10:56:06 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,27 @@ void	wait_for_children(t_cmd *cmds, t_shell *shell)
 	while (current)
 	{
 		waitpid(current->pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_status = 128 + WTERMSIG(status);
+		// if (WIFSIGNALED(status))
+		// {
+		// 	if (WTERMSIG(status) == SIGINT)
+		// 		shell->exit_status = 130;
+		// 	else if (WTERMSIG(status) == SIGQUIT)
+		// 		shell->exit_status = 131;
+		// }
 		current = current->next;
 	}
-	if (WIFEXITED(status))
-		shell->exit_status = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		shell->exit_status = 128 + WTERMSIG(status);
+	if (shell->exit_status == 130)
+		write(2, "\n", 1);
+	else if (shell->exit_status == 131)
+		write(2, "Quit (core dumped)\n", 19);
+	// if (WIFEXITED(status))
+	// 	shell->exit_status = WEXITSTATUS(status);
+	// else if (WIFSIGNALED(status))
+	// 	shell->exit_status = 128 + WTERMSIG(status);
 }
 
 /*
@@ -82,7 +97,7 @@ Fait un `dup2` pour `STDIN` depuis le pipe de gauche (`pipes[i-1][0]`).
 Fait un `dup2` pour `STDOUT` vers le pipe de droite (`pipes[i][1]`).
 */
 
-void	pipeline_child_life(t_cmd *cmd, t_shell *shell)
+void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 {
 	int	exit_status;
 	char	*path;
@@ -126,9 +141,47 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 	{
 		pid = fork();
 		if (pid == 0)
-			pipeline_child_life(cmd_curr, shell);
+			pipeline_childhood(cmd_curr, shell);
 		cmd_curr = cmd_curr->next;
 	}
 	close_all_pipes(cmd_list);
 	wait_for_children(cmd_list, shell);
 }
+
+
+/* void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
+{
+	t_cmd	*cmd_curr;
+
+	cmd_curr = cmd_list;
+	if (create_pipes(cmd_list) == -1)
+	{
+		shell->exit_status = 1;
+		ft_exit(shell, cmd_list, -99);
+	}
+	while (cmd_curr)
+	{
+		cmd_curr->pid = fork(); // valeur de retour de fork = 0 si tout se passe bien ATTENTIOON pas le PID
+		cmd_curr = cmd_curr->next;
+	}
+	cmd_curr = cmd_list;
+	while (cmd_curr)
+	{
+		if (cmd_curr->pid == 0)
+			pipeline_childhood(cmd_curr, shell, cmd_list);
+		cmd_curr = cmd_curr->next;
+	}
+	close_all_pipes(cmd_list);
+	wait_for_children(cmd_list, shell);
+} */
+
+/* 	if (cmd->prev && cmd->next)
+	{
+		dup2(prev_cmd->pipe[1], STDIN_FILENO);
+		dup2(cmd->pipe[0], STDOUT_FILENO);
+	}
+	else if (cmd->next == NULL)
+		dup2(prev_cmd->pipe[1], STDIN_FILENO);
+	else if (prev_cmd == NULL)
+		dup2(cmd->pipe[0], STDOUT_FILENO); */
+
