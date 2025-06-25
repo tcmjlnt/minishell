@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:20:15 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 17:29:20 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:13:08 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	apply_dup_redirections(t_cmd *cmd)
 fd_in et fd_out mis -1 => permet de savoir etat aps qu'ils sont fermes
 et donc eviter de les refermer par erreur.
 */
-
 void	close_redirections(t_cmd *cmd)
 {
 	if (cmd->fd_in > 2)
@@ -68,4 +67,3 @@ int	apply_redirections(t_cmd *cmd, t_shell *shell)
 	close_redirections(cmd);
 	return (0);
 }
-

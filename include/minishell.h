@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 15:07:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:09:35 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,6 @@ void	print_token(t_token	*token_list);
 int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
-void	print_builtin_pipe_warning(t_cmd *cmd);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell);
@@ -232,10 +231,8 @@ void	wait_for_children(t_cmd *cmds, t_shell *shell);
 void	apply_dup_redirections(t_cmd *cmd);
 void	close_redirections(t_cmd *cmd);
 t_bool	is_directory(char *file);
-t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell);
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path);
 int		check_redirections_consistency(t_cmd *cmd, t_shell *shell);
-int		open_file(t_redir *redir, t_shell *shell);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

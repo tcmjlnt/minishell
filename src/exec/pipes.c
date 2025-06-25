@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 21:41:20 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:12:42 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 
 	exit_status = 0;
 	path = NULL;
-	// proteger les dup2
 	if (cmd->prev && cmd->next)
 	{
 		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1
