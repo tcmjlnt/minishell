@@ -6,27 +6,12 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:27:35 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-
-int	heredoc_delim_check(t_token *tkn_curr)
-{
-	if (tkn_curr->prev && tkn_curr->prev->token_type == TKN_HEREDOC)
-		return (true);
-	return (false);
-}
-
-int	redir_prev_tkn_check(t_token *tkn_curr)
-{
-	if (tkn_curr->prev && (tkn_curr->prev->token_type == TKN_APPEND
-		|| tkn_curr->prev->token_type == TKN_IN || tkn_curr->prev->token_type == TKN_OUT))
-		return (true);
-	return (false);
-}
 
 int	tkn_xpnd_segmentation2_squotes(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list) // gere les subtokens single quotes
 {
@@ -249,24 +234,24 @@ int	tkn_xpnd_quotes_segmentation(char *tkn_raw, t_xpnd **xpnd_list)
 	return (true);
 }
 
-void	printf_xpnd(t_xpnd **xpnd_list)
-{
-	t_xpnd *xpnd_current;
-	int i = 0;
+// void	printf_xpnd(t_xpnd **xpnd_list)
+// {
+// 	t_xpnd *xpnd_current;
+// 	int i = 0;
 
-	xpnd_current = *xpnd_list;
-	if (!xpnd_current)
-		return ;
-	while (xpnd_current && xpnd_current->prev)
-		xpnd_current = xpnd_current->prev;
-	while (xpnd_current)
-	{
-		printf("xpnd_current->substr[%d]: `%s`	;	in_single: %d	;	in_double: %d	;	xpnd_check: %d	;	str_to_join: `%s`\n",
-			 i, xpnd_current->substr, xpnd_current->in_single, xpnd_current->in_double, xpnd_current->xpnd_check, xpnd_current->str_to_join);
-		i++;
-		xpnd_current = xpnd_current->next;
-	}
-}
+// 	xpnd_current = *xpnd_list;
+// 	if (!xpnd_current)
+// 		return ;
+// 	while (xpnd_current && xpnd_current->prev)
+// 		xpnd_current = xpnd_current->prev;
+// 	while (xpnd_current)
+// 	{
+// 		printf("xpnd_current->substr[%d]: `%s`	;	in_single: %d	;	in_double: %d	;	xpnd_check: %d	;	str_to_join: `%s`\n",
+// 			 i, xpnd_current->substr, xpnd_current->in_single, xpnd_current->in_double, xpnd_current->xpnd_check, xpnd_current->str_to_join);
+// 		i++;
+// 		xpnd_current = xpnd_current->next;
+// 	}
+// }
 
 int	handle_key_value(t_xpnd **xpnd_list, t_shell *shell)
 {
