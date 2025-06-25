@@ -6,7 +6,8 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 16:08:11 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:13:04 by tjacquel         ###   ########.fr       */
+
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +119,7 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 				exit (1);
 			if (is_valid_command(cmd, shell, &exit_status, &path))
 				execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 			exit(exit_status);
 		}
 		wait_for_children(cmd, shell);

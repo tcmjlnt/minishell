@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:50:16 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 22:17:02 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:44:20 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	g_sig = 0;
 int main(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
+	int		res;
 	(void)av;
 
 	if (ac != 1)
@@ -38,6 +39,7 @@ int main(int ac, char **av, char **envp)
 	env_from_envp(shell, envp);
 	// init_signals();
 	ft_prompt(shell);
+	res = shell->exit_status;
 	gc_mem(GC_FREE_ALL, 0, NULL, GC_ENV);
 	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	// print_envp(envp);
@@ -54,5 +56,5 @@ int main(int ac, char **av, char **envp)
 	// }
 	// else
 	// 	printf("Expected behavior: launch the executable without any other argument\n");
-	return (shell->exit_status);
+	return (res);
 }
