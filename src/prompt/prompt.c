@@ -137,6 +137,6 @@ void	ft_prompt(t_shell *shell)
 			// cmd_list = NULL;
 
 		}
-		free(prompt);
+		// free(prompt);
 	}
 }

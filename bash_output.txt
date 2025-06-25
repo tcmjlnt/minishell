@@ -1,0 +1,1483 @@
+Executing commands with Bash...
+$ echo "🧪 Running TESTS relou echo"
+🧪 Running TESTS relou echo
+----------------
+$ echo -n -n test
+test----------------
+$ echo -n -n -n test
+test----------------
+$ echo -n -nnn -nnnn
+----------------
+$ echo -nnnnn
+----------------
+$ echo -n-nnn -nnnn
+-n-nnn -nnnn
+----------------
+$ echo hello >
+/bin/bash: line 1: syntax error near unexpected token `newline'
+/bin/bash: line 1: `echo hello >'
+----------------
+$ echo hello | cat | cat | wc -c
+6
+----------------
+$ echo hello | grep h | cat -e
+hello$
+----------------
+$ echo 'test' | cat
+test
+----------------
+$ echo 'unclosed single
+/bin/bash: line 1: unexpected EOF while looking for matching `''
+/bin/bash: line 2: syntax error: unexpected end of file
+----------------
+$ echo "unclosed double
+/bin/bash: line 1: unexpected EOF while looking for matching `"'
+/bin/bash: line 2: syntax error: unexpected end of file
+----------------
+$ echo hello | cat -e
+hello$
+----------------
+$ echo echo             hello | cat -e
+echo hello$
+----------------
+$ echo '"' | cat -e
+"$
+----------------
+$ echo "echo  hello" | cat -e
+echo  hello$
+----------------
+$ echo echo" " hello | cat -e
+echo  hello$
+----------------
+$ echo '"'
+"
+----------------
+$ echo echo"hello
+/bin/bash: line 1: unexpected EOF while looking for matching `"'
+/bin/bash: line 2: syntax error: unexpected end of file
+----------------
+$ echo "  test  " | sed 's/^ *//;s/ *$//'
+test
+----------------
+$ echo "nested 'quotes' test"
+nested 'quotes' test
+----------------
+$ echo 'nested "quotes" test'
+nested "quotes" test
+----------------
+$ echo "🧪 Running TESTS BUILTINS"
+🧪 Running TESTS BUILTINS
+----------------
+$ echo bonjour > bonjour.txt
+----------------
+$ echo bonjour2 > bonjour
+----------------
+$ echo -n test | cat -e
+test----------------
+$ echo "hello     world"
+hello     world
+----------------
+$ pwd | cd src/
+----------------
+$ pwd
+/home/aumartin/Documents/09_Minishell
+----------------
+$ cd src/
+----------------
+$ pwd
+/home/aumartin/Documents/09_Minishell
+----------------
+$ cd ../
+----------------
+$ pwd
+/home/aumartin/Documents/09_Minishell
+----------------
+$ env | grep PWD
+PWD=/home/aumartin/Documents/09_Minishell
+OLDPWD=/home/aumartin/Documents/09_Minishell/tests
+----------------
+$ env | sort | head -n 5
+CHROME_DESKTOP=code.desktop
+COLORTERM=truecolor
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/108175/bus
+DESKTOP_SESSION=ubuntu
+DISPLAY=:0
+----------------
+$ echo test | wc -w
+1
+----------------
+$ export YOLO=Aurore
+----------------
+$ echo 'append' >> test_log.txt
+----------------
+$ export | grep VSCODE
+declare -x VSCODE_GIT_ASKPASS_EXTRA_ARGS=""
+declare -x VSCODE_GIT_ASKPASS_MAIN="/usr/share/code/resources/app/extensions/git/dist/askpass-main.js"
+declare -x VSCODE_GIT_ASKPASS_NODE="/usr/share/code/code"
+declare -x VSCODE_GIT_IPC_HANDLE="/run/user/108175/vscode-git-5b10e9a6f7.sock"
+declare -x VSCODE_INJECTION="1"
+----------------
+$ export 4test=udfe 3test=qwr test=wat
+/bin/bash: line 1: export: `4test=udfe': not a valid identifier
+/bin/bash: line 1: export: `3test=qwr': not a valid identifier
+----------------
+$ export $bubble=test 3r =w dude=bro
+/bin/bash: line 1: export: `=test': not a valid identifier
+/bin/bash: line 1: export: `3r': not a valid identifier
+/bin/bash: line 1: export: `=w': not a valid identifier
+----------------
+$ export name
+----------------
+$ export | grep name
+----------------
+$ env | grep name
+----------------
+$ export bob=
+----------------
+$ export | grep bob
+----------------
+$ env | grep bob
+----------------
+$ echo "🧪 Running TESTS"
+🧪 Running TESTS
+----------------
+$ ls | grep .c | wc -l
+5
+----------------
+$ cat /etc/passwd | grep root | wc -l
+1
+----------------
+$ ls | | wc
+/bin/bash: line 1: syntax error near unexpected token `|'
+/bin/bash: line 1: `ls | | wc'
+----------------
+$ echo hello | | wc
+/bin/bash: line 1: syntax error near unexpected token `|'
+/bin/bash: line 1: `echo hello | | wc'
+----------------
+$ | ls
+/bin/bash: line 1: syntax error near unexpected token `|'
+/bin/bash: line 1: `| ls'
+----------------
+$ cat <
+/bin/bash: line 1: syntax error near unexpected token `newline'
+/bin/bash: line 1: `cat <'
+----------------
+$ ls | grep . | grep .c | sort | uniq
+coucou
+include
+main.c
+src
+subject
+----------------
+$ ls | unknowncmd
+/bin/bash: line 1: unknowncmd: command not found
+----------------
+$ cat <input_a.txt -n
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ wc> 'out'
+----------------
+$ last -l>out -c<redin -L
+/bin/bash: line 1: redin: No such file or directory
+----------------
+$ < input_a.txt> output
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ <input_a.txt <input_b.txt cat
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ env | grep PATH
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session4
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+PATH=/home/aumartin/bin:/home/aumartin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/aumartin/.config/Code/User/globalStorage/github.copilot-chat/debugCommand
+----------------
+$ pwd
+/home/aumartin/Documents/09_Minishell
+----------------
+$ whoami
+aumartin
+----------------
+$ date
+Tue Jun 24 03:35:55 PM CEST 2025
+----------------
+$ ls | grep "" | wc -c
+246
+----------------
+$ ls | sort | grep src
+src
+----------------
+$ ls | grep -v .c
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+expand_test.sh
+hola
+lib
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ test'
+/bin/bash: line 1: unexpected EOF while looking for matching `''
+/bin/bash: line 2: syntax error: unexpected end of file
+----------------
+$ ls -la | grep '^d'
+drwxr-xr-x 11 aumartin 2024_paris   4096 Jun 24 15:35 .
+drwxr-xr-x  6 aumartin 2024_paris     69 Jun 22 16:04 ..
+drwxr-xr-x  2 aumartin 2024_paris     49 Jun 21 19:24 coucou
+drwxr-xr-x  8 aumartin 2024_paris    220 Jun 24 14:01 .git
+drwxr-xr-x  2 aumartin 2024_paris     25 Jun 24 09:52 include
+drwxr-xr-x  5 aumartin 2024_paris     76 Jun 24 09:52 lib
+drwxr-xr-x  9 aumartin 2024_paris    114 Jun 24 13:32 objs
+drwxr-xr-x 10 aumartin 2024_paris    114 Jun 21 19:24 src
+drwxr-xr-x  2 aumartin 2024_paris    127 Jun 10 15:30 subject
+drwxr-xr-x  4 aumartin 2024_paris   4096 Jun 24 15:10 tests
+drwxr-xr-x  2 aumartin 2024_paris     27 Jun 21 19:25 .vscode
+----------------
+$ ls -la | awk '{print $1}'
+total
+drwxr-xr-x
+drwxr-xr-x
+-rw-r--r--
+-rw-r--r--
+-rw-r--r--
+-rw-r--r--
+drwxr-xr-x
+-rw-r--r--
+-rwxr-xr-x
+drwxr-xr-x
+-rw-r--r--
+-rw-r--r--
+drwxr-xr-x
+drwxr-xr-x
+-rw-r--r--
+-rw-r--r--
+-rwxr-xr-x
+-rw-r--r--
+drwxr-xr-x
+-rw-r--r--
+-rw-r--r--
+-rw-r--r--
+-rw-r--r--
+-rw-r--r--
+-rw-r--r--
+drwxr-xr-x
+drwxr-xr-x
+-rw-r--r--
+drwxr-xr-x
+-rwxr-xr-x
+-rw-r--r--
+drwxr-xr-x
+----------------
+$ ps aux | grep bash
+aumartin  479446  0.0  0.0 128312  3840 pts/0    S+   13:55   0:00 bash --posix
+aumartin  506660  0.0  0.0 128312  4032 pts/3    S    15:09   0:00 bash --posix
+aumartin  516036  4.0  0.0 127968  3840 pts/3    S+   15:35   0:00 /bin/bash ./tests.sh
+aumartin  517042  0.0  0.0 127836  3456 pts/3    S+   15:35   0:00 /bin/bash
+aumartin  517044  0.0  0.0 127076  2304 pts/3    S+   15:35   0:00 grep bash
+----------------
+$ seq 10 | tail -n 3
+8
+9
+10
+----------------
+$ printf "test\n" | wc -l
+1
+----------------
+$ ls -la | head -n 1
+total 420
+----------------
+$ wc> 'out'
+----------------
+$ last -l>out -c<redin -L
+/bin/bash: line 1: redin: No such file or directory
+----------------
+$ < input_a.txt> output
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ cat <input_a.txt -n
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ ./a.out hell'o w'orld
+/bin/bash: line 1: ./a.out: No such file or directory
+----------------
+$ <input_a.txt <input_b.txt cat
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ env TEST=hello printenv TEST | cat -e
+hello$
+----------------
+$ ls     -l
+total 400
+-rw-r--r--  1 aumartin 2024_paris   8038 Jun 24 15:35 bash_output.txt
+-rw-r--r--  1 aumartin 2024_paris      9 Jun 24 15:35 bonjour
+-rw-r--r--  1 aumartin 2024_paris      8 Jun 24 15:35 bonjour.txt
+-rw-r--r--  1 aumartin 2024_paris   4792 Jun 24 15:35 commands_test.txt
+drwxr-xr-x  2 aumartin 2024_paris     49 Jun 21 19:24 coucou
+-rwxr-xr-x  1 aumartin 2024_paris    936 Jun 22 13:55 expand_test.sh
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 hola
+drwxr-xr-x  2 aumartin 2024_paris     25 Jun 24 09:52 include
+drwxr-xr-x  5 aumartin 2024_paris     76 Jun 24 09:52 lib
+-rw-r--r--  1 aumartin 2024_paris   2002 Jun 24 12:15 main.c
+-rw-r--r--  1 aumartin 2024_paris   4843 Jun 22 21:22 Makefile
+-rwxr-xr-x  1 aumartin 2024_paris 133280 Jun 24 14:02 minishell
+-rw-r--r--  1 aumartin 2024_paris  79278 Jun 24 15:35 minishell_output.txt
+drwxr-xr-x  9 aumartin 2024_paris    114 Jun 24 13:32 objs
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 out
+-rw-r--r--  1 aumartin 2024_paris      6 Jun 24 15:35 out1.txt
+-rw-r--r--  1 aumartin 2024_paris   9686 Jun 24 15:35 out2.txt
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 outlast
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 out.txt
+-rw-r--r--  1 aumartin 2024_paris    278 Jun 22 13:55 readline.supp
+drwxr-xr-x 10 aumartin 2024_paris    114 Jun 21 19:24 src
+drwxr-xr-x  2 aumartin 2024_paris    127 Jun 10 15:30 subject
+-rw-r--r--  1 aumartin 2024_paris     19 Jun 24 15:35 test_log.txt
+drwxr-xr-x  4 aumartin 2024_paris   4096 Jun 24 15:10 tests
+-rwxr-xr-x  1 aumartin 2024_paris   1060 Jun 23 16:03 tests.sh
+-rw-r--r--  1 aumartin 2024_paris      8 Jun 24 15:35 test.txt
+----------------
+$ ls | grep .c | sort | uniq | wc -l
+5
+----------------
+$ cat < Makefile | wc -l
+182
+----------------
+$ echo test >> test_log.txt
+----------------
+$ ../../../../aumartin/../../usr/bin/ls
+/bin/bash: line 1: ../../../../aumartin/../../usr/bin/ls: No such file or directory
+----------------
+$ ../../../aumartin/../../usr/bin/ls
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ cat < test_log.txt
+append
+test
+append
+test
+----------------
+$ echo hello > out1.txt
+----------------
+$ cat < out1.txt | wc -c
+6
+----------------
+$ ls | grep "src" | grep exec | wc -l
+0
+----------------
+$ echo test | grep test | grep -v "notfound"
+test
+----------------
+$ ls -l | grep ^d
+drwxr-xr-x  2 aumartin 2024_paris     49 Jun 21 19:24 coucou
+drwxr-xr-x  2 aumartin 2024_paris     25 Jun 24 09:52 include
+drwxr-xr-x  5 aumartin 2024_paris     76 Jun 24 09:52 lib
+drwxr-xr-x  9 aumartin 2024_paris    114 Jun 24 13:32 objs
+drwxr-xr-x 10 aumartin 2024_paris    114 Jun 21 19:24 src
+drwxr-xr-x  2 aumartin 2024_paris    127 Jun 10 15:30 subject
+drwxr-xr-x  4 aumartin 2024_paris   4096 Jun 24 15:10 tests
+----------------
+$ ls -l | grep ^-
+-rw-r--r--  1 aumartin 2024_paris  11047 Jun 24 15:35 bash_output.txt
+-rw-r--r--  1 aumartin 2024_paris      9 Jun 24 15:35 bonjour
+-rw-r--r--  1 aumartin 2024_paris      8 Jun 24 15:35 bonjour.txt
+-rw-r--r--  1 aumartin 2024_paris   4792 Jun 24 15:35 commands_test.txt
+-rwxr-xr-x  1 aumartin 2024_paris    936 Jun 22 13:55 expand_test.sh
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 hola
+-rw-r--r--  1 aumartin 2024_paris   2002 Jun 24 12:15 main.c
+-rw-r--r--  1 aumartin 2024_paris   4843 Jun 22 21:22 Makefile
+-rwxr-xr-x  1 aumartin 2024_paris 133280 Jun 24 14:02 minishell
+-rw-r--r--  1 aumartin 2024_paris  79278 Jun 24 15:35 minishell_output.txt
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 out
+-rw-r--r--  1 aumartin 2024_paris      6 Jun 24 15:35 out1.txt
+-rw-r--r--  1 aumartin 2024_paris   9686 Jun 24 15:35 out2.txt
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 outlast
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 out.txt
+-rw-r--r--  1 aumartin 2024_paris    278 Jun 22 13:55 readline.supp
+-rw-r--r--  1 aumartin 2024_paris     24 Jun 24 15:35 test_log.txt
+-rwxr-xr-x  1 aumartin 2024_paris   1060 Jun 23 16:03 tests.sh
+-rw-r--r--  1 aumartin 2024_paris      8 Jun 24 15:35 test.txt
+----------------
+$ ls -al | grep "." | wc -l
+33
+----------------
+$ echo "unterminated double
+/bin/bash: line 1: unexpected EOF while looking for matching `"'
+/bin/bash: line 2: syntax error: unexpected end of file
+----------------
+$ echo 'unterminated single
+/bin/bash: line 1: unexpected EOF while looking for matching `''
+/bin/bash: line 2: syntax error: unexpected end of file
+----------------
+$ ls |     | wc
+/bin/bash: line 1: syntax error near unexpected token `|'
+/bin/bash: line 1: `ls |     | wc'
+----------------
+$ echo "hello | wc"
+hello | wc
+----------------
+$ ls | grep -v main | sort
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ ls | sort | uniq | wc -l
+26
+----------------
+$ cat < Makefile > out2.txt
+----------------
+$ cat < Makefile >> out2.txt
+----------------
+$ ls -l | grep minishell | wc -l
+2
+----------------
+$ printf "bonjour\nbonjour\n" | wc -l
+2
+----------------
+$ seq 10 | wc -l
+10
+----------------
+$ yes | head -n 42 | wc -l
+42
+----------------
+$ echo -n "test" | wc -c
+4
+----------------
+$ seq 1 10 | tail -n 3
+8
+9
+10
+----------------
+$ printf "abc\n" | wc -l
+1
+----------------
+$ echo "🧪 Running TESTS Batards de la bible horrible"
+🧪 Running TESTS Batards de la bible horrible
+----------------
+$ ls hola
+hola
+----------------
+$ ./Makefile
+/bin/bash: line 1: ./Makefile: Permission denied
+----------------
+$ ./minishell
+[1;95mminishell:[0m readline: Inappropriate ioctl for device
+----------------
+$ env | grep SHLVL
+SHLVL=2
+----------------
+$ ./minishell
+[1;95mminishell:[0m readline: Inappropriate ioctl for device
+----------------
+$ env | grep SHLVL
+SHLVL=2
+----------------
+$ touch hola
+----------------
+$ ./hola
+/bin/bash: line 1: ./hola: Permission denied
+----------------
+$ env|"wc" -l
+70
+----------------
+$ env|"wc "-l
+/bin/bash: line 1: wc -l: command not found
+----------------
+$ expr 1 + 1
+2
+----------------
+$ wc>   'out'last -l>out -c<redin   -L
+/bin/bash: line 1: redin: No such file or directory
+----------------
+$ echo hello>
+/bin/bash: line 1: syntax error near unexpected token `newline'
+/bin/bash: line 1: `echo hello>'
+----------------
+$ <    input_a.txt>   output
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ cat <input_a.txt -n
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ ./a.out hell'o w'orld
+/bin/bash: line 1: ./a.out: No such file or directory
+----------------
+$ <input_a.txt <input_b.txt cat
+/bin/bash: line 1: input_a.txt: No such file or directory
+----------------
+$ "ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls
+/bin/bash: line 1: unexpected EOF while looking for matching `"'
+/bin/bash: line 2: syntax error: unexpected end of file
+----------------
+$ |ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls"
+/bin/bash: line 1: syntax error near unexpected token `|'
+/bin/bash: line 1: `|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls|ls"'
+----------------
+$ echo hola | cat | cat | cat | cat | cat | grep hola
+hola
+----------------
+$ echo hola ||| cat
+/bin/bash: line 1: syntax error near unexpected token `|'
+/bin/bash: line 1: `echo hola ||| cat'
+----------------
+$ cat Makefile | grep srcs | grep srcs | cat -e
+----------------
+$ cat Makefile | grep pr | head -n 5 | cd file_not_exist
+/bin/bash: line 1: cd: file_not_exist: No such file or directory
+----------------
+$ echo "🧪 TESTS commands not found et exit code"
+🧪 TESTS commands not found et exit code
+----------------
+$ ert|ert|ert|wc -l
+/bin/bash: line 1: ert: command not found
+/bin/bash: line 1: ert: command not found
+/bin/bash: line 1: ert: command not found
+0
+----------------
+$ ert|wc -l
+/bin/bash: line 1: ert: command not found
+0
+----------------
+$ er | t | b | zy u | wc
+/bin/bash: line 1: er: command not found
+/bin/bash: line 1: t: command not found
+/bin/bash: line 1: b: command not found
+/bin/bash: line 1: zy: command not found
+      0       0       0
+----------------
+$ ls|cot
+/bin/bash: line 1: cot: command not found
+----------------
+$ ""
+/bin/bash: line 1: : command not found
+----------------
+$ asg | bnu | ls | bob
+/bin/bash: line 1: asg: command not found
+/bin/bash: line 1: bnu: command not found
+/bin/bash: line 1: bob: command not found
+----------------
+$ asg | bnu | ls
+/bin/bash: line 1: asg: command not found
+/bin/bash: line 1: bnu: command not found
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ env 333333
+env: ‘333333’: No such file or directory
+----------------
+$ echo $?
+0
+----------------
+$ env src/
+env: ‘src/’: Permission denied
+----------------
+$ echo $?
+0
+----------------
+$ echo "REDIR"
+REDIR
+----------------
+$ cat < us | cat < here
+/bin/bash: line 1: us: No such file or directory
+/bin/bash: line 1: here: No such file or directory
+----------------
+$ echo $?
+0
+----------------
+$ cat < $us | cat < $here
+/bin/bash: line 1: $us: ambiguous redirect
+/bin/bash: line 1: $here: ambiguous redirect
+----------------
+$ echo $?
+0
+----------------
+$ cat <
+/bin/bash: line 1: syntax error near unexpected token `newline'
+/bin/bash: line 1: `cat <'
+----------------
+$ echo $?
+0
+----------------
+$ cat < | cat <
+/bin/bash: line 1: syntax error near unexpected token `|'
+/bin/bash: line 1: `cat < | cat <'
+----------------
+$ echo $?
+0
+----------------
+$ cat $us | cat <
+/bin/bash: line 1: syntax error near unexpected token `newline'
+/bin/bash: line 1: `cat $us | cat <'
+----------------
+$ cat < $us | cat <
+/bin/bash: line 1: syntax error near unexpected token `newline'
+/bin/bash: line 1: `cat < $us | cat <'
+----------------
+$ echo $?
+0
+----------------
+$ cat < | cat < $us
+/bin/bash: line 1: syntax error near unexpected token `|'
+/bin/bash: line 1: `cat < | cat < $us'
+----------------
+$ cat < $us | cat
+/bin/bash: line 1: $us: ambiguous redirect
+----------------
+$ echo $?
+0
+----------------
+$ cat $us | cat < $us
+/bin/bash: line 1: $us: ambiguous redirect
+----------------
+$ cat < $us | cat < $us
+/bin/bash: line 1: $us: ambiguous redirect
+/bin/bash: line 1: $us: ambiguous redirect
+----------------
+$ echo $?
+0
+----------------
+$ cat < $us
+/bin/bash: line 1: $us: ambiguous redirect
+----------------
+$ echo bonjour > $us
+/bin/bash: line 1: $us: ambiguous redirect
+----------------
+$ echo $?
+0
+----------------
+$ echo bonjour >> $us
+/bin/bash: line 1: $us: ambiguous redirect
+----------------
+$ echo $?
+0
+----------------
+$ cat < $us | echo bonjour > test.txt
+/bin/bash: line 1: $us: ambiguous redirect
+----------------
+$ cat < $us | cat < test.txt
+/bin/bash: line 1: $us: ambiguous redirect
+bonjour
+----------------
+$ echo "🧪 TESTS EXPANSION"
+🧪 TESTS EXPANSION
+----------------
+$ echo "$test     reste de l a string"
+a  b             c     reste de l a string
+----------------
+$ echo $test"$test"
+a b ca  b             c
+----------------
+$ export catceci="cat test.txt"
+----------------
+$ $catceci
+----------------
+$ "$catceci"
+/bin/bash: line 1: : command not found
+----------------
+$ export hellhess="ls -l | grep a.out"
+----------------
+$ $hellhess
+----------------
+$ "$hellhess"
+/bin/bash: line 1: : command not found
+----------------
+$ "ls" "-l" "|" "grep" "a.out"
+ls: cannot access '|': No such file or directory
+ls: cannot access 'grep': No such file or directory
+ls: cannot access 'a.out': No such file or directory
+----------------
+$ export ls-l="ls -l"
+/bin/bash: line 1: export: `ls-l=ls -l': not a valid identifier
+----------------
+$ echo dudde | $EMPTY
+----------------
+$ cat "a  b             c"
+cat: 'a  b             c': No such file or directory
+----------------
+$ echo 'cccc$'"""$USER"
+cccc$aumartin
+----------------
+$ unset USER
+----------------
+$ /bin/ls /
+bin
+boot
+cdrom
+dev
+etc
+goinfre
+home
+lib
+lib32
+lib64
+libx32
+lost+found
+media
+mnt
+opt
+osquery.flags
+proc
+root
+run
+sbin
+sgoinfre
+snap
+srv
+swap.img
+sys
+tmp
+usr
+var
+----------------
+$ /bin/ls /doesnotexist
+/bin/ls: cannot access '/doesnotexist': No such file or directory
+----------------
+$ /bin/echo Hello
+Hello
+----------------
+$ /bin/echo
+
+----------------
+$ /bin/echo -n "test"
+test----------------
+$ ls
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ ls -l
+total 416
+-rw-r--r--  1 aumartin 2024_paris  20890 Jun 24 15:35 bash_output.txt
+-rw-r--r--  1 aumartin 2024_paris      9 Jun 24 15:35 bonjour
+-rw-r--r--  1 aumartin 2024_paris      8 Jun 24 15:35 bonjour.txt
+-rw-r--r--  1 aumartin 2024_paris   4792 Jun 24 15:35 commands_test.txt
+drwxr-xr-x  2 aumartin 2024_paris     49 Jun 21 19:24 coucou
+-rwxr-xr-x  1 aumartin 2024_paris    936 Jun 22 13:55 expand_test.sh
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 hola
+drwxr-xr-x  2 aumartin 2024_paris     25 Jun 24 09:52 include
+drwxr-xr-x  5 aumartin 2024_paris     76 Jun 24 09:52 lib
+-rw-r--r--  1 aumartin 2024_paris   2002 Jun 24 12:15 main.c
+-rw-r--r--  1 aumartin 2024_paris   4843 Jun 22 21:22 Makefile
+-rwxr-xr-x  1 aumartin 2024_paris 133280 Jun 24 14:02 minishell
+-rw-r--r--  1 aumartin 2024_paris  79278 Jun 24 15:35 minishell_output.txt
+drwxr-xr-x  9 aumartin 2024_paris    114 Jun 24 13:32 objs
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 out
+-rw-r--r--  1 aumartin 2024_paris      6 Jun 24 15:35 out1.txt
+-rw-r--r--  1 aumartin 2024_paris   9686 Jun 24 15:35 out2.txt
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 outlast
+-rw-r--r--  1 aumartin 2024_paris      0 Jun 24 15:35 out.txt
+-rw-r--r--  1 aumartin 2024_paris    278 Jun 22 13:55 readline.supp
+drwxr-xr-x 10 aumartin 2024_paris    114 Jun 21 19:24 src
+drwxr-xr-x  2 aumartin 2024_paris    127 Jun 10 15:30 subject
+-rw-r--r--  1 aumartin 2024_paris     24 Jun 24 15:35 test_log.txt
+drwxr-xr-x  4 aumartin 2024_paris   4096 Jun 24 15:10 tests
+-rwxr-xr-x  1 aumartin 2024_paris   1060 Jun 23 16:03 tests.sh
+-rw-r--r--  1 aumartin 2024_paris      8 Jun 24 15:35 test.txt
+----------------
+$ ls -l /tmp
+total 144
+drwx-----T 2 aumartin 2024_paris 4096 Jun 23 11:06 aumartin-code-zsh
+-rw------- 1 jschmitz 2024_paris    0 Jun 20 17:13 config-err-15TNfb
+-rw------- 1 aumartin 2024_paris    0 Jun 24 12:11 config-err-2lOVkS
+-rw------- 1 jschmitz 2024_paris    0 Jun 20 14:22 config-err-fd1ueK
+-rw------- 1 aumartin 2024_paris    0 Jun 24 09:00 config-err-w15UVQ
+-rw------- 1 aumartin 2024_paris    0 Jun 23 10:02 config-err-X30sDM
+drwxr-xr-x 2 aumartin 2024_paris 4096 Jun 24 09:00 {D2AA9A6A-6366-46E2-A156-11834EAD8F5C}
+drwxr-xr-x 2 aumartin 2024_paris 4096 Jun 24 12:11 {FF9DEEC2-D600-4F1B-AFD2-84AD24C5AA37}
+-rw------- 1 root     root        601 Jun 24 11:56 krb5cc_0
+-rw------- 1 aumartin 2024_paris 1048 Jun 24 12:11 krb5cc_108175_i3dBGC
+-rw------- 1 root     root       1153 Jun 24 08:57 krb5ccmachine_42PARIS.FR
+-rw------- 1 aumartin 2024_paris    0 Jun 24 15:35 minishell_heredoc_0.tmp
+-rw------- 1 aumartin 2024_paris    6 Jun 23 18:01 minishell_heredoc_10.tmp
+-rw------- 1 aumartin 2024_paris   11 Jun 23 18:05 minishell_heredoc_11.tmp
+-rw------- 1 aumartin 2024_paris    7 Jun 23 18:16 minishell_heredoc_12.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:16 minishell_heredoc_13.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:16 minishell_heredoc_14.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:16 minishell_heredoc_15.tmp
+-rw------- 1 aumartin 2024_paris    6 Jun 23 18:16 minishell_heredoc_16.tmp
+-rw------- 1 aumartin 2024_paris    7 Jun 23 18:17 minishell_heredoc_17.tmp
+-rw------- 1 aumartin 2024_paris    4 Jun 23 18:17 minishell_heredoc_18.tmp
+-rw------- 1 aumartin 2024_paris    4 Jun 23 18:17 minishell_heredoc_19.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:18 minishell_heredoc_1.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:18 minishell_heredoc_2.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:18 minishell_heredoc_3.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:18 minishell_heredoc_4.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:18 minishell_heredoc_5.tmp
+-rw------- 1 aumartin 2024_paris    0 Jun 23 18:18 minishell_heredoc_6.tmp
+-rw------- 1 aumartin 2024_paris   10 Jun 23 18:18 minishell_heredoc_7.tmp
+-rw------- 1 aumartin 2024_paris   10 Jun 23 17:57 minishell_heredoc_8.tmp
+-rw------- 1 aumartin 2024_paris    6 Jun 23 18:00 minishell_heredoc_9.tmp
+-rw------- 1 aumartin 2024_paris    8 Jun 23 10:48 minishell_heredoc_.tmp
+drwx------ 4 root     root       4096 Jun 20 14:27 snap-private-tmp
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-bluetooth.service-ctFiER
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-bolt.service-lxKris
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-colord.service-wRAqBY
+drwx------ 3 root     root       4096 Jun 20 14:22 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-fwupd.service-qB6E4R
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-iio-sensor-proxy.service-C3gjbY
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-ModemManager.service-EeQseH
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-node_exporter.service-keKkRc
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-power-profiles-daemon.service-FpjdMg
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-redis-server.service-dULN2t
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-switcheroo-control.service-vfl7V7
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-systemd-logind.service-VJXMep
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-systemd-resolved.service-E7u5UY
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-systemd-timesyncd.service-j30cgK
+drwx------ 3 root     root       4096 Jun 20 08:55 systemd-private-d06de460ef954e9aa488db6a7c6f1a61-upower.service-kFHCqp
+drwx------ 2 aumartin 2024_paris 4096 Jun 24 12:11 Temp-c9518ad7-755a-4fd5-994b-fdab6f9bcd7a
+drwx------ 2 jschmitz 2024_paris 4096 Jun 20 17:13 Temp-f24044a1-0e22-49c9-893f-0709748aa797
+drwxr-xr-x 2 jschmitz 2024_paris 4096 Jun 20 18:15 vscode-typescript107988
+drwxr-xr-x 2 aumartin 2024_paris 4096 Jun 23 19:23 vscode-typescript108175
+----------------
+$ ls -l /doesnotexist
+ls: cannot access '/doesnotexist': No such file or directory
+----------------
+$ echo Hello World
+Hello World
+----------------
+$ echo
+
+----------------
+$ echo -n
+----------------
+$ echo -n "Hello"
+Hello----------------
+$ echo "Hello     World"
+Hello     World
+----------------
+$ echo "cat lol.c | cat > lol.c"
+cat lol.c | cat > lol.c
+----------------
+$ echo '$USER'
+$USER
+----------------
+$ echo "$USER"
+aumartin
+----------------
+$ echo "   "
+   
+----------------
+$ echo ''
+
+----------------
+$ echo "test with    spaces"
+test with    spaces
+----------------
+$ echo "test" "with" "multiple" "args"
+test with multiple args
+----------------
+$ exit
+----------------
+$ exit 42
+----------------
+$ exit 256
+----------------
+$ /bin/ls ; echo $?
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+0
+----------------
+$ ls /doesnotexist ; echo $?
+ls: cannot access '/doesnotexist': No such file or directory
+2
+----------------
+$ expr $? + $?
+0
+----------------
+$ echo in double quotes
+in double quotes
+----------------
+$ echo in single quotes'
+/bin/bash: line 1: unexpected EOF while looking for matching `''
+/bin/bash: line 2: syntax error: unexpected end of file
+----------------
+$ echo '$USER'
+$USER
+----------------
+$ echo '$PATH'
+$PATH
+----------------
+$ echo '   '
+   
+----------------
+$ env
+SHELL=/bin/zsh
+LSCOLORS=Gxfxcxdxbxegedabagacad
+SESSION_MANAGER=local/f6r3s4.clusters.42paris.fr:@/tmp/.ICE-unix/434982,unix/f6r3s4.clusters.42paris.fr:/tmp/.ICE-unix/434982
+USER_ZDOTDIR=/home/aumartin
+QT_ACCESSIBILITY=1
+COLORTERM=truecolor
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+SSH_AGENT_LAUNCHER=gnome-keyring
+LESS=-R
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session4
+XDG_MENU_PREFIX=gnome-
+TERM_PROGRAM_VERSION=1.101.1
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+LANGUAGE=en_US
+SSH_AUTH_SOCK=/run/user/108175/keyring/ssh
+XMODIFIERS=@im=ibus
+DESKTOP_SESSION=ubuntu
+GTK_MODULES=gail:atk-bridge
+PWD=/home/aumartin/Documents/09_Minishell
+KRB5CCNAME=FILE:/tmp/krb5cc_108175_i3dBGC
+XDG_SESSION_DESKTOP=ubuntu
+LOGNAME=aumartin
+XDG_SESSION_TYPE=x11
+GPG_AGENT_INFO=/run/user/108175/gnupg/S.gpg-agent:0:1
+SYSTEMD_EXEC_PID=435008
+_=/usr/bin/env
+XAUTHORITY=/home/aumartin/.Xauthority
+VSCODE_GIT_ASKPASS_NODE=/usr/share/code/code
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/aumartin
+GJS_DEBUG_TOPICS=JS ERROR;JS LOG
+VSCODE_INJECTION=1
+GDM_LANG=en_US
+HOME=/home/aumartin
+LANG=en_US.UTF-8
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+XDG_CURRENT_DESKTOP=Unity
+GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+INVOCATION_ID=143e54eb240847e28d6484b6e71e3205
+MANAGERPID=434339
+CHROME_DESKTOP=code.desktop
+GJS_DEBUG_OUTPUT=stderr
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+XDG_SESSION_CLASS=user
+TERM=xterm-256color
+ZSH=/home/aumartin/.oh-my-zsh
+ZDOTDIR=/home/aumartin
+LIBVIRT_DEFAULT_URI=qemu:///system
+USER=aumartin
+VSCODE_GIT_IPC_HANDLE=/run/user/108175/vscode-git-5b10e9a6f7.sock
+DISPLAY=:0
+SHLVL=3
+PAGER=less
+QT_IM_MODULE=ibus
+XDG_RUNTIME_DIR=/run/user/108175
+DOCKER_HOST=unix:///run/user/108175/docker.sock
+VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
+JOURNAL_STREAM=8:1161928
+XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/home/aumartin/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+GDK_BACKEND=x11
+PATH=/home/aumartin/bin:/home/aumartin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/aumartin/.config/Code/User/globalStorage/github.copilot-chat/debugCommand
+GDMSESSION=ubuntu
+ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/108175/bus
+GIO_LAUNCHED_DESKTOP_FILE_PID=436086
+GIO_LAUNCHED_DESKTOP_FILE=/usr/share/applications/code.desktop
+test=a  b             c
+OLDPWD=/home/aumartin/Documents/09_Minishell/tests
+TERM_PROGRAM=vscode
+----------------
+$ export TESTVAR=hello
+----------------
+$ export TESTVAR=world
+----------------
+$ env
+SHELL=/bin/zsh
+LSCOLORS=Gxfxcxdxbxegedabagacad
+SESSION_MANAGER=local/f6r3s4.clusters.42paris.fr:@/tmp/.ICE-unix/434982,unix/f6r3s4.clusters.42paris.fr:/tmp/.ICE-unix/434982
+USER_ZDOTDIR=/home/aumartin
+QT_ACCESSIBILITY=1
+COLORTERM=truecolor
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+SSH_AGENT_LAUNCHER=gnome-keyring
+LESS=-R
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session4
+XDG_MENU_PREFIX=gnome-
+TERM_PROGRAM_VERSION=1.101.1
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+LANGUAGE=en_US
+SSH_AUTH_SOCK=/run/user/108175/keyring/ssh
+XMODIFIERS=@im=ibus
+DESKTOP_SESSION=ubuntu
+GTK_MODULES=gail:atk-bridge
+PWD=/home/aumartin/Documents/09_Minishell
+KRB5CCNAME=FILE:/tmp/krb5cc_108175_i3dBGC
+XDG_SESSION_DESKTOP=ubuntu
+LOGNAME=aumartin
+XDG_SESSION_TYPE=x11
+GPG_AGENT_INFO=/run/user/108175/gnupg/S.gpg-agent:0:1
+SYSTEMD_EXEC_PID=435008
+_=/usr/bin/env
+XAUTHORITY=/home/aumartin/.Xauthority
+VSCODE_GIT_ASKPASS_NODE=/usr/share/code/code
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/aumartin
+GJS_DEBUG_TOPICS=JS ERROR;JS LOG
+VSCODE_INJECTION=1
+GDM_LANG=en_US
+HOME=/home/aumartin
+LANG=en_US.UTF-8
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+XDG_CURRENT_DESKTOP=Unity
+GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+INVOCATION_ID=143e54eb240847e28d6484b6e71e3205
+MANAGERPID=434339
+CHROME_DESKTOP=code.desktop
+GJS_DEBUG_OUTPUT=stderr
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+XDG_SESSION_CLASS=user
+TERM=xterm-256color
+ZSH=/home/aumartin/.oh-my-zsh
+ZDOTDIR=/home/aumartin
+LIBVIRT_DEFAULT_URI=qemu:///system
+USER=aumartin
+VSCODE_GIT_IPC_HANDLE=/run/user/108175/vscode-git-5b10e9a6f7.sock
+DISPLAY=:0
+SHLVL=3
+PAGER=less
+QT_IM_MODULE=ibus
+XDG_RUNTIME_DIR=/run/user/108175
+DOCKER_HOST=unix:///run/user/108175/docker.sock
+VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
+JOURNAL_STREAM=8:1161928
+XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/home/aumartin/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+GDK_BACKEND=x11
+PATH=/home/aumartin/bin:/home/aumartin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/aumartin/.config/Code/User/globalStorage/github.copilot-chat/debugCommand
+GDMSESSION=ubuntu
+ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/108175/bus
+GIO_LAUNCHED_DESKTOP_FILE_PID=436086
+GIO_LAUNCHED_DESKTOP_FILE=/usr/share/applications/code.desktop
+test=a  b             c
+OLDPWD=/home/aumartin/Documents/09_Minishell/tests
+TERM_PROGRAM=vscode
+----------------
+$ unset TESTVAR
+----------------
+$ env
+SHELL=/bin/zsh
+LSCOLORS=Gxfxcxdxbxegedabagacad
+SESSION_MANAGER=local/f6r3s4.clusters.42paris.fr:@/tmp/.ICE-unix/434982,unix/f6r3s4.clusters.42paris.fr:/tmp/.ICE-unix/434982
+USER_ZDOTDIR=/home/aumartin
+QT_ACCESSIBILITY=1
+COLORTERM=truecolor
+XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+SSH_AGENT_LAUNCHER=gnome-keyring
+LESS=-R
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session4
+XDG_MENU_PREFIX=gnome-
+TERM_PROGRAM_VERSION=1.101.1
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+GTK_IM_MODULE=ibus
+LANGUAGE=en_US
+SSH_AUTH_SOCK=/run/user/108175/keyring/ssh
+XMODIFIERS=@im=ibus
+DESKTOP_SESSION=ubuntu
+GTK_MODULES=gail:atk-bridge
+PWD=/home/aumartin/Documents/09_Minishell
+KRB5CCNAME=FILE:/tmp/krb5cc_108175_i3dBGC
+XDG_SESSION_DESKTOP=ubuntu
+LOGNAME=aumartin
+XDG_SESSION_TYPE=x11
+GPG_AGENT_INFO=/run/user/108175/gnupg/S.gpg-agent:0:1
+SYSTEMD_EXEC_PID=435008
+_=/usr/bin/env
+XAUTHORITY=/home/aumartin/.Xauthority
+VSCODE_GIT_ASKPASS_NODE=/usr/share/code/code
+XDG_GREETER_DATA_DIR=/var/lib/lightdm-data/aumartin
+GJS_DEBUG_TOPICS=JS ERROR;JS LOG
+VSCODE_INJECTION=1
+GDM_LANG=en_US
+HOME=/home/aumartin
+LANG=en_US.UTF-8
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+XDG_CURRENT_DESKTOP=Unity
+GIT_ASKPASS=/usr/share/code/resources/app/extensions/git/dist/askpass.sh
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+INVOCATION_ID=143e54eb240847e28d6484b6e71e3205
+MANAGERPID=434339
+CHROME_DESKTOP=code.desktop
+GJS_DEBUG_OUTPUT=stderr
+VSCODE_GIT_ASKPASS_EXTRA_ARGS=
+XDG_SESSION_CLASS=user
+TERM=xterm-256color
+ZSH=/home/aumartin/.oh-my-zsh
+ZDOTDIR=/home/aumartin
+LIBVIRT_DEFAULT_URI=qemu:///system
+USER=aumartin
+VSCODE_GIT_IPC_HANDLE=/run/user/108175/vscode-git-5b10e9a6f7.sock
+DISPLAY=:0
+SHLVL=3
+PAGER=less
+QT_IM_MODULE=ibus
+XDG_RUNTIME_DIR=/run/user/108175
+DOCKER_HOST=unix:///run/user/108175/docker.sock
+VSCODE_GIT_ASKPASS_MAIN=/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
+JOURNAL_STREAM=8:1161928
+XDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/home/aumartin/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+GDK_BACKEND=x11
+PATH=/home/aumartin/bin:/home/aumartin/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/aumartin/.config/Code/User/globalStorage/github.copilot-chat/debugCommand
+GDMSESSION=ubuntu
+ORIGINAL_XDG_CURRENT_DESKTOP=ubuntu:GNOME
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/108175/bus
+GIO_LAUNCHED_DESKTOP_FILE_PID=436086
+GIO_LAUNCHED_DESKTOP_FILE=/usr/share/applications/code.desktop
+test=a  b             c
+OLDPWD=/home/aumartin/Documents/09_Minishell/tests
+TERM_PROGRAM=vscode
+----------------
+$ cd /
+----------------
+$ pwd
+/home/aumartin/Documents/09_Minishell
+----------------
+$ cd ..
+----------------
+$ pwd
+/home/aumartin/Documents/09_Minishell
+----------------
+$ cd .
+----------------
+$ pwd
+/home/aumartin/Documents/09_Minishell
+----------------
+$ cd /tmp
+----------------
+$ pwd
+/home/aumartin/Documents/09_Minishell
+----------------
+$ ls
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ ls ../..
+Desktop
+Documents
+Downloads
+goinfre
+Music
+Pictures
+Public
+sgoinfre
+snap
+Templates
+Videos
+----------------
+$ ls ./../
+09_Minishell
+grademe
+Pipex
+----------------
+$ ls ../../bin
+ls: cannot access '../../bin': No such file or directory
+----------------
+$ unset PATH
+----------------
+$ ls
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ export PATH=/bin:/usr/bin
+----------------
+$ ls
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ ls > out.txt
+----------------
+$ cat < out.txt
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ echo test > out.txt
+----------------
+$ cat out.txt
+test
+----------------
+$ echo test >> out.txt
+----------------
+$ cat out.txt
+test
+test
+----------------
+$ cat << EOF
+/bin/bash: line 1: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')
+----------------
+$ test
+----------------
+$ EOF
+/bin/bash: line 1: EOF: command not found
+----------------
+$ cat file | grep test | wc -l
+cat: file: No such file or directory
+0
+----------------
+$ ls filethatdoesntexist | grep bla | more
+ls: cannot access 'filethatdoesntexist': No such file or directory
+----------------
+$ ls | grep bin > out.txt
+----------------
+$ cat | cat | ls
+bash_output.txt
+bonjour
+bonjour.txt
+commands_test.txt
+coucou
+expand_test.sh
+hola
+include
+lib
+main.c
+Makefile
+minishell
+minishell_output.txt
+objs
+out
+out1.txt
+out2.txt
+outlast
+out.txt
+readline.supp
+src
+subject
+test_log.txt
+tests
+tests.sh
+test.txt
+----------------
+$ dsbksdgbksdghsd
+/bin/bash: line 1: dsbksdgbksdghsd: command not found
+----------------
+$ echo $USER
+aumartin
+----------------
+$ echo "$USER"
+aumartin
+----------------
+$ echo $HOME
+/home/aumartin
+----------------
+$ echo "$HOME"
+/home/aumartin
+----------------

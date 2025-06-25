@@ -16,8 +16,11 @@
 void	save_std(t_std_backup *backup)
 {
 	backup->orig_stdin = dup(STDIN_FILENO);
+	close(backup->orig_stdin);
 	backup->orig_stdout = dup(STDOUT_FILENO);
+	close(backup->orig_stdout);
 	backup->orig_stderr = dup(STDERR_FILENO);
+	close(backup->orig_stderr);
 }
 
 /* restaure les descripteurs STDIN/STDOUT depuis la sauvegarde */

@@ -111,13 +111,9 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 		dup2(cmd->pipe[1], STDOUT_FILENO);
 	}
 	else if (cmd->next == NULL)
-	{
 		dup2(cmd->prev->pipe[0], STDIN_FILENO);
-	}
 	else if (cmd->prev == NULL)
-	{
 		dup2(cmd->pipe[1], STDOUT_FILENO);
-	}
 	close_all_pipes(cmd);
 	if (apply_redirections(cmd, shell) == -1)
 		exit (1);
@@ -136,31 +132,22 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 {
 	t_cmd	*cmd_curr;
-	pid_t	PID_parent;
+	pid_t	pid;
 
 	cmd_curr = cmd_list;
 	if (create_pipes(cmd_list) == -1)
-	{
-		shell->exit_status = 1;
-		ft_exit(shell, cmd_list, -99);
-	}
-	PID_parent = getpid();
-	int i = 0;
+		exit(1);
 	while (cmd_curr)
 	{
-		cmd_curr->pid = fork(); // valeur de retour de fork = 0 si tout se passe bien ATTENTIOON pas le PID
-		if (cmd_curr->pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
+		pid = fork();
+		if (pid == 0)
 			pipeline_childhood(cmd_curr, shell);
-		}
-		i++;
 		cmd_curr = cmd_curr->next;
 	}
 	close_all_pipes(cmd_list);
 	wait_for_children(cmd_list, shell);
 }
+
 
 /* void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 {
@@ -197,3 +184,4 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 		dup2(prev_cmd->pipe[1], STDIN_FILENO);
 	else if (prev_cmd == NULL)
 		dup2(cmd->pipe[0], STDOUT_FILENO); */
+
