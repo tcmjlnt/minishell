@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_dispatcher.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 13:45:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 22:14:47 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:16:12 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ void	exec_dispatcher(t_cmd *cmd, t_shell *shell)
 	if (!cmd)
 		return ;
 	if (handle_all_heredocs(cmd) == -1)
+	{
 		return ;
+	}
+
 	//init_signals();
 	// signal(SIGINT, SIG_IGN);
 	if (!cmd->next)
