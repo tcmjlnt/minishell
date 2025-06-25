@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 15:02:09 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:41:20 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	close_all_pipes(t_cmd *command)
 int	create_pipes(t_cmd *cmd)
 {
 	t_cmd	*command;
-	// int i = 0;
 
 	command = cmd;
 	while (command->next)
@@ -42,10 +41,7 @@ int	create_pipes(t_cmd *cmd)
 			close_all_pipes(cmd);
 			return (-1);
 		}
-		//printf("Création du pipe [%d,%d] pour cmd %s | cmd %s\n", command->pipe[0], command->pipe[1], command->cmd, command->next->cmd);
 		command = command->next;
-		//	i++;
-
 	}
 	return (0);
 }
@@ -64,23 +60,12 @@ void	wait_for_children(t_cmd *cmds, t_shell *shell)
 			shell->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 			shell->exit_status = 128 + WTERMSIG(status);
-		// if (WIFSIGNALED(status))
-		// {
-		// 	if (WTERMSIG(status) == SIGINT)
-		// 		shell->exit_status = 130;
-		// 	else if (WTERMSIG(status) == SIGQUIT)
-		// 		shell->exit_status = 131;
-		// }
 		current = current->next;
 	}
 	if (shell->exit_status == 130)
 		write(2, "\n", 1);
 	else if (shell->exit_status == 131)
 		write(2, "Quit (core dumped)\n", 19);
-	// if (WIFEXITED(status))
-	// 	shell->exit_status = WEXITSTATUS(status);
-	// else if (WIFSIGNALED(status))
-	// 	shell->exit_status = 128 + WTERMSIG(status);
 }
 
 /*
@@ -96,10 +81,9 @@ Ne fait **pas** de `dup2` pour `STDOUT` (il garde la sortie standard du shell).
 Fait un `dup2` pour `STDIN` depuis le pipe de gauche (`pipes[i-1][0]`).
 Fait un `dup2` pour `STDOUT` vers le pipe de droite (`pipes[i][1]`).
 */
-
 void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 {
-	int	exit_status;
+	int		exit_status;
 	char	*path;
 
 	exit_status = 0;
@@ -107,18 +91,42 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 	// proteger les dup2
 	if (cmd->prev && cmd->next)
 	{
-		dup2(cmd->prev->pipe[0], STDIN_FILENO);
-		dup2(cmd->pipe[1], STDOUT_FILENO);
+		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1
+			|| dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2 failed (middle cmd)");
+			exit(1);
+		}
 	}
 	else if (cmd->next == NULL)
-		dup2(cmd->prev->pipe[0], STDIN_FILENO);
+	{
+		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2 failed (last cmd)");
+			exit(1);
+		}
+	}
 	else if (cmd->prev == NULL)
-		dup2(cmd->pipe[1], STDOUT_FILENO);
+	{
+		if (dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2 failed (first cmd)");
+			exit(1);
+		}
+	}
 	close_all_pipes(cmd);
 	if (apply_redirections(cmd, shell) == -1)
+	{
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 		exit (1);
+	}
 	if (!cmd->is_builtin && is_valid_command(cmd, shell, &exit_status, &path))
+	{
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
+		perror("execve failed");
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+		exit(1);
+	}
 	else if (cmd->is_builtin)
 	{
 		exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
@@ -136,10 +144,22 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 
 	cmd_curr = cmd_list;
 	if (create_pipes(cmd_list) == -1)
-		exit(1);
+	{
+		perror("create_pipes failed");
+		shell->exit_status = 1;
+		return ;
+	}
 	while (cmd_curr)
 	{
 		pid = fork();
+/* 		if (pid == -1) // check si verif a faire ou non avec clio ?
+		{
+			perror("fork failed");
+			close_all_pipes(cmd_list);
+			wait_for_children(cmd_list, shell);
+			shell->exit_status = 1;
+			return ;
+		} */
 		if (pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
@@ -151,7 +171,6 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 	close_all_pipes(cmd_list);
 	wait_for_children(cmd_list, shell);
 }
-
 
 /* void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 {

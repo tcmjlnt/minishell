@@ -6,12 +6,11 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 10:07:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 11:12:11 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:42:48 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
 
 int	open_file(t_redir *redir, t_shell *shell)
 {
@@ -66,4 +65,45 @@ int	check_redirections_consistency(t_cmd *cmd, t_shell *shell)
 		redir_list = redir_list->next;
 	}
 	return (0);
+}
+
+t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path)
+{
+	if (!cmd->cmd)
+		return (false);
+	else if (cmd->cmd[0] == '\0')
+	{
+		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		*status = 127;
+		return (false);
+	}
+	else if (is_directory(cmd->cmd))
+	{
+		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+		*status = 126;
+		return (false);
+	}
+	*path = find_command_path(cmd->cmd, shell->env);
+	if (!cmd->is_builtin && *path == NULL)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		*status = 127;
+		return (false);
+	}
+	return (true);
+}
+
+t_bool	is_directory(char *file)
+{
+	int	fd;
+
+	fd = open(file, O_DIRECTORY);
+	if (fd < 0)
+		return (false);
+	close(fd);
+	return (true);
 }
