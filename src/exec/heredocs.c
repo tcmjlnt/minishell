@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 23:26:53 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 11:16:41 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,64 @@ int	handle_all_heredocs(t_cmd *cmd_list)
 
 
 
+/* int	handle_heredoc(t_redir *redir)
+{
+	pid_t	pid; //pid process enfant pour heredoc
+	int		status; //code retour de waitpid(status du child)
+	int		fd; //fd du fichier temp dans lequel ecrit le heredoc
 
+	//generer un nom de fichier temp pour ce heredoc
+	redir->file = gen_tmp_filename();
+	if (!redir->file)
+		return (perror("malloc name"), -1);
+	//ici on va cree un process enfant pour isoler la lecture du heredoc
+	pid = fork();
+	if (pid < 0)
+		return (perror("fork"), free(redir->file), -1);
+	// PROCESS ENFANT
+	if (pid == 0)
+	{
+		//install le handler special heredoc sur SIGINT(ctrl+C), pour fermer stdin
+		signal(SIGINT, signal_handler_heredoc);
+		//ignorer SIGQUIT (^\, évite "Quit (core dumped)" dans heredoc)
+		signal(SIGQUIT, SIG_IGN);
+		//ouvrir le fichier temp en ecriture /troncature
+		fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
+		if (fd == -1)
+			exit(1);
+		while (1) //lecture ligne a ligne
+		{
+			//affiche le prompt "heredoc> " et lit une ligne utilisateur
+			char *line = readline("heredoc> ");
+			if (!line)
+				break; //sortie: ctrl+D ou stdin ferme via SIGINYT
+			//si la ligne lue est exactement le delimiteur alors: fin du heredoc
+			if (ft_strncmp(line, redir->delim, ft_strlen(redir->delim)) == 0 && line[ft_strlen(redir->delim)] == '\0')
+			{
+				free(line);
+				break;
+			}
+			//sinon, ecrire la ligne dans le fichier temp
+			ft_putendl_fd(line, fd);
+			free(line);
+		}
+		close(fd); //fermer fichier temp
+		exit(0); //fin process heredoc (successss)
+	}
+	//PROCESS PARENT (= SHELL PRINCIPAL)
+	//ignore SIGINT pendant que l'enfant lit le heredoc
+	//eviter de kill le shell si le user fait ctrl+c (car seule le child est concerne)
+	signal(SIGINT, SIG_IGN);
+	//attend la fin du process enfant heredoc
+	waitpid(pid, &status, 0);
+	//reinstall la gestion des signaux du shell parent cad prompt propre, ctrl+c reactive
+	init_signals();
+	//si l'enfant a ete killed par un SIGINT alors indiquer interruption
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		return (-1);
+	//sinon tout est oki: heredoc ready, cmd peut etre lancee
+	return (0);
+} */
 
 
 
@@ -173,7 +230,9 @@ int	handle_all_heredocs(t_cmd *cmd_list, int *exit_status, t_shell *shell)
 	t_cmd	*cmd;
 	t_redir	*redir;
 	char	*path;
+	int		res;
 
+	res = 0;
 	cmd = cmd_list;
 	while (cmd)
 	{
@@ -194,7 +253,8 @@ int	handle_all_heredocs(t_cmd *cmd_list, int *exit_status, t_shell *shell)
 	{
 		if (!is_valid_command(cmd, shell, exit_status, &path))
 			return (1);
+			// res = 1;
 		cmd = cmd->next;
 	}
-	return (0);
+	return (res);
 }
