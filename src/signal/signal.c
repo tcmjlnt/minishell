@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 10:25:00 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 10:32:50 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:50:18 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	signal_handler_exec(int sig)
 {
 	if (sig == SIGINT)
 	{
-		g_sig = 1;
+		g_sig = SIGINT;
 		// write(1, "\n", 1);
 	}
 }
