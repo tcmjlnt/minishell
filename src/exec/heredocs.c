@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 15:52:05 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:43:05 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,14 @@ int	heredoc_childhood(t_redir *redir)
 				write(2, redir->delim, len);
 				write(2, "')\n", 3);
 				return (0);
-				//return (write(2, "')\n", 3), parse->exit_code = EXIT_EOF, -1);
 			}
 			if (g_sig)
 			{
-				// printf("hellp\n");
 				g_sig = 0;
 				exit(SIGINT);
 			}
 		}
-		if (ft_strncmp(line, redir->delim, len) == 0 && line[len] == '\0') // Clio a mis le strlen la
+		if (ft_strncmp(line, redir->delim, len) == 0 && line[len] == '\0')
 		{
 			free(line);
 			break ;
@@ -73,7 +71,7 @@ int	heredoc_childhood(t_redir *redir)
 	}
 	close(fd);
 	// gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP); reteste avec val si tu dois le faire maintenant que c'est isoler
-	return (0); // clio a mis exit (0)
+	return (0);
 }
 
 /*
@@ -89,32 +87,21 @@ int	handle_heredoc(t_redir *redir)
 	redir->file = gen_tmp_filename();
 	if (!redir->file)
 		return (perror("malloc name"), -1);
-	// printf("%d\n",g_sig);
 	pid = fork();
 	if (pid < 0)
 		return (perror("fork"), free(redir->file), -1);
 	if (pid == 0)
 	{
-		//install le handler special heredoc sur SIGINT(ctrl+C), pour fermer stdin
-		//ignorer SIGQUIT (^\, évite "Quit (core dumped)" dans heredoc)
 		signal(SIGINT, signal_handler_heredoc);
 		signal(SIGQUIT, SIG_IGN);
 		heredoc_childhood(redir);
-		exit (0); // clio a mis le exit(0) direcement ici mais ca devirat etre pareil
-		// moi j'avais mis mais ca deavrait etre pareil
-		// exit(handle_heredoc_child(redir)); // enfant sort avec le code d'erreur heredoc
+		exit (0);
 	}
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
-	//reinstall la gestion des signaux du shell parent cad prompt propre, ctrl+c reactive
 	init_signals();
-
-	//si l'enfant a ete killed par un SIGINT alors indiquer interruption
-	// printf("signal %d \n", status);
 	if (status)
 		return (-1);
-	//sinon tout est oki: heredoc ready, cmd peut etre lancee
-
 	return (0);
 }
 
