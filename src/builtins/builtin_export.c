@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/23 14:44:58 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:42:54 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	print_env_export(t_env *env)
 	}
 }
 
-size_t check_key_export(t_shell *shell, char *arg)
+size_t check_key_export(char *arg)
 {
 	size_t	j;
 
@@ -35,7 +35,7 @@ size_t check_key_export(t_shell *shell, char *arg)
 	{
 		if(!is_valid_keychar(arg[j]) || ft_isdigit(arg[0]) || arg[0] == '=')
 		{
-			shell->exit_status = 1;
+			// shell->exit_status = 1;
 			write(2, "minishell: export: `", 20);
 			write(2, arg, ft_strlen(arg));
 			write(2, "': not a valid identifier\n", 26);
@@ -101,14 +101,14 @@ int	export_args(t_shell *shell, t_cmd *cmd)
 	res = true;
 	while (cmd->args[i])
 	{
-		if(!check_key_export(shell, cmd->args[i]))
+		if(!check_key_export(cmd->args[i]))
 		{
-			shell->exit_status = 1;
+			// shell->exit_status = 1;
 			res = false;
 		}
 		else
 		{
-			j = check_key_export(shell, cmd->args[i]);
+			j = check_key_export(cmd->args[i]);
 			arg_to_env(shell, cmd->args[i], j);
 		}
 		i++;
@@ -124,6 +124,6 @@ int	ft_export(t_shell *shell, t_cmd *cmd, int fd)
 	if (!cmd->args[1])
 		print_env_export(shell->env);
 	if (!export_args(shell, cmd))
-		return (false);
+		return (1);
 	return (0);
 }

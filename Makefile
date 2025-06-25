@@ -93,6 +93,9 @@ SRC_PARSING = \
 	parsing/expansion.c \
 	parsing/expansion_utils.c
 
+SRC_SIGNAL = \
+	signal/signal.c \
+
 SRC_DEBUG = debug/debug.c \
 
 SRC_FILES = main.c $(SRC_BUILTINS) \
@@ -101,6 +104,7 @@ SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_EXEC) \
 			$(SRC_PARSING) \
 			$(SRC_DEBUG) \
+			$(SRC_SIGNAL) \
 
 
 # Chemins complets des sources et objets

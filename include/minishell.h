@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 21:13:06 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/24 22:10:42 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@
 # include <limits.h>
 # include <fcntl.h>
 # include <signal.h>
+
+extern int		g_sig;
 
 /* ===========================    🔷 ENUMS    =========================== */
 
@@ -289,6 +291,14 @@ t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd);
 t_token	*ft_lstnewtoken_xpnd(void);
 void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list);
 int		is_valid_keychar(char c);
+
+/* ========================    📡 SIGNALS    ======================== */
+void	init_signals(void);
+void	signal_handler(int sig);
+void	signal_handler_exec(int sig);
+void	set_signals_interactive(void);
+void	set_signals_exec(void);
+void	signal_handler_heredoc(int sig);
 
 
 
