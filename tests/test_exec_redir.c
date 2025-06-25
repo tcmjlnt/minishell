@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test_exec_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 08:32:20 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/10 13:58:02 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:12:16 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void test_output_redir(t_shell *shell)
 	char *args[] = {"echo", "hello redir", NULL};
 	t_cmd *cmd = create_cmd("echo", args, STDIN_FILENO, STDOUT_FILENO, shell);
 
-	cmd->redir = create_redir(TOKEN_REDIRECT_OUT, "out_test1.txt");
+	cmd->redir = create_redir(TKN_OUT, "out_test1.txt");
 
 	printf("\n[Test redirection >]\n");
 	exec_dispatcher(cmd, shell);
@@ -76,7 +76,7 @@ void test_append_redir(t_shell *shell)
 	char *args[] = {"echo", "appending text", NULL};
 	t_cmd *cmd = create_cmd("echo", args, STDIN_FILENO, STDOUT_FILENO, shell);
 
-	cmd->redir = create_redir(TOKEN_REDIRECT_APPEND, "out_test1.txt");
+	cmd->redir = create_redir(TKN_APPEND, "out_test1.txt");
 
 	printf("\n[Test redirection >>]\n");
 	exec_dispatcher(cmd, shell);
@@ -89,7 +89,7 @@ void test_input_redir(t_shell *shell)
 	char *args[] = {"cat", NULL};
 	t_cmd *cmd = create_cmd("cat", args, STDIN_FILENO, STDOUT_FILENO, shell);
 
-	cmd->redir = create_redir(TOKEN_REDIRECT_IN, "input_test.txt");
+	cmd->redir = create_redir(TKN_IN, "input_test.txt");
 
 	printf("\n[Test redirection <]\n");
 	exec_dispatcher(cmd, shell);
@@ -102,8 +102,8 @@ void test_in_out_redir(t_shell *shell)
 	char *args[] = {"cat", NULL};
 	t_cmd *cmd = create_cmd("cat", args, STDIN_FILENO, STDOUT_FILENO, shell);
 
-	t_redir *redir_in = create_redir(TOKEN_REDIRECT_IN, "input_test.txt");
-	t_redir *redir_out = create_redir(TOKEN_REDIRECT_OUT, "test2.txt");
+	t_redir *redir_in = create_redir(TKN_IN, "input_test.txt");
+	t_redir *redir_out = create_redir(TKN_OUT, "test2.txt");
 
 	redir_in->next = redir_out;
 	cmd->redir = redir_in;
@@ -119,7 +119,7 @@ void test_input_error(t_shell *shell)
     char *args[] = {"cat", NULL};
     t_cmd *cmd = create_cmd("cat", args, STDIN_FILENO, STDOUT_FILENO, shell);
 
-    cmd->redir = create_redir(TOKEN_REDIRECT_IN, "fichier_inexistant.txt");
+    cmd->redir = create_redir(TKN_IN, "fichier_inexistant.txt");
 
     printf("\n[Test redirection < fichier inexistant]\n");
     exec_dispatcher(cmd, shell);
@@ -135,8 +135,8 @@ void test_pipe_redir(t_shell *shell)
     t_cmd *cmd1 = create_cmd("cat", args1, STDIN_FILENO, STDOUT_FILENO, shell);
     t_cmd *cmd2 = create_cmd("grep", args2, STDIN_FILENO, STDOUT_FILENO, shell);
 
-    cmd1->redir = create_redir(TOKEN_REDIRECT_IN, "input_test.txt");
-    cmd2->redir = create_redir(TOKEN_REDIRECT_OUT, "result_test.txt");
+    cmd1->redir = create_redir(TKN_IN, "input_test.txt");
+    cmd2->redir = create_redir(TKN_OUT, "result_test.txt");
 
     add_cmd(&cmd1, cmd2);
 

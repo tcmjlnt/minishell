@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 16:57:33 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:11:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 			j = 0;
 			redir_list = NULL; // need to reset redir_list for new command
 		}
-		if (tkn_current->token_type == TOKEN_PIPE)
+		if (tkn_current->token_type == TKN_PIPE)
 		{
 			if (j < 256)
 				cmd_current->args[j] = NULL;
@@ -58,7 +58,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 			cmd_current->redir = redir_list;
 			cmd_current = NULL;
 			j = 0;
-			if (!tkn_current->next || tkn_current->next->token_type == TOKEN_PIPE)
+			if (!tkn_current->next || tkn_current->next->token_type == TKN_PIPE)
 			{
 				printf("PIPE AT THE eND, exit status = 0\n");
 				return (false);
@@ -70,7 +70,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 		}
 		else if(is_redir_operator(tkn_current->token_type)) // traitement des redir
 		{
-			if(tkn_current->next && tkn_current->next->token_type == TOKEN_WORD)
+			if(tkn_current->next && tkn_current->next->token_type == TKN_WORD)
 			{
 				tkn_current=tkn_current->next;
 				if(!fill_redir(&redir_list, tkn_current))
@@ -80,7 +80,7 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 				}
 			}
 		}
-		else if (tkn_current->token_type == TOKEN_WORD)
+		else if (tkn_current->token_type == TKN_WORD)
 		{
 			if (j >= 255)
 			{
@@ -106,9 +106,9 @@ int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell) // p
 		// Add handling for REDIRECTION tokens here.
 		// They modify the cmd_current_node (e.g., infile, outfile) and consume the next token (filename).
 		// Example:
-		// else if (tkn_current->token_type == TOKEN_REDIRECT_OUT)
+		// else if (tkn_current->token_type == TKN_OUT)
 		// {
-		//     if (!tkn_current->next || tkn_current->next->token_type != TOKEN_WORD)
+		//     if (!tkn_current->next || tkn_current->next->token_type != TKN_WORD)
 		//         return (false); // Syntax error: > not followed by filename
 		//     cmd_current_node->outfile = ft_strdup(tkn_current->next->token_value);
 		//     // Set mode (truncate/append)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 15:07:24 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:15:05 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,12 @@ typedef enum e_bool
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,				// mot (commande ou argument)
-	TOKEN_BLANK,			// SPACE OR TAB
-	TOKEN_D_QUOTES,			// "
-	TOKEN_S_QUOTES,			// '
-	TOKEN_PIPE,				// |
-	TOKEN_REDIRECT_IN,		// <
-	TOKEN_REDIRECT_OUT,		// >
-	TOKEN_REDIRECT_APPEND,	// >>
-	TOKEN_REDIRECT_HEREDOC,	// <<
-	TOKEN_EOF,				// fin de la ligne/commande
+	TKN_WORD,
+	TKN_PIPE,
+	TKN_IN,
+	TKN_OUT,
+	TKN_APPEND,
+	TKN_HEREDOC,
 }	t_token_type;
 
 typedef enum	e_parsing_type
@@ -115,7 +111,7 @@ typedef struct s_env
 
 typedef struct s_redir
 {
-	t_token_type		type; // a sup uniquement pour tester exec redir
+	t_token_type		type;
 	char				*file;
 	char				*delim;
 	struct s_redir		*next;
@@ -293,6 +289,10 @@ t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd);
 t_token	*ft_lstnewtoken_xpnd(void);
 void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list);
 int		is_valid_keychar(char c);
+t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd);
+int		is_valid_keychar(char c);
+
+
 
 /* ========================    📡 SIGNALS    ======================== */
 void	init_signals(void);

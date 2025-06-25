@@ -91,7 +91,9 @@ SRC_PARSING = \
 	parsing/parsing_cmd.c \
 	parsing/parsing_redir.c \
 	parsing/expansion.c \
-	parsing/expansion_utils.c
+	parsing/expansion_lst_utils.c \
+	parsing/expansion_lst_utilsb.c \
+	parsing/expansion_utils.c \
 
 SRC_SIGNAL = \
 	signal/signal.c \

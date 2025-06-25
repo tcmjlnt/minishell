@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:43:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/23 20:43:33 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 // int	is_redir_operator(int token_type) // helper function creee ailleurs
 // {
-// 	if (token_type == TOKEN_REDIRECT_APPEND || token_type == TOKEN_REDIRECT_HEREDOC
-// 		|| token_type == TOKEN_REDIRECT_IN || token_type == TOKEN_REDIRECT_OUT)
+// 	if (token_type == TKN_APPEND || token_type == TKN_HEREDOC
+// 		|| token_type == TKN_IN || token_type == TKN_OUT)
 // 		return (true);
 // 	else
 // 		return (false);
@@ -57,15 +57,15 @@ int	is_inside_squotes(char *token_raw)
 
 const char	*token_type_string(t_token_type token_type) // elle est pas utilisee cette fonction??
 {
-	if (token_type == TOKEN_PIPE)
+	if (token_type == TKN_PIPE)
 		return ("|");
-	else if (token_type == TOKEN_REDIRECT_IN)
+	else if (token_type == TKN_IN)
 		return ("<");
-	else if (token_type == TOKEN_REDIRECT_OUT)
+	else if (token_type == TKN_OUT)
 		return (">");
-	else if (token_type == TOKEN_REDIRECT_APPEND)
+	else if (token_type == TKN_APPEND)
 		return (">>");
-	else if (token_type == TOKEN_REDIRECT_HEREDOC)
+	else if (token_type == TKN_HEREDOC)
 		return ("<<");
 	else
 		return("WTF IS GOING ON");
@@ -75,11 +75,11 @@ int	is_operator_token(t_token *token)
 {
 	if (!token)
 		return (false);
-	if (token->token_type == TOKEN_PIPE ||
-		 token->token_type == TOKEN_REDIRECT_IN ||
-		 token->token_type == TOKEN_REDIRECT_OUT ||
-		 token->token_type == TOKEN_REDIRECT_APPEND ||
-		 token->token_type == TOKEN_REDIRECT_HEREDOC)
+	if (token->token_type == TKN_PIPE ||
+		 token->token_type == TKN_IN ||
+		 token->token_type == TKN_OUT ||
+		 token->token_type == TKN_APPEND ||
+		 token->token_type == TKN_HEREDOC)
 		 return (true);
 	else
 		return (false);
@@ -87,9 +87,9 @@ int	is_operator_token(t_token *token)
 
 int	is_redir_operator(t_token_type token_type)
 {
-	if (token_type == TOKEN_REDIRECT_IN || token_type == TOKEN_REDIRECT_OUT
-		|| token_type == TOKEN_REDIRECT_APPEND
-		|| token_type == TOKEN_REDIRECT_HEREDOC)
+	if (token_type == TKN_IN || token_type == TKN_OUT
+		|| token_type == TKN_APPEND
+		|| token_type == TKN_HEREDOC)
 		return (true);
 	return (false);
 }
@@ -106,7 +106,7 @@ int	check_token(t_token **token_list)
 	while (temp)
 	{
 		if ((is_redir_operator(temp->token_type) && temp->next && is_redir_operator(temp->next->token_type))
-			|| (is_operator_token(temp) && temp->next && temp->next->token_type == TOKEN_PIPE))
+			|| (is_operator_token(temp) && temp->next && temp->next->token_type == TKN_PIPE))
 		{
 			printf("minishell: syntax error near unexpected token `%s'\n", token_type_string(temp->next->token_type));
 			return (false);

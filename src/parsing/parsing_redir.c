@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:53:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 16:43:47 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	fill_redir(t_redir **redir_list, t_token *token)
 	current_redir = ft_lstnewredir();
 	if (!current_redir)
 		return (false);
-	if (token->prev && token->prev->token_type != TOKEN_REDIRECT_HEREDOC)
+	if (token->prev && token->prev->token_type != TKN_HEREDOC)
 	{
 		current_redir->file = gc_strdup(token->token_value, GC_CMD);
 		if (!current_redir->file)
@@ -71,7 +71,7 @@ int	fill_redir(t_redir **redir_list, t_token *token)
 			return (false);
 		}
 	}
-	else if (token->prev && token->prev->token_type == TOKEN_REDIRECT_HEREDOC)
+	else if (token->prev && token->prev->token_type == TKN_HEREDOC)
 	{
 			current_redir->delim = gc_strdup(token->token_value, GC_CMD);
 			if (!current_redir->delim)

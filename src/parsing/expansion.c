@@ -6,40 +6,24 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/23 15:52:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int is_valid_keychar(char c)
-{
-	if (ft_isalnum(c) || c == '_')
-		return (1);
-	else
-		return (0);
-}
-
-t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd)
-{
-	new_xpnd->substr = gc_strndup(src, n, GC_TKN);
-	new_xpnd->xpnd_check = xpnd_check;
-	new_xpnd->in_single = xpnd_quotes_curr->in_single;
-	new_xpnd->in_double = xpnd_quotes_curr->in_double;
-	return (new_xpnd);
-}
 
 int	heredoc_delim_check(t_token *tkn_curr)
 {
-	if (tkn_curr->prev && tkn_curr->prev->token_type == TOKEN_REDIRECT_HEREDOC)
+	if (tkn_curr->prev && tkn_curr->prev->token_type == TKN_HEREDOC)
 		return (true);
 	return (false);
 }
 
 int	redir_prev_tkn_check(t_token *tkn_curr)
 {
-	if (tkn_curr->prev && (tkn_curr->prev->token_type == TOKEN_REDIRECT_APPEND
-		|| tkn_curr->prev->token_type == TOKEN_REDIRECT_IN || tkn_curr->prev->token_type == TOKEN_REDIRECT_OUT))
+	if (tkn_curr->prev && (tkn_curr->prev->token_type == TKN_APPEND
+		|| tkn_curr->prev->token_type == TKN_IN || tkn_curr->prev->token_type == TKN_OUT))
 		return (true);
 	return (false);
 }

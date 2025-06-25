@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 19:01:14 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/23 21:12:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:10:42 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type)
 	if (!new_token)
 		return (NULL);
 	new_token->token_type = token_type;
-	if (token_type != TOKEN_WORD)
+	if (token_type != TKN_WORD)
 		new_token->token_value = gc_strndup(prompt, n, GC_TKN);
 	else
 		new_token->token_value = gc_strndup_noquotes(prompt, n, GC_TKN);

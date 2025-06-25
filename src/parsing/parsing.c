@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/24 10:01:41 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ t_token	*token_wordtpye(char *prompt, int *i)
 			(*i)++;
 
 	}
-	temp = ft_lstnewtoken(prompt + start, (*i) - start, TOKEN_WORD);
+	temp = ft_lstnewtoken(prompt + start, (*i) - start, TKN_WORD);
 	if (!temp)
 		return (NULL);
 
@@ -268,7 +268,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		if(prompt[i] == '|') // PIPE
 		{
 			start = i;
-			token = ft_lstnewtoken(prompt + start, 1, TOKEN_PIPE);
+			token = ft_lstnewtoken(prompt + start, 1, TKN_PIPE);
 			if (!token)
 				return (false);
 			i++;
@@ -276,7 +276,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		else if(prompt[i] == '<' && prompt[i + 1] && prompt[i + 1] == '<') // RED_HEREDOC
 		{
 			start = i;
-			token = ft_lstnewtoken(prompt + start, 2, TOKEN_REDIRECT_HEREDOC);
+			token = ft_lstnewtoken(prompt + start, 2, TKN_HEREDOC);
 			if (!token)
 				return (false);
 			i += 2;
@@ -284,7 +284,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		else if(prompt[i] == '>' && prompt[i + 1] && prompt[i + 1] == '>') // RED_APPEND
 		{
 			start = i;
-			token = ft_lstnewtoken(prompt + start, 2, TOKEN_REDIRECT_APPEND);
+			token = ft_lstnewtoken(prompt + start, 2, TKN_APPEND);
 			if (!token)
 				return (false);
 			i += 2;
@@ -292,7 +292,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		else if(prompt[i] == '>') // RED_OUT
 		{
 			start = i;
-			token = ft_lstnewtoken(prompt + start, 1, TOKEN_REDIRECT_OUT);
+			token = ft_lstnewtoken(prompt + start, 1, TKN_OUT);
 			if (!token)
 				return (false);
 			i++;
@@ -300,7 +300,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		else if(prompt[i] == '<') // RED_IN
 		{
 			start = i;
-			token = ft_lstnewtoken(prompt + start, 1, TOKEN_REDIRECT_IN);
+			token = ft_lstnewtoken(prompt + start, 1, TKN_IN);
 			if (!token)
 				return (false);
 			i++;
@@ -317,7 +317,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 			// start = i;
 			// while (prompt[i] && !is_blank(prompt[i]) && !is_operator(prompt[i]))
 			// 	i++;
-			// token = ft_lstnewtoken(prompt + start, i - start, TOKEN_WORD);
+			// token = ft_lstnewtoken(prompt + start, i - start, TKN_WORD);
 			// if (!token)
 			// 	return (false);
 		}
