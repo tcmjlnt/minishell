@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion_utils.c                                  :+:      :+:    :+:   */
+/*   expnd_lst_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/14 20:37:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 16:42:48 by tjacquel         ###   ########.fr       */
+/*   Created: 2025/06/26 14:32:48 by tjacquel          #+#    #+#             */
+/*   Updated: 2025/06/26 14:32:50 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 t_token	*ft_lstnewtoken_xpnd(void)
 {
-	t_token *new_token;
+	t_token	*new_token;
 
 	new_token = gc_mem(GC_ALLOC, sizeof(t_token), NULL, GC_TKN);
-	// new_token = malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 	new_token->token_type = -1;
@@ -26,7 +25,6 @@ t_token	*ft_lstnewtoken_xpnd(void)
 	new_token->prev = NULL;
 	new_token->next = NULL;
 	return (new_token);
-
 }
 
 t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd)
@@ -60,7 +58,6 @@ t_xpnd	*ft_lstnewxpnd(void)
 	t_xpnd	*new_xpnd;
 
 	new_xpnd = gc_mem(GC_ALLOC, sizeof(t_xpnd), NULL, GC_TKN);
-	// new_xpnd = malloc(sizeof(t_xpnd));
 	if (!new_xpnd)
 		return (NULL);
 	new_xpnd->substr = NULL;
@@ -70,7 +67,6 @@ t_xpnd	*ft_lstnewxpnd(void)
 	new_xpnd->str_to_join = NULL;
 	new_xpnd->prev = NULL;
 	new_xpnd->next = NULL;
-
 	return (new_xpnd);
 }
 
@@ -84,7 +80,7 @@ void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list)
 	xpnd_curr = xpnd_quotes_list;
 	while (xpnd_curr && xpnd_curr->prev)
 		xpnd_curr = xpnd_curr->prev;
-	while(xpnd_curr)
+	while (xpnd_curr)
 	{
 		xpnd_next = xpnd_curr->next;
 		if (xpnd_curr->substr)

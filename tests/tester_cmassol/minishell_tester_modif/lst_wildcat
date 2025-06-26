@@ -1,9 +1,0 @@
-wildcat_batard.tests
-wildcat_echo.tests
-wildcat_env_export.tests
-wildcat_exit.tests
-wildcat_operateur.tests
-wildcat_pipe.tests
-wildcat_redirections
-wildcat_segfault.tests
-wildcat_tests_error.tests

@@ -86,12 +86,26 @@ SRC_EXEC = \
 
 SRC_PARSING = \
 	parsing/parsing.c \
-	parsing/parsing_utils.c \
+	parsing/parsing_first_syntax_check.c \
+	parsing/parsing_lst_utils.c \
+	parsing/parsing_helper.c \
 	parsing/token_utils.c \
+	parsing/token_lst_utils.c \
+	parsing/token_operator.c \
+	parsing/token_check.c \
 	parsing/parsing_cmd.c \
+	parsing/parsing_cmd_utils.c \
 	parsing/parsing_redir.c \
 	parsing/expansion.c \
-	parsing/expansion_utils.c
+	parsing/expnd_lst_utils.c \
+	parsing/expnd_lst_helper.c \
+	parsing/expnd_utils.c \
+	parsing/expnd_post_sgmt.c \
+	parsing/expnd_first_sgmt.c \
+	parsing/expnd_scnd_sgmt.c \
+	parsing/expnd_scnd_sgmt_dquotes.c \
+
+
 
 SRC_SIGNAL = \
 	signal/signal.c \
