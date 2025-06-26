@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 21:06:48 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 23:19:26 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ void	single_cmd_childhood(t_cmd *cmd, t_shell *shell)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (apply_redirections(cmd) == -1)
+	{
+		perror("boib");
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 		exit (1);
+	}
 	if (is_valid_command(cmd, shell, &exit_status, &path))
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
 	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
