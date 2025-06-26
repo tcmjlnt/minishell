@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 12:51:09 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 13:43:10 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,15 @@ typedef struct s_nq_state
 	size_t	i;
 	size_t	start;
 }			t_nq_state;
+
+typedef struct s_dq_state
+{
+	size_t	i;
+	size_t	start;
+	size_t	strlen;
+}			t_dq_state;
+
+
 
 /* ===========================    ♻️ PROMPT    =========================== */
 void	ft_prompt(t_shell *shell);
