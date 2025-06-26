@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 10:22:26 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 21:09:35 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:08:59 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,7 @@ char	*get_env_value(t_env *env, const char *key, t_gc_type type)
 		}
 		env = env->next;
 	}
-	res = gc_strdup("", type); // hmm jutilise cette fonction dans la creation des xpd, est-ce que le type c'est GC_ENV ou GC_TKN ?
-	// ca depend t'as besoin d'une copie temporaire ? pour moi ce serait GC_ENV ?
+	res = gc_strdup("", type);
 	if (!res)
 		return (NULL);
 	return (res);

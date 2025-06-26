@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 15:07:32 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:16:13 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define RESET "\001\033[0m\002 "
 # define STDIN_EOF_WARNING "minishell: warning: "
 # define STDIN_EOF_MSG "here-document delimited by end-of-file (wanted `"
+# define WARNING_ENV "minishell: warning: running with empty environment\n"
 
 /* ==========================    📚 INCLUDES    ========================== */
 
