@@ -6,11 +6,120 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/07 18:20:41 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 11:07:20 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:53:46 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd)
+{
+	new_xpnd->substr = gc_strndup(src, n, GC_TKN);
+	new_xpnd->xpnd_check = xpnd_check;
+	new_xpnd->in_single = xpnd_quotes_curr->in_single;
+	new_xpnd->in_double = xpnd_quotes_curr->in_double;
+	return (new_xpnd);
+}
+
+static t_xpnd	*create_filled_xpnd(char *src, size_t n, t_bool check,
+									t_xpnd *q_curr)
+{
+	t_xpnd	*new_xpnd;
+
+	new_xpnd = ft_lstnewxpnd();
+	if (!new_xpnd)
+		return (NULL);
+	new_xpnd->substr = gc_strndup(src, n, GC_TKN);
+	new_xpnd->xpnd_check = check;
+	new_xpnd->in_single = q_curr->in_single;
+	new_xpnd->in_double = q_curr->in_double;
+	return (new_xpnd);
+}
+// gem
+static t_bool	is_variable_start(char *s, size_t i, t_token *tkn)
+{
+	if (s[i] == '$' && s[i + 1] && (s[i + 1] == '_'
+			|| is_valid_keychar(s[i + 1]) || s[i + 1] == '?'
+			|| s[i + 1] == '$') && !heredoc_delim_check(tkn))
+		return (true);
+	return (false);
+}
+// static int	create_unquoted_scnd_segment(char *tkn_raw, size_t start, size_t i,
+// 							t_xpnd **xpnd_list)
+// {
+// 	t_xpnd	*current_xpnd;
+
+// 	if (i <= start)
+// 		return (true);
+// 	current_xpnd = ft_lstnewxpnd();
+// 	if (!current_xpnd)
+// 		return (false);
+// 	current_xpnd->substr = gc_strndup(tkn_raw + start, i - start, GC_TKN);
+// 	current_xpnd->xpnd_check = false;
+// 	ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+// 	return (true);
+// }
+// gem
+static int	handle_variable_segment(char *sub, t_nq_state *st, t_xpnd **list,
+									t_xpnd *q_curr)
+{
+	t_xpnd	*new_xpnd;
+
+	if (st->i > st->start)
+	{
+		new_xpnd = create_filled_xpnd(sub + st->start, st->i - st->start,
+				false, q_curr);
+		if (!new_xpnd)
+			return (false);
+		ft_lstadd_back_xpnd(list, new_xpnd);
+	}
+	st->start = ++st->i;
+	if (sub[st->i] == '?' || sub[st->i] == '$' || ft_isdigit(sub[st->i]))
+		st->i++;
+	else
+	{
+		while (sub[st->i] && is_valid_keychar(sub[st->i]))
+			st->i++;
+	}
+	new_xpnd = create_filled_xpnd(sub + st->start, st->i - st->start, true,
+			q_curr);
+	if (!new_xpnd)
+		return (false);
+	ft_lstadd_back_xpnd(list, new_xpnd);
+	st->start = st->i;
+	return (true);
+}
+// gem
+int	noquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr,
+								t_xpnd **xpnd_list, t_token *tkn_curr)
+{
+	t_nq_state	st;
+	t_xpnd		*new_xpnd;
+
+	st.i = 0;
+	st.start = 0;
+	while (substr[st.i])
+	{
+		if (is_variable_start(substr, st.i, tkn_curr))
+		{
+			if (!handle_variable_segment(substr, &st, xpnd_list,
+					xpnd_quotes_curr))
+				return (false);
+		}
+		else
+			st.i++;
+	}
+	if (st.i > st.start)
+	{
+		new_xpnd = create_filled_xpnd(substr + st.start, st.i - st.start,
+				false, xpnd_quotes_curr);
+		if (!new_xpnd)
+			return (false);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	}
+	return (true);
+}
+
 
 int	squotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr,
 								t_xpnd **xpnd_list)
@@ -71,7 +180,6 @@ int	dquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr,
 				while (i < strlen - 1 && is_valid_keychar(substr[i]))
 				i++;
 			}
-
 			new_xpnd = ft_lstnewxpnd();
 			if (!new_xpnd)
 				return (false);
@@ -91,56 +199,6 @@ int	dquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr,
 		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
 	}
 	return (true);
-}
-
-int	noquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr)
-{
-	size_t	i;
-	size_t	start;
-	t_xpnd	*new_xpnd;
-
-	i = 0;
-	start = 0;
-	while(substr[i])
-	{
-		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$') && !heredoc_delim_check(tkn_curr))
-		{
-			if (i > start)
-			{
-				new_xpnd = ft_lstnewxpnd();
-				if (!new_xpnd)
-					return (false);
-				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
-				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-			}
-			start = ++i;
-			if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
-				i++;
-			else
-			{
-				while (substr[i] && is_valid_keychar(substr[i]))
-					i++;
-			}
-			new_xpnd = ft_lstnewxpnd();
-			if (!new_xpnd)
-				return (false);
-			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
-			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-			start = i;
-		}
-		else
-			i++;
-	}
-	if (i > start)
-	{
-		new_xpnd = ft_lstnewxpnd();
-		if (!new_xpnd)
-			return (false);
-		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
-		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-	}
-	return (true);
-
 }
 
 int	scnd_segmentation(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list,
@@ -168,8 +226,6 @@ int	scnd_segmentation(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list,
 	}
 	return (true);
 }
-
-
 
 int	process_key_value(t_xpnd *xpnd_curr, t_shell *shell)
 {

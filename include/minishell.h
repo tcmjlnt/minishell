@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 11:04:24 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:51:09 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,12 @@ typedef	struct s_xpnd
 	struct s_xpnd	*prev;
 	struct s_xpnd	*next;
 }	t_xpnd;
+
+typedef struct s_nq_state
+{
+	size_t	i;
+	size_t	start;
+}			t_nq_state;
 
 /* ===========================    ♻️ PROMPT    =========================== */
 void	ft_prompt(t_shell *shell);

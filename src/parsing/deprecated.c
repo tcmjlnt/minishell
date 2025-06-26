@@ -6,13 +6,63 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 10:50:05 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 12:53:39 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // anciennes fonctions ou anciens bout de fonctions
+
+int	noquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list, t_token *tkn_curr) // avant refacto
+{
+	size_t	i;
+	size_t	start;
+	t_xpnd	*new_xpnd;
+
+	i = 0;
+	start = 0;
+	while(substr[i])
+	{
+		if(substr[i] == '$' && substr[i + 1] && (substr[i + 1] == '_' || is_valid_keychar(substr[i + 1]) || substr[i + 1] == '?' || substr[i + 1] == '$') && !heredoc_delim_check(tkn_curr))
+		{
+			if (i > start)
+			{
+				new_xpnd = ft_lstnewxpnd();
+				if (!new_xpnd)
+					return (false);
+				new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+				ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			}
+			start = ++i;
+			if (substr[i] == '?' || substr[i] == '$' || ft_isdigit(substr[i]))
+				i++;
+			else
+			{
+				while (substr[i] && is_valid_keychar(substr[i]))
+					i++;
+			}
+			new_xpnd = ft_lstnewxpnd();
+			if (!new_xpnd)
+				return (false);
+			new_xpnd = xpnd_new_fill(substr + start, i - start, true, xpnd_quotes_curr, new_xpnd);
+			ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+			start = i;
+		}
+		else
+			i++;
+	}
+	if (i > start)
+	{
+		new_xpnd = ft_lstnewxpnd();
+		if (!new_xpnd)
+			return (false);
+		new_xpnd = xpnd_new_fill(substr + start, i - start, false, xpnd_quotes_curr, new_xpnd);
+		ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
+	}
+	return (true);
+
+}
 
 int	quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list) // avant refacto
 {
