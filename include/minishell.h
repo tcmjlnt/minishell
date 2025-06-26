@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:50:21 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:37:21 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
 void	free_and_cleanup_heredocs(t_cmd *cmd_list);
-void	error_free_GC_CMD(const char *message);
+void	error_free_gc_cmd(const char *message);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell);
