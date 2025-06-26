@@ -3,69 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 17:03:17 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:57:37 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	free_tcmd(t_cmd *cmd_list)
-{
-	t_cmd	*cmd_current;
-	t_cmd	*next_cmd;
-	t_redir	*current_redir;
-	t_redir	*next_redir;
-	int		j = 0;
-
-	if (!cmd_list)
-		return ;
-
-	cmd_current = cmd_list;
-
-	while(cmd_current)
-	{
-		next_cmd = cmd_current->next;
-		if (cmd_current->cmd)
-		{
-			free(cmd_current->cmd);
-			// cmd_current->cmd = NULL;
-		}
-		if (cmd_current->args)
-		{
-			j = 0;
-			while (cmd_current->args[j])
-			{
-				free (cmd_current->args[j]);
-				// cmd_current->args[j] = NULL;
-				j++;
-			}
-			free(cmd_current->args);
-			// cmd_current->args = NULL;
-		}
-		if (cmd_current->redir)
-		{
-			current_redir = cmd_current->redir;
-			while (current_redir)
-			{
-				next_redir = current_redir->next;
-				if (current_redir->file)
-				{
-					free(current_redir->file);
-					// current_redir->file = NULL;
-				}
-				free(current_redir);
-				current_redir = next_redir;
-			}
-			// cmd_current->redir = NULL;
-		}
-
-		free(cmd_current);
-		cmd_current = next_cmd;
-	}
-}
 
 void	ft_prompt(t_shell *shell)
 {
@@ -89,7 +35,7 @@ void	ft_prompt(t_shell *shell)
 		if (!prompt)
 		{
 			int res = shell->exit_status;
-			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 			rl_clear_history();
 			ft_putstr_fd("exit\n", 2);
 			exit(res);
@@ -97,7 +43,7 @@ void	ft_prompt(t_shell *shell)
 		}
 /* 		else if (prompt[0] == '\0') // c'est cense gerer les ctrl + '\'
 		{
-			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 		} */
 		if (*prompt)
 		{
@@ -105,6 +51,7 @@ void	ft_prompt(t_shell *shell)
 
 			if (!parsing(prompt, &cmd_list, shell))
 			{
+				shell->exit_status = 2;
 				free(prompt);
 				gc_mem(GC_FREE_ALL, 0 , NULL, GC_TKN);
 				gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
@@ -130,7 +77,7 @@ void	ft_prompt(t_shell *shell)
 			set_signals_interactive();
 
 
-			gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 
 			// ceci est un commentaire pour le merge
 			// printf("%d\n", x);

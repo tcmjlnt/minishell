@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:16:13 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:50:21 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,6 @@ typedef struct s_shell
 	t_gc			gc;
 	t_env			*env;
 	char			**paths;
-	t_bool			is_cmd; // verifier car je crois que je l'utilise plus finalement
 	t_builtin		builtins[8]; // init OK
 	int				exit_status;
 	t_std_backup	std_backup; // init OK

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:27:22 by aumartin          #+#    #+#             */
-/*   Updated: 2025/05/06 09:41:40 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:46:38 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	*gc_mem(t_gc_action op, size_t size, void *ptr, t_gc_type type)
 char *s1 = gc_mem(GC_ALLOC, 100, NULL, GC_TMP);		// alloue 100 octets
 gc_mem(GC_FREE_ONE, 0, s1, 0);						// libère s1
 gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);				// libère tous les GC_CMD
-gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);				// libère tout
+gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);				// libère tout
 */
 
 /* int main(void)
@@ -149,7 +149,7 @@ gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);				// libère tout
 	printf("toutes les allocs type GC_ENV liberes.\n");
 
 	// Free de toutes les alloc restantes
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 	printf("toutes les allocs restantes liberes.\n");
 
 	return EXIT_SUCCESS;

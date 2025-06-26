@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 14:58:50 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:28:38 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,20 @@ void	restore_std(t_std_backup *backup)
 	{
 		dup2(backup->orig_stdin, STDIN_FILENO);
 		close(backup->orig_stdin);
+		backup->orig_stdin = -1;
 	}
 	if (backup->orig_stdout != -1)
 	{
 		dup2(backup->orig_stdout, STDOUT_FILENO);
 		close(backup->orig_stdout);
+		backup->orig_stdout = -1;
 	}
 	if (backup->orig_stderr != -1)
 	{
 		dup2(backup->orig_stderr, STDERR_FILENO);
 		close(backup->orig_stderr);
+		backup->orig_stderr = -1;
 	}
-	close(backup->orig_stdin);
-	close(backup->orig_stdout);
-	close(backup->orig_stderr);
 }
 
 void	single_cmd_childhood(t_cmd *cmd, t_shell *shell)
@@ -56,7 +56,7 @@ void	single_cmd_childhood(t_cmd *cmd, t_shell *shell)
 		exit (1);
 	if (is_valid_command(cmd, shell, &exit_status, &path))
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 	exit(exit_status);
 }
 

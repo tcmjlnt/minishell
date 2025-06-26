@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:18:27 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:57:10 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ void	env_from_envp(t_shell *shell, char **envp)
 	if (!envp || !*envp)
 	{
 		ft_putstr_fd(WARNING_ENV, STDERR_FILENO);
+		shell->exit_status = 1;
 		exit(1);
 		return ;
 	}
