@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 00:43:05 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 01:29:59 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ void	single_cmd_childhood(t_cmd *cmd, t_shell *shell)
 		exit (1);
 	}
 	if (is_valid_command(cmd, shell, &exit_status, &path))
+		// char **str = env_to_env_tab_for_execve(shell->env);
+		// if (!str)
+		// 	error_free_gc("env_to_env_tab_for_execve malloc fail");
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
 	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	exit(exit_status);

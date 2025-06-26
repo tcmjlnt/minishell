@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_collector.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:27:22 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:46:38 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 01:17:12 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static void	gc_free_all(t_gc *gc, t_gc_type type)
 	t_gc_node	*tmp;
 	t_gc_node	*prev;
 
+	// si tu n'as pas de !gc est ce quil ne faut pas sortir ?
 	curr = gc->head;
 	prev = NULL;
 	while (curr)

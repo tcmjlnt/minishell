@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:56:32 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 01:23:59 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env	*env_new(char *key, char *value, t_bool equal)
 
 	new = gc_mem(GC_ALLOC, sizeof(t_env), NULL, GC_ENV);
 	if (!new)
-		error_exit("env_new: allocation failed");
+		error_exit("env_new: allocation failed"); // free GC_NONE egalement ? malloc protection
 	new->key = key;
 	new->value = value;
 	new->equal = equal;
@@ -81,7 +81,9 @@ void	env_from_envp(t_shell *shell, char **envp)
 	if (!envp || !*envp)
 	{
 		ft_putstr_fd(WARNING_ENV, STDERR_FILENO);
-		shell->exit_status = 1;
+		shell->exit_status = 1; // ca sert a quoi du coup ?
+		// il faut free tout en GC_NONE ? --> error_free_gc
+		// on est dans le cas d'un env -i par exemple, donc est ce quil y a de la memoire deja allouee? auquel cas pas besoin de free ?
 		exit(1);
 		return ;
 	}
@@ -92,7 +94,7 @@ void	env_from_envp(t_shell *shell, char **envp)
 		new = parse_env_line(envp[i]);
 		if (!new)
 		{
-			gc_mem(GC_FREE_ALL, 0, NULL, GC_ENV);
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_ENV); // si tu fais GC_NONE ca change quelque chose ?
 			error_exit("alloc parse env");
 		}
 		env_add_back(&shell->env, new);
