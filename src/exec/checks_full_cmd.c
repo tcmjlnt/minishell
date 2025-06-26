@@ -6,13 +6,13 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 10:07:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:09:13 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:38:31 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	open_file(t_redir *redir, t_shell *shell)
+static int	open_file(t_redir *redir)
 {
 	int	fd;
 
@@ -30,7 +30,7 @@ static int	open_file(t_redir *redir, t_shell *shell)
 	return (fd);
 }
 
-int	check_redirections_consistency(t_cmd *cmd, t_shell *shell)
+int	check_redirections_consistency(t_cmd *cmd)
 {
 	t_redir	*redir_list;
 
@@ -43,7 +43,7 @@ int	check_redirections_consistency(t_cmd *cmd, t_shell *shell)
 		{
 			if (cmd->fd_in != STDIN_FILENO)
 				close(cmd->fd_in);
-			cmd->fd_in = open_file(redir_list, shell);
+			cmd->fd_in = open_file(redir_list);
 			if (cmd->fd_in == -1)
 				return (-1);
 		}
@@ -51,7 +51,7 @@ int	check_redirections_consistency(t_cmd *cmd, t_shell *shell)
 		{
 			if (cmd->fd_out != STDOUT_FILENO)
 				close(cmd->fd_out);
-			cmd->fd_out = open_file(redir_list, shell);
+			cmd->fd_out = open_file(redir_list);
 			if (cmd->fd_out == -1)
 				return (-1);
 		}

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 18:33:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:52:55 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:51:51 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@ void	error_exit(const char *message)
 {
 	perror(message);
 	exit(EXIT_FAILURE);
+}
+
+void	error_free_GC_CMD(const char *message)
+{
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+	error_exit(message);
 }
 
 // a implemnter ??

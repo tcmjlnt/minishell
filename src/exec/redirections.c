@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:20:15 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:13:08 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:39:56 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ void	close_redirections(t_cmd *cmd)
 	}
 }
 
-int	apply_redirections(t_cmd *cmd, t_shell *shell)
+int	apply_redirections(t_cmd *cmd)
 {
 	t_redir	*redir;
 
 	if (!cmd || !cmd->redir)
 		return (0);
 	redir = cmd->redir;
-	if (check_redirections_consistency(cmd, shell) == -1)
+	if (check_redirections_consistency(cmd) == -1)
 		return (-1);
 	apply_dup_redirections(cmd);
 	close_redirections(cmd);

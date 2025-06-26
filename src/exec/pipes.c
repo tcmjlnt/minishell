@@ -6,13 +6,13 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 07:57:56 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:56:28 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	close_all_pipes(t_cmd *command)
+static void	close_all_pipes(t_cmd *command)
 {
 	t_cmd	*tmp;
 
@@ -29,7 +29,7 @@ void	close_all_pipes(t_cmd *command)
 	}
 }
 
-int	create_pipes(t_cmd *cmd)
+static int	create_pipes(t_cmd *cmd)
 {
 	t_cmd	*command;
 
@@ -46,28 +46,6 @@ int	create_pipes(t_cmd *cmd)
 	return (0);
 }
 
-void	wait_for_children(t_cmd *cmds, t_shell *shell)
-{
-	t_cmd	*current;
-	int		status;
-
-	status = 0;
-	current = cmds;
-	while (current)
-	{
-		waitpid(current->pid, &status, 0);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			shell->exit_status = 128 + WTERMSIG(status);
-		current = current->next;
-	}
-	if (shell->exit_status == 130)
-		write(2, "\n", 1);
-	else if (shell->exit_status == 131)
-		write(2, "Quit (core dumped)\n", 19);
-}
-
 /*
 - Premier enfant** (`i == 0`) :
 Ne fait **pas** de `dup2` pour `STDIN` (il garde l'entrée standard du shell).
@@ -81,6 +59,27 @@ Ne fait **pas** de `dup2` pour `STDOUT` (il garde la sortie standard du shell).
 Fait un `dup2` pour `STDIN` depuis le pipe de gauche (`pipes[i-1][0]`).
 Fait un `dup2` pour `STDOUT` vers le pipe de droite (`pipes[i][1]`).
 */
+
+static void	apply_dup_pipeline(t_cmd *cmd)
+{
+	if (cmd->prev && cmd->next)
+	{
+		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1
+			|| dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
+			error_free_GC_CMD("dup2 failed (middle cmd)");
+	}
+	else if (cmd->next == NULL)
+	{
+		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1)
+			error_free_GC_CMD("dup2 failed (last cmd)");
+	}
+	else if (cmd->prev == NULL)
+	{
+		if (dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
+			error_free_GC_CMD("dup2 failed (first cmd)");
+	}
+}
+
 void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 {
 	int		exit_status;
@@ -88,43 +87,14 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 
 	exit_status = 0;
 	path = NULL;
-	if (cmd->prev && cmd->next)
-	{
-		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1
-			|| dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2 failed (middle cmd)");
-			exit(1);
-		}
-	}
-	else if (cmd->next == NULL)
-	{
-		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1)
-		{
-			perror("dup2 failed (last cmd)");
-			exit(1);
-		}
-	}
-	else if (cmd->prev == NULL)
-	{
-		if (dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2 failed (first cmd)");
-			exit(1);
-		}
-	}
+	apply_dup_pipeline(cmd);
 	close_all_pipes(cmd);
-	if (apply_redirections(cmd, shell) == -1)
-	{
-		gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
-		exit (1);
-	}
+	if (apply_redirections(cmd) == -1)
+		error_free_GC_CMD("apply redir in pipeline failed");
 	if (!cmd->is_builtin && is_valid_command(cmd, shell, &exit_status, &path))
 	{
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
-		perror("execve failed");
-		gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
-		exit(1);
+		error_free_GC_CMD("execve failed");
 	}
 	else if (cmd->is_builtin)
 	{
@@ -143,11 +113,7 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 
 	cmd_curr = cmd_list;
 	if (create_pipes(cmd_list) == -1)
-	{
-		perror("create_pipes failed");
-		shell->exit_status = 1;
-		return ;
-	}
+		error_free_GC_CMD("create_pipes failed");
 	while (cmd_curr)
 	{
 		pid = fork();

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 07:57:20 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:18:40 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	single_cmd_childhood(t_cmd *cmd, t_shell *shell)
 	path = NULL;
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	if (apply_redirections(cmd, shell) == -1)
+	if (apply_redirections(cmd) == -1)
 		exit (1);
 	if (is_valid_command(cmd, shell, &exit_status, &path))
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
@@ -69,7 +69,7 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 	if (cmd->is_builtin)
 	{
 		save_std(&std_backup);
-		if (apply_redirections(cmd, shell) == -1)
+		if (apply_redirections(cmd) == -1)
 		{
 			shell->exit_status = 1;
 			restore_std(&std_backup);
@@ -86,4 +86,27 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 		wait_for_children(cmd, shell);
 		free_and_cleanup_heredocs(cmd); // check si c'est bon pour le unlink
 	}
+}
+
+/* waitpid du ou des enfants */
+void	wait_for_children(t_cmd *cmds, t_shell *shell)
+{
+	t_cmd	*current;
+	int		status;
+
+	status = 0;
+	current = cmds;
+	while (current)
+	{
+		waitpid(current->pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_status = 128 + WTERMSIG(status);
+		current = current->next;
+	}
+	if (shell->exit_status == 130)
+		write(2, "\n", 1);
+	else if (shell->exit_status == 131)
+		write(2, "Quit (core dumped)\n", 19);
 }

@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 07:58:34 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:52:51 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@
 // # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <errno.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
@@ -214,24 +213,19 @@ int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
 void	free_and_cleanup_heredocs(t_cmd *cmd_list);
+void	error_free_GC_CMD(const char *message);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell);
-int		handle_all_heredocs(t_cmd *cmd_list);
-int		handle_heredoc(t_redir *redir);
 void	exec_single_cmd(t_cmd *cmd, t_shell *shell);
-int		apply_redirections(t_cmd *cmd, t_shell *shell);
-void	exec_external_cmd(t_cmd *cmd, t_shell *shell);
-void	exec_pipeline(t_cmd *cmd, t_shell *shell);
-void	close_all_pipes(t_cmd *command);
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
+int		apply_redirections(t_cmd *cmd);
+void	exec_pipeline(t_cmd *cmd, t_shell *shell);
 void	wait_for_children(t_cmd *cmds, t_shell *shell);
-void	apply_dup_redirections(t_cmd *cmd);
-void	close_redirections(t_cmd *cmd);
-t_bool	is_directory(char *file);
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path);
-int		check_redirections_consistency(t_cmd *cmd, t_shell *shell);
+int		check_redirections_consistency(t_cmd *cmd);
+int		handle_all_heredocs(t_cmd *cmd_list);
 void	cleanup_heredocs(t_cmd *cmd_list);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
