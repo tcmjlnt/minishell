@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:53:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:39:03 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:53:51 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ t_redir	*ft_lstnewredir(void)
 	new_redir->type = -666;
 	new_redir->next = NULL;
 	new_redir->prev = NULL;
-
 	return (new_redir);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:49:53 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:00:44 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,7 @@ int		parsing(char *prompt, t_cmd **cmd_list, t_shell *shell);
 void	ft_lstadd_back_token(t_token **token, t_token *new);
 t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
-int		check_token(t_token **token_list);
+int		check_token(t_token **token_list, t_shell *shell);
 int		is_quote(char c);
 int		parse_tokens(t_cmd **cmd_list, t_token **tkn_list, t_shell *shell);
 t_cmd	*ft_lstnewcmd(void);

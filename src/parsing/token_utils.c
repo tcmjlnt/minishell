@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:43:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 17:31:27 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:01:07 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,34 @@ int	is_redir_operator(t_token_type token_type)
 	return (false);
 }
 
-int	check_token(t_token **token_list)
+int	process_check_tkn(t_token *temp)
+{
+	if ((is_redir_operator(temp->token_type) && temp->next
+			&& is_redir_operator(temp->next->token_type))
+		|| (is_operator_token(temp) && temp->next
+			&& temp->next->token_type == TKN_PIPE))
+	{
+		printf("minishell: syntax error near unexpected token `%s'\n",
+			token_type_string(temp->next->token_type));
+		return (false);
+	}
+	else if (is_operator_token(temp) && temp->next
+		&& is_operator_token(temp->next) && temp->next->next
+		&& is_operator_token(temp->next->next))
+	{
+		printf("minishell: syntax error near unexpected token `%s'\n",
+			token_type_string(temp->next->token_type));
+		return (false);
+	}
+	else if (is_operator_token(temp) && !temp->next)
+	{
+		printf("minishell: syntax error near unexpected token `newline'\n");
+		return (false);
+	}
+	return (true);
+}
+
+int	check_token(t_token **token_list, t_shell *shell)
 {
 	t_token	*temp;
 
@@ -102,21 +129,9 @@ int	check_token(t_token **token_list)
 		temp = temp->prev;
 	while (temp)
 	{
-		if ((is_redir_operator(temp->token_type) && temp->next && is_redir_operator(temp->next->token_type))
-			|| (is_operator_token(temp) && temp->next && temp->next->token_type == TKN_PIPE))
+		if (!process_check_tkn(temp))
 		{
-			printf("minishell: syntax error near unexpected token `%s'\n", token_type_string(temp->next->token_type));
-			return (false);
-		}
-		else if (is_operator_token(temp) && temp->next && is_operator_token(temp->next)
-				&& temp->next->next && is_operator_token(temp->next->next))
-		{
-			printf("minishell: syntax error near unexpected token `%s'\n", token_type_string(temp->next->token_type));
-			return (false);
-		}
-		else if (is_operator_token(temp) && !temp->next)
-		{
-			printf("minishell: syntax error near unexpected token `newline'\n");
+			shell->exit_status = 2;
 			return (false);
 		}
 		temp = temp->next;

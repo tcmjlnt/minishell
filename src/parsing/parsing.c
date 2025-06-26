@@ -6,40 +6,11 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 17:49:26 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:04:12 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	print_args(t_cmd *cmd)
-{
-	int		i ;
-	int		j;
-	t_cmd	*temp;
-
-	i = 0;
-	j = 0;
-	temp = cmd;
-	while (temp && temp->prev)
-		temp = temp->prev;
-	while (temp)
-	{
-		printf("-----------------\nCommand %d: `%s` ", i, temp->cmd);
-		printf("; is_builtin=%d\n", temp->is_builtin);
-		if (temp->args)
-		{
-			j = 0;
-			while (temp->args[j++])
-				printf("arg[%d]: `%s`\n", j, temp->args[j]);
-		}
-		if (temp->redir)
-			print_redir(temp);
-		i++;
-		temp = temp->next;
-	}
-	printf("----------------- END OF COMMAND LIST -----------------\n");
-}
 
 static int	token_operator(char *prompt, int *i, t_token **tkn_list)
 {
@@ -117,7 +88,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		return (false);
 	if (!tokenize_prompt(prompt, &tkn_list))
 		return (false);
-	if (!check_token(&tkn_list))
+	if (!check_token(&tkn_list, shell))
 		return (false);
 	if (!handle_expansion(&tkn_list, &tkn_xpnd_list, shell))
 		return (false);
