@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 14:06:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 14:59:06 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,8 +324,10 @@ int		quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list);
 t_bool	is_variable_in_dquotes(char *s, size_t i, t_token *tkn);
 int		dquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr,
 								t_xpnd **xpnd_list, t_token *tkn_curr);
-t_xpnd		*create_filled_xpnd(char *src, size_t n, t_bool check,
+t_xpnd	*create_filled_xpnd(char *src, size_t n, t_bool check,
 									t_xpnd *q_curr);
+int		scnd_segmentation(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list,
+						t_token *tkn_current);
 
 
 
