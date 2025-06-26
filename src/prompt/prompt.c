@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 21:30:08 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 00:14:38 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_prompt(t_shell *shell)
 		if (!prompt)
 		{
 			int res = shell->exit_status;
-			gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 			rl_clear_history();
 			ft_putstr_fd("exit\n", 2);
 			exit(res);

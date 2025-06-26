@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:41:32 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 00:38:09 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,16 @@ int	handle_heredoc(t_redir *redir)
 
 	redir->file = gen_tmp_filename();
 	if (!redir->file)
-		return (perror("malloc name"), -1);
+		error_free_gc("");
 	pid = fork();
 	if (pid < 0)
-		return (perror("fork"), free(redir->file), -1);
+		error_free_gc("");
 	if (pid == 0)
 	{
 		signal(SIGINT, signal_handler_heredoc);
 		signal(SIGQUIT, SIG_IGN);
 		heredoc_childhood(redir);
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 		exit (0);
 	}
 	signal(SIGINT, SIG_IGN);
