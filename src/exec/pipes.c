@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:41:39 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 07:57:56 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 	}
 	close_all_pipes(cmd_list);
 	wait_for_children(cmd_list, shell);
+	free_and_cleanup_heredocs(cmd_list); // check si c'est bon pour le unlink
 }
 
 /* void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)

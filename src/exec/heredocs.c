@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:43:05 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 07:51:45 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,3 +130,24 @@ int	handle_all_heredocs(t_cmd *cmd_list)
 	}
 	return (0);
 }
+
+void	cleanup_heredocs(t_cmd *cmd_list)
+{
+	t_cmd	*cmd;
+	t_redir	*redir;
+
+	cmd = cmd_list;
+	while (cmd)
+	{
+		redir = cmd->redir;
+		while (redir)
+		{
+			if (redir->type == TOKEN_REDIRECT_HEREDOC && redir->file)
+				unlink(redir->file);
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+	}
+}
+
+

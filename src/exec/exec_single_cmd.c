@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:39:46 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 07:57:20 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 		if (pid == 0)
 			single_cmd_childhood(cmd, shell);
 		wait_for_children(cmd, shell);
+		free_and_cleanup_heredocs(cmd); // check si c'est bon pour le unlink
 	}
 }

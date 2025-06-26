@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:33:39 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 07:58:34 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ void	print_token(t_token	*token_list);
 int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
+void	free_and_cleanup_heredocs(t_cmd *cmd_list);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell);
@@ -231,6 +232,7 @@ void	close_redirections(t_cmd *cmd);
 t_bool	is_directory(char *file);
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path);
 int		check_redirections_consistency(t_cmd *cmd, t_shell *shell);
+void	cleanup_heredocs(t_cmd *cmd_list);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
