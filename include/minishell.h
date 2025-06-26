@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 14:59:06 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:27:19 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,16 @@ int		is_inside_dquotes(char *token_raw);
 int		is_inside_squotes(char *token_raw);
 int		is_blank(int c);
 int		is_quote(char c);
+int		token_in(char *prompt, int *i, t_token **tkn_list);
+int		token_out(char *prompt, int *i, t_token **tkn_list);
+int		token_pipe(char *prompt, int *i, t_token **tkn_list);
+int		token_heredoc(char *prompt, int *i, t_token **tkn_list);
+int		token_append(char *prompt, int *i, t_token **tkn_list);
+
+
+
+
+
 
 
 

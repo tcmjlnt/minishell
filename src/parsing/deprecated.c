@@ -6,13 +6,79 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 13:06:52 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:59:36 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // anciennes fonctions ou anciens bout de fonctions
+
+int	tokenize_prompt(char *prompt, t_token **tkn_list) // en cours de refacto
+{
+	t_token	*token;
+	int		i;
+	int		start;
+
+	i = 0;
+	start = 0;
+	while (prompt[i])
+	{
+		while (prompt[i] && is_blank(prompt[i]))
+			i++;
+		if (!prompt[i])
+			break ;
+		if(prompt[i] == '|')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 1, TKN_PIPE);
+			if (!token)
+				return (false);
+			i++;
+		}
+		else if(prompt[i] == '<' && prompt[i + 1] && prompt[i + 1] == '<')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 2, TKN_HEREDOC);
+			if (!token)
+				return (false);
+			i += 2;
+		}
+		// else if (!handle_append_token(prompt, &i, token, tkn_list))
+		// 	return (false);
+		else if(prompt[i] == '>' && prompt[i + 1] && prompt[i + 1] == '>')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 2, TKN_APPEND);
+			if (!token)
+				return (false);
+			i += 2;
+		}
+		else if(prompt[i] == '>')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 1, TKN_OUT);
+			if (!token)
+				return (false);
+			i++;
+		}
+		else if(prompt[i] == '<')
+		{
+			start = i;
+			token = ft_lstnewtoken(prompt + start, 1, TKN_IN);
+			if (!token)
+				return (false);
+			i++;
+		}
+		else
+		{
+			token = token_wordtpye(prompt, &i);
+			if (!token)
+				return (false);
+		}
+		ft_lstadd_back_token(tkn_list, token);
+	}
+}
 
 int	dquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr,
 								t_xpnd **xpnd_list, t_token *tkn_curr) // before refacto
