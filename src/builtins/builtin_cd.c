@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:17:01 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 16:58:27 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 21:42:37 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ static int	handle_special_cases(t_cmd *cmd)
 	{
 		ft_putstr_fd("minishell: cd: missing path\n", STDERR_FILENO);
 		ft_putstr_fd("Usage: cd <path> relative or absolute\n", STDERR_FILENO);
+		return (1);
+	}
+	if (cmd->args[2])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO);
 		return (1);
 	}
 	if (ft_strncmp(cmd->args[0], "~", 1) == 0)
