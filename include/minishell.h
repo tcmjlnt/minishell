@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 19:54:34 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:18:53 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,6 @@ char	**gc_split(char *str, char sep, t_gc_type type);
 char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type);
 char	*gc_itoa(int n, t_gc_type type);
 
-
 /* ==============================    🛠️ UTILS    ================================ */
 void	error_exit(const char *message);
 char	*gc_strndup_noquotes(char *src, size_t n, t_gc_type type);
@@ -235,6 +234,7 @@ t_shell	*get_shell(void);
 void	init_shell(void);
 void	free_and_cleanup_heredocs(t_cmd *cmd_list);
 void	error_free_gc_cmd(const char *message);
+void	print_redir(t_cmd *temp);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell);

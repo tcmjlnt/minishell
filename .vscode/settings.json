@@ -8,6 +8,7 @@
 		"compare": "c",
 		"stdlib.h": "c",
 		"get_next_line_bonus.h": "c",
-		"ft_printf.h": "c"
+		"ft_printf.h": "c",
+		"stdio.h": "c"
 	}
 }

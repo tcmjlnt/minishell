@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 07:54:42 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 15:06:53 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:15:27 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	cleanup_heredocs(t_cmd *cmd_list)
 		redir = cmd->redir;
 		while (redir)
 		{
-			if (redir->type == TOKEN_REDIRECT_HEREDOC && redir->file)
+			if (redir->type == TKN_HEREDOC && redir->file)
 				unlink(redir->file);
 			redir = redir->next;
 		}
