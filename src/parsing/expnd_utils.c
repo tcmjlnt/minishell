@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 14:33:08 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 14:33:11 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:11:05 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,3 @@ int	trailing_dollar_count(char *str)
 	}
 	return (count);
 }
-
