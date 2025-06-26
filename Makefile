@@ -92,10 +92,11 @@ SRC_PARSING = \
 	parsing/parsing_redir.c \
 	parsing/expansion.c \
 	parsing/expansion_lst_utils.c \
-	parsing/expansion_lst_utilsb.c \
+	parsing/expansion_lst_helper.c \
 	parsing/expansion_utils.c \
 	parsing/expansion_post_sgmt.c \
 	parsing/expansion_first_sgmt.c \
+	parsing/expnd_scnd_sgmt_dquotes.c \
 
 
 
