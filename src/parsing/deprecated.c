@@ -6,13 +6,55 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 15:59:36 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:25:47 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // anciennes fonctions ou anciens bout de fonctions
+
+int	pipes_check(char *prompt)
+{
+	int	i;
+
+	i = 0;
+	while (prompt[i] && is_blank(prompt[i]))
+		i++;
+	if (prompt[i] == '|' && !is_inside_quotes(prompt, i))
+	{
+		ft_putstr_fd(PIPE_SYNT_ERR, 2);
+		return (false);
+	}
+	i = 0;
+	while (prompt[i])
+	{
+		if (prompt[i] == '|' && !is_inside_quotes(prompt, i))
+		{
+			if (prompt[i + 1] && prompt[i + 1] == '|')
+			{
+				ft_putstr_fd(PIPE_SYNT_ERR, 2);
+				return (false);
+			}
+			i++;
+			while (prompt[i] && is_blank(prompt[i]))
+				i++;
+			if (prompt[i] == '|')
+			{
+				ft_putstr_fd(PIPE_SYNT_ERR, 2);
+				return (false);
+			}
+			if (!prompt[i])
+			{
+				ft_putstr_fd(PIPE_SYNT_ERR, 2);
+				return (false);
+			}
+			continue ;
+		}
+		i++;
+	}
+	return (true);
+}
 
 int	tokenize_prompt(char *prompt, t_token **tkn_list) // en cours de refacto
 {

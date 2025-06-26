@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:53:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:39:03 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ t_redir	*ft_lstnewredir(void)
 	t_redir	*new_redir;
 
 	new_redir = gc_mem(GC_ALLOC, sizeof(t_redir), NULL, GC_CMD);
-	// new_redir = malloc(sizeof(t_redir));
 	if (!new_redir)
 		return (NULL);
 	new_redir->file = NULL;
 	new_redir->delim = NULL;
-	new_redir->type = -666; // check ce qu'on met
+	new_redir->type = -666;
 	new_redir->next = NULL;
 	new_redir->prev = NULL;
 
@@ -66,23 +65,35 @@ int	fill_redir(t_redir **redir_list, t_token *token)
 	{
 		current_redir->file = gc_strdup(token->token_value, GC_CMD);
 		if (!current_redir->file)
-		{
-			free(current_redir);
 			return (false);
-		}
 	}
 	else if (token->prev && token->prev->token_type == TKN_HEREDOC)
 	{
-			current_redir->delim = gc_strdup(token->token_value, GC_CMD);
-			if (!current_redir->delim)
-			{
-				free(current_redir);
-				return (false);
-			}
+		current_redir->delim = gc_strdup(token->token_value, GC_CMD);
+		if (!current_redir->delim)
+			return (false);
 	}
 	current_redir->type = token->prev->token_type;
 	ft_lstadd_back_redir(redir_list, current_redir);
 	return (true);
 }
 
+void	print_redir(t_cmd *temp)
+{
+	t_redir	*redir_current;
+	int		i;
 
+	redir_current = NULL;
+	i = 0;
+	if (!temp)
+		return ;
+	redir_current = temp->redir;
+	while (redir_current)
+	{
+		printf("	redir_file[%d]: `%s`	;	redir_delim[%d]: `%s`	",
+			i, redir_current->file, i, redir_current->delim);
+		printf(";	redir_type[%d]: `%d`\n", i, redir_current->type);
+		i++;
+		redir_current = redir_current->next;
+	}
+}

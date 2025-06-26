@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 16:27:19 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:49:53 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define RESET "\001\033[0m\002 "
 # define STDIN_EOF_WARNING "minishell: warning: "
 # define STDIN_EOF_MSG "here-document delimited by end-of-file (wanted `"
+# define PIPE_SYNT_ERR "minishell: syntax error near unexpected token `|'\n"
 
 /* ==========================    📚 INCLUDES    ========================== */
 
@@ -274,10 +275,11 @@ int		ft_exit(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
 t_bool	is_builtin(t_shell *shell, char *cmd_name);
 t_bool	is_parent_builtin(t_cmd *cmd);
+void	print_redir(t_cmd *temp);
+
 
 /* ========================    🦄 PARSING    ======================== */
 int		parsing(char *prompt, t_cmd **cmd_list, t_shell *shell);
-t_token	*ft_lstlast_token(t_token *token);
 void	ft_lstadd_back_token(t_token **token, t_token *new);
 t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
@@ -294,12 +296,17 @@ int		fill_redir(t_redir **redir, t_token *token);
 int		is_inside_dquotes(char *token_raw);
 int		is_inside_squotes(char *token_raw);
 int		is_blank(int c);
-int		is_quote(char c);
 int		token_in(char *prompt, int *i, t_token **tkn_list);
 int		token_out(char *prompt, int *i, t_token **tkn_list);
 int		token_pipe(char *prompt, int *i, t_token **tkn_list);
 int		token_heredoc(char *prompt, int *i, t_token **tkn_list);
 int		token_append(char *prompt, int *i, t_token **tkn_list);
+int		first_syntax_check(char *prompt, t_shell *shell);
+int		is_inside_quotes(char *prompt, int pos);
+int		closed_quotes(char *prompt);
+int		is_operator_char(char c);
+
+
 
 
 
