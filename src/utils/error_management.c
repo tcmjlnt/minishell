@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_management.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 18:33:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:45:13 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:44:01 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ void	error_exit(const char *message)
 	exit(EXIT_FAILURE);
 }
 
-void	error_free_gc_cmd(const char *message)
+void	error_free_gc(const char *message)
 {
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE); // GC_NONE ou GC_CMD
 	error_exit(message);
 }
 

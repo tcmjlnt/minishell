@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:51:31 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:57:37 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 21:10:23 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ft_prompt(t_shell *shell)
 
 	while (1)
 	{
-		gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+		// gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 
 		cmd_list = NULL;
 		// init_signals();
@@ -77,7 +77,7 @@ void	ft_prompt(t_shell *shell)
 			set_signals_interactive();
 
 
-			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 
 			// ceci est un commentaire pour le merge
 			// printf("%d\n", x);

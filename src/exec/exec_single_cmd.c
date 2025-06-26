@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 18:28:38 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 21:06:48 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,23 @@ void	save_std(t_std_backup *backup)
 /* restaure les descripteurs STDIN/STDOUT depuis la sauvegarde */
 void	restore_std(t_std_backup *backup)
 {
-	if (backup->orig_stdin != -1)
+	if (backup->orig_stdin >= 3)
 	{
 		dup2(backup->orig_stdin, STDIN_FILENO);
 		close(backup->orig_stdin);
-		backup->orig_stdin = -1;
+		backup->orig_stdin = 0;
 	}
-	if (backup->orig_stdout != -1)
+	if (backup->orig_stdout >= 3)
 	{
 		dup2(backup->orig_stdout, STDOUT_FILENO);
 		close(backup->orig_stdout);
-		backup->orig_stdout = -1;
+		backup->orig_stdout = 0;
 	}
-	if (backup->orig_stderr != -1)
+	if (backup->orig_stderr >= 3)
 	{
 		dup2(backup->orig_stderr, STDERR_FILENO);
 		close(backup->orig_stderr);
-		backup->orig_stderr = -1;
+		backup->orig_stderr = 0;
 	}
 }
 
@@ -56,7 +56,7 @@ void	single_cmd_childhood(t_cmd *cmd, t_shell *shell)
 		exit (1);
 	if (is_valid_command(cmd, shell, &exit_status, &path))
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	exit(exit_status);
 }
 
@@ -64,19 +64,18 @@ void	single_cmd_childhood(t_cmd *cmd, t_shell *shell)
 void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 {
 	pid_t			pid;
-	t_std_backup	std_backup;
 
 	if (cmd->is_builtin)
 	{
-		save_std(&std_backup);
+		save_std(&shell->std_backup);
 		if (apply_redirections(cmd) == -1)
 		{
 			shell->exit_status = 1;
-			restore_std(&std_backup);
+			restore_std(&shell->std_backup);
 			return ;
 		}
 		shell->exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
-		restore_std(&std_backup);
+		restore_std(&shell->std_backup);
 	}
 	else
 	{
@@ -86,6 +85,7 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 		wait_for_children(cmd, shell);
 		free_and_cleanup_heredocs(cmd);
 	}
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
 }
 
 /* waitpid du ou des enfants */

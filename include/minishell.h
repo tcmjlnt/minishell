@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:18:53 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:43:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
 void	free_and_cleanup_heredocs(t_cmd *cmd_list);
-void	error_free_gc_cmd(const char *message);
+void	error_free_gc(const char *message);
 void	print_redir(t_cmd *temp);
 
 /* ===========================    🚀 EXECUTION    =========================== */
@@ -247,6 +247,8 @@ void	wait_for_children(t_cmd *cmds, t_shell *shell);
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path);
 int		check_redirections_consistency(t_cmd *cmd);
 int		handle_all_heredocs(t_cmd *cmd_list);
+void	restore_std(t_std_backup *backup);
+
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

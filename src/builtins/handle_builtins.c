@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_builtins.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 08:57:44 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:22:26 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:23:03 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	handle_builtin(t_shell *shell, t_cmd *cmd, int fd)
 	{
 		if (ft_strcmp(args[0], builtins[i].name) == 0)
 		{
-			// printf("handle_builtin: calling %s\n", args[0]);
+			if (ft_strcmp(args[0], "exit") == 0)
+				restore_std(&shell->std_backup);
 			return (builtins[i].func(shell, cmd, fd));
 		}
 		i++;

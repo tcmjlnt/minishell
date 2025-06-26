@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 19:55:55 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:41:32 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	heredoc_childhood(t_redir *redir)
 
 	fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd == -1)
-		error_free_gc_cmd("minishell : error : fd = -1");
+		error_free_gc("minishell : error : fd = -1");
 	len = ft_strlen(redir->delim);
 	while (1)
 	{

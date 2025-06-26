@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:52:34 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:48:27 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,17 @@ static void	apply_dup_pipeline(t_cmd *cmd)
 	{
 		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1
 			|| dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
-			error_free_gc_cmd("dup2 failed (middle cmd)");
+			error_free_gc("dup2 failed (middle cmd)");
 	}
 	else if (cmd->next == NULL)
 	{
 		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1)
-			error_free_gc_cmd("dup2 failed (last cmd)");
+			error_free_gc("dup2 failed (last cmd)");
 	}
 	else if (cmd->prev == NULL)
 	{
 		if (dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
-			error_free_gc_cmd("dup2 failed (first cmd)");
+			error_free_gc("dup2 failed (first cmd)");
 	}
 }
 
@@ -90,19 +90,19 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 	apply_dup_pipeline(cmd);
 	close_all_pipes(cmd);
 	if (apply_redirections(cmd) == -1)
-		error_free_gc_cmd("apply redir in pipeline failed");
+		error_free_gc("apply redir in pipeline failed");
 	if (!cmd->is_builtin && is_valid_command(cmd, shell, &exit_status, &path))
 	{
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
-		error_free_gc_cmd("execve failed");
+		error_free_gc("execve failed");
 	}
 	else if (cmd->is_builtin)
 	{
 		exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
-		gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 		exit (exit_status);
 	}
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	exit(exit_status);
 }
 
@@ -113,14 +113,14 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 
 	cmd_curr = cmd_list;
 	if (create_pipes(cmd_list) == -1)
-		error_free_gc_cmd("create_pipes failed");
+		error_free_gc("create_pipes failed");
 	while (cmd_curr)
 	{
 		pid = fork();
 		if (pid < 0)
 		{
 			shell->exit_status = 1;
-			error_exit("fork failed");
+			error_free_gc("fork failed");
 		}
 		if (pid == 0)
 		{

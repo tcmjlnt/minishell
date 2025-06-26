@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:25:43 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:45:33 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:41:32 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*check_absolute_or_relative_path(char *cmd)
 		{
 			copy = gc_strdup(cmd, GC_CMD);
 			if (!copy)
-				error_free_gc_cmd("absolute_or_relative_path: strdup failed");
+				error_free_gc("absolute_or_relative_path: strdup failed");
 			return (copy);
 		}
 	}
