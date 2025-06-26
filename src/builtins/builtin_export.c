@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/24 18:42:54 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:34:21 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,34 @@ void	print_env_export(t_env *env)
 		printf("export %s=", env->key);
 		if (env->value)
 			printf("\"%s\"", env->value);
-
 		printf("\n");
 		env = env->next;
 	}
 }
 
-size_t check_key_export(char *arg)
+static int	is_valid_identifier(char *arg)
+{
+	if (!arg || !arg[0] || ft_isdigit(arg[0]) || arg[0] == '=')
+	{
+		write(2, "minishell: export: `", 20);
+		write(2, arg, ft_strlen(arg));
+		write(2, "': not a valid identifier\n", 26);
+		return (false);
+	}
+	return (true);
+}
+
+size_t	check_key_export(char *arg)
 {
 	size_t	j;
 
+	if (!is_valid_identifier(arg))
+		return (false);
 	j = 0;
-
-	while(arg[j] && arg[j + 1] && arg[j + 1] != '=')
+	while (arg[j] && arg[j] != '=')
 	{
-		if(!is_valid_keychar(arg[j]) || ft_isdigit(arg[0]) || arg[0] == '=')
+		if (!is_valid_keychar(arg[j]))
 		{
-			// shell->exit_status = 1;
 			write(2, "minishell: export: `", 20);
 			write(2, arg, ft_strlen(arg));
 			write(2, "': not a valid identifier\n", 26);
@@ -43,7 +54,7 @@ size_t check_key_export(char *arg)
 		}
 		j++;
 	}
-	return (++j);
+	return (j);
 }
 
 t_env	*check_existing_key(t_shell *shell, char *key)
@@ -53,7 +64,7 @@ t_env	*check_existing_key(t_shell *shell, char *key)
 	if (!shell->env)
 		return (NULL);
 	env_curr = shell->env;
-	while(env_curr)
+	while (env_curr)
 	{
 		if (ft_strcmp(env_curr->key, key) == 0)
 			return (env_curr);
@@ -64,7 +75,6 @@ t_env	*check_existing_key(t_shell *shell, char *key)
 
 int	arg_to_env(t_shell *shell, char *arg, size_t n)
 {
-	(void) shell;
 	char	*key;
 	char	*value;
 	t_env	*env_new_node;
@@ -74,7 +84,10 @@ int	arg_to_env(t_shell *shell, char *arg, size_t n)
 	key = gc_strndup(arg, n, GC_ENV);
 	if (!key)
 		return (false);
-	value = gc_strdup(arg + n + 1, GC_ENV);
+	if (arg[n] != '\0')
+		value = gc_strdup(arg + n + 1, GC_ENV);
+	else
+		value = gc_strdup("", GC_ENV);
 	if (!value)
 		return (false);
 	env_new_node = check_existing_key(shell, key);
@@ -101,7 +114,7 @@ int	export_args(t_shell *shell, t_cmd *cmd)
 	res = true;
 	while (cmd->args[i])
 	{
-		if(!check_key_export(cmd->args[i]))
+		if (!check_key_export(cmd->args[i]))
 		{
 			// shell->exit_status = 1;
 			res = false;
@@ -116,11 +129,9 @@ int	export_args(t_shell *shell, t_cmd *cmd)
 	return (res);
 }
 
-
 int	ft_export(t_shell *shell, t_cmd *cmd, int fd)
 {
 	(void) fd;
-
 	if (!cmd->args[1])
 		print_env_export(shell->env);
 	if (!export_args(shell, cmd))

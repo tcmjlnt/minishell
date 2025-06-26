@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:45:33 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:55:55 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ int	handle_all_heredocs(t_cmd *cmd_list)
 		redir = cmd->redir;
 		while (redir)
 		{
-			if (redir->type == TOKEN_REDIRECT_HEREDOC)
+			if (redir->type == TKN_HEREDOC)
 			{
 				if (handle_heredoc(redir) == -1)
 					return (-1);

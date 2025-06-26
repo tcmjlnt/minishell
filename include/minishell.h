@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 18:37:21 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:54:34 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # define STDIN_EOF_WARNING "minishell: warning: "
 # define STDIN_EOF_MSG "here-document delimited by end-of-file (wanted `"
 # define WARNING_ENV "minishell: warning: running with empty environment\n"
+# define PIPE_SYNT_ERR "minishell: syntax error near unexpected token `|'\n"
 
 /* ==========================    📚 INCLUDES    ========================== */
 
@@ -71,16 +72,12 @@ typedef enum e_bool
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,				// mot (commande ou argument)
-	TOKEN_BLANK,			// SPACE OR TAB
-	TOKEN_D_QUOTES,			// "
-	TOKEN_S_QUOTES,			// '
-	TOKEN_PIPE,				// |
-	TOKEN_REDIRECT_IN,		// <
-	TOKEN_REDIRECT_OUT,		// >
-	TOKEN_REDIRECT_APPEND,	// >>
-	TOKEN_REDIRECT_HEREDOC,	// <<
-	TOKEN_EOF,				// fin de la ligne/commande
+	TKN_WORD,
+	TKN_PIPE,
+	TKN_IN,
+	TKN_OUT,
+	TKN_APPEND,
+	TKN_HEREDOC,
 }	t_token_type;
 
 typedef enum	e_parsing_type
@@ -115,7 +112,7 @@ typedef struct s_env
 
 typedef struct s_redir
 {
-	t_token_type		type; // a sup uniquement pour tester exec redir
+	t_token_type		type;
 	char				*file;
 	char				*delim;
 	struct s_redir		*next;
@@ -190,6 +187,30 @@ typedef	struct s_xpnd
 	struct s_xpnd	*next;
 }	t_xpnd;
 
+typedef struct s_nq_state
+{
+	size_t	i;
+	size_t	start;
+}			t_nq_state;
+
+typedef struct s_dq_state
+{
+	size_t	i;
+	size_t	start;
+	size_t	strlen;
+}			t_dq_state;
+
+typedef struct s_parser_state
+{
+	t_cmd	**cmd_list_head;
+	t_cmd	*cmd_current;
+	t_redir	*redir_list;
+	int		arg_idx;
+	t_shell	*shell;
+}	t_parser_state;
+
+
+
 /* ===========================    ♻️ PROMPT    =========================== */
 void	ft_prompt(t_shell *shell);
 
@@ -255,11 +276,10 @@ t_bool	is_builtin(t_shell *shell, char *cmd_name);
 
 /* ========================    🦄 PARSING    ======================== */
 int		parsing(char *prompt, t_cmd **cmd_list, t_shell *shell);
-t_token	*ft_lstlast_token(t_token *token);
 void	ft_lstadd_back_token(t_token **token, t_token *new);
 t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type);
 int		is_operator_token(t_token *token);
-int		check_token(t_token **token_list);
+int		check_token(t_token **token_list, t_shell *shell);
 int		is_quote(char c);
 int		parse_tokens(t_cmd **cmd_list, t_token **tkn_list, t_shell *shell);
 t_cmd	*ft_lstnewcmd(void);
@@ -272,6 +292,28 @@ int		fill_redir(t_redir **redir, t_token *token);
 int		is_inside_dquotes(char *token_raw);
 int		is_inside_squotes(char *token_raw);
 int		is_blank(int c);
+int		token_in(char *prompt, int *i, t_token **tkn_list);
+int		token_out(char *prompt, int *i, t_token **tkn_list);
+int		token_pipe(char *prompt, int *i, t_token **tkn_list);
+int		token_heredoc(char *prompt, int *i, t_token **tkn_list);
+int		token_append(char *prompt, int *i, t_token **tkn_list);
+int		first_syntax_check(char *prompt, t_shell *shell);
+int		is_inside_quotes(char *prompt, int pos);
+int		closed_quotes(char *prompt);
+int		is_operator_char(char c);
+int		init_new_cmd(t_parser_state *state);
+int		handle_pipe_token(t_parser_state *state, t_token *tkn_current);
+int		handle_redir_token(t_token **tkn_ptr, t_redir **redir_list_ptr);
+
+
+
+
+
+
+
+
+
+
 
 
 /* ========================    💰 EXPANSION    ======================== */
@@ -282,6 +324,41 @@ t_xpnd	*ft_lstlast_xpnd(t_xpnd *xpnd);
 t_token	*ft_lstnewtoken_xpnd(void);
 void	free_t_xpnd_list(t_xpnd *xpnd_quotes_list);
 int		is_valid_keychar(char c);
+t_xpnd	*xpnd_new_fill(char	*src, size_t n, t_bool xpnd_check, t_xpnd *xpnd_quotes_curr, t_xpnd *new_xpnd);
+int		is_valid_keychar(char c);
+int		heredoc_delim_check(t_token *tkn_curr);
+int		redir_prev_tkn_check(t_token *tkn_curr);
+void	printf_xpnd(t_xpnd **xpnd_list);
+int		trailing_dollar_count(char *str);
+int		handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current,
+			t_xpnd **xpnd_list, t_shell *shell);
+int		handle_dollarsign_before_quotes(t_xpnd **xpnd_list, t_token *tkn_current);
+int		process_trailing_dollar_loop(t_xpnd *xpnd_curr, t_token *tkn_current);
+int		join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current);
+int		create_expanded_token(t_token **tkn_xpnd_list, t_token *tkn_current,
+							t_xpnd **xpnd_list, char *res);
+int		check_empty_xpnd_node(t_xpnd **xpnd_list, t_token *tkn_curr);
+int		quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list);
+t_bool	is_variable_in_dquotes(char *s, size_t i, t_token *tkn);
+int		dquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr,
+								t_xpnd **xpnd_list, t_token *tkn_curr);
+t_xpnd	*create_filled_xpnd(char *src, size_t n, t_bool check,
+									t_xpnd *q_curr);
+int		scnd_segmentation(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list,
+						t_token *tkn_current);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ========================    📡 SIGNALS    ======================== */
 void	init_signals(void);
