@@ -6,13 +6,71 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 10:50:05 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // anciennes fonctions ou anciens bout de fonctions
+
+int	quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list) // avant refacto
+{
+	size_t	i;
+	size_t	start;
+	t_bool	in_single;
+	t_bool	in_double;
+	t_xpnd	*current_xpnd;
+
+
+
+	i = 0;
+	start = 0;
+	in_double = false;
+	in_single = false;
+	while (tkn_raw[i])
+	{
+		if ((tkn_raw[i] == '\'' && !in_double) || (tkn_raw[i] == '\"' && !in_single))
+		{
+			if (!create_unquoted_segment(tkn_raw, start, i, xpnd_list))
+				return (false);
+			if (tkn_raw[i] == '\'' && !in_double)
+				in_single = !in_single;
+			else if (tkn_raw[i] == '\"' && !in_single)
+				in_double = !in_double;
+			start = i;
+			i++;
+			while(tkn_raw[i])
+			{
+				if ((tkn_raw[i] == '\'' && in_single && !in_double) ||
+					(tkn_raw[i] == '\"' && in_double && !in_single))
+				{
+					current_xpnd = ft_lstnewxpnd();
+					if (!current_xpnd)
+						return (false);
+					current_xpnd->in_single = in_single;
+					current_xpnd->in_double = in_double;
+					if (tkn_raw[i] == '\'' && !in_double)
+						in_single = !in_single;
+					else if (tkn_raw[i] == '\"' && !in_single)
+						in_double = !in_double;
+					i++;
+					break ;
+				}
+				i++;
+			}
+			current_xpnd->substr = gc_strndup(tkn_raw + start, i - start, GC_TKN);
+			current_xpnd->xpnd_check = false;
+			ft_lstadd_back_xpnd(xpnd_list, current_xpnd);
+			start = i;
+		}
+		else
+			i++;
+	}
+	if (!create_unquoted_segment(tkn_raw, start, i, xpnd_list))
+		return (false);
+	return (true);
+}
 
 int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {

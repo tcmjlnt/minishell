@@ -95,6 +95,8 @@ SRC_PARSING = \
 	parsing/expansion_lst_utilsb.c \
 	parsing/expansion_utils.c \
 	parsing/expansion_post_sgmt.c \
+	parsing/expansion_quotes_first_segmentation.c \
+	
 
 
 SRC_SIGNAL = \

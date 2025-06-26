@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 23:43:59 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:04:24 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,8 @@ int		fill_redir(t_redir **redir, t_token *token);
 int		is_inside_dquotes(char *token_raw);
 int		is_inside_squotes(char *token_raw);
 int		is_blank(int c);
+int		is_quote(char c);
+
 
 
 /* ========================    💰 EXPANSION    ======================== */
@@ -303,6 +305,8 @@ int		join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current
 int		create_expanded_token(t_token **tkn_xpnd_list, t_token *tkn_current,
 							t_xpnd **xpnd_list, char *res);
 int		check_empty_xpnd_node(t_xpnd **xpnd_list, t_token *tkn_curr);
+int		quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list);
+
 
 
 

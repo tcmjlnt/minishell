@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 11:07:31 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	is_operator(char c)
 	else
 		return (false);
 }
+
+
 
 int	closed_quotes(char *prompt)
 {
