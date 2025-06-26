@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 10:07:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 10:38:31 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:52:11 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path)
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		*status = 127;
-		return (false);
+		return (*status = 127, false);
 	}
 	return (true);
 }

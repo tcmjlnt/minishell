@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 15:29:46 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:54:24 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	handle_eof_signal(t_redir *redir, size_t len)
 		write(2, STDIN_EOF_MSG, ft_strlen(STDIN_EOF_MSG));
 		write(2, redir->delim, len);
 		write(2, "')\n", 3);
-		return (0);
+		return ;
 	}
 	if (g_sig)
 	{
@@ -57,7 +57,7 @@ int	heredoc_childhood(t_redir *redir)
 
 	fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd == -1)
-		exit(1);
+		error_free_GC_CMD("minishell : error : fd = -1");
 	len = ft_strlen(redir->delim);
 	while (1)
 	{

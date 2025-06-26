@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 15:40:35 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:46:19 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,41 +129,5 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 	}
 	close_all_pipes(cmd_list);
 	wait_for_children(cmd_list, shell);
-	free_and_cleanup_heredocs(cmd_list); // check si c'est bon pour le unlink
+	free_and_cleanup_heredocs(cmd_list);
 }
-
-/* void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
-{
-	t_cmd	*cmd_curr;
-
-	cmd_curr = cmd_list;
-	if (create_pipes(cmd_list) == -1)
-	{
-		shell->exit_status = 1;
-		ft_exit(shell, cmd_list, -99);
-	}
-	while (cmd_curr)
-	{
-		cmd_curr->pid = fork();
-		cmd_curr = cmd_curr->next;
-	}
-	cmd_curr = cmd_list;
-	while (cmd_curr)
-	{
-		if (cmd_curr->pid == 0)
-			pipeline_childhood(cmd_curr, shell, cmd_list);
-		cmd_curr = cmd_curr->next;
-	}
-	close_all_pipes(cmd_list);
-	wait_for_children(cmd_list, shell);
-} */
-
-/* 	if (cmd->prev && cmd->next)
-	{
-		dup2(prev_cmd->pipe[1], STDIN_FILENO);
-		dup2(cmd->pipe[0], STDOUT_FILENO);
-	}
-	else if (cmd->next == NULL)
-		dup2(prev_cmd->pipe[1], STDIN_FILENO);
-	else if (prev_cmd == NULL)
-		dup2(cmd->pipe[0], STDOUT_FILENO); */
