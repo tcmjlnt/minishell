@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 10:07:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 15:52:11 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:03:59 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ static int	open_file(t_redir *redir)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (redir->type == TOKEN_REDIRECT_APPEND)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (fd == -1)
-		error_exit("open_file : redir file error : fd = -1");
 	return (fd);
 }
 
