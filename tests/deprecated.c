@@ -6,13 +6,97 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 17:25:47 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:22:30 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // anciennes fonctions ou anciens bout de fonctions
+
+int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell)
+{
+	t_token	*tkn_current;
+	t_cmd	*cmd_current;
+	t_redir	*redir_list;
+	int		j;
+
+	j = 0;
+	redir_list = NULL;
+	cmd_current = NULL;
+	if (!tkn_list || !(*tkn_list))
+		return (false);
+	tkn_current = *tkn_list;
+	while (tkn_current)
+	{
+		if (cmd_current == NULL)
+		{
+			cmd_current = ft_lstnewcmd();
+			if (!cmd_current)
+				return (false);
+			ft_lstadd_back_cmd(cmd_list_head, cmd_current);
+			j = 0;
+			redir_list = NULL;
+		}
+		if (tkn_current->token_type == TKN_PIPE)
+		{
+			if (j < 256)
+				cmd_current->args[j] = NULL;
+			else
+				return (false);
+			cmd_current->redir = redir_list;
+			cmd_current = NULL;
+			j = 0;
+			if (!tkn_current->next || tkn_current->next->token_type == TKN_PIPE)
+			{
+				shell->exit_status = 0;
+				return (false);
+			}
+		}
+		else if (is_redir_operator(tkn_current->token_type))
+		{
+			if (tkn_current->next && tkn_current->next->token_type == TKN_WORD)
+			{
+				tkn_current = tkn_current->next;
+				if (!fill_redir(&redir_list, tkn_current))
+					return (false);
+			}
+		}
+		else if (tkn_current->token_type == TKN_WORD)
+		{
+			if (j >= 255)
+			{
+				printf("blabla faut pas abuser le nombre d'args stp\n");
+				return (false);
+			}
+			cmd_current->args[j] = gc_strdup(tkn_current->token_value, GC_CMD);
+			if (!cmd_current->args[j])
+			{
+				return (false);
+			}
+			if (j == 0)
+			{
+				cmd_current->cmd = gc_strdup(tkn_current->token_value, GC_CMD);
+				if (!cmd_current->cmd)
+				{
+					return (false);
+				}
+				cmd_current->is_builtin = is_builtin(shell, cmd_current->cmd);
+			}
+			j++;
+		}
+		tkn_current = tkn_current->next;
+	}
+	if (cmd_current != NULL)
+	{
+		cmd_current->redir = redir_list;
+		if (j < 256)
+			cmd_current->args[j] = NULL;
+		else
+			return (false);
+	}
+	return (true);
+}
 
 int	pipes_check(char *prompt)
 {

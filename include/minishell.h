@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 18:00:44 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 18:32:53 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,15 @@ typedef struct s_dq_state
 	size_t	strlen;
 }			t_dq_state;
 
+typedef struct s_parser_state
+{
+	t_cmd	**cmd_list_head;
+	t_cmd	*cmd_current;
+	t_redir	*redir_list;
+	int		arg_idx;
+	t_shell	*shell;
+}	t_parser_state;
+
 
 
 /* ===========================    ♻️ PROMPT    =========================== */
@@ -305,6 +314,11 @@ int		first_syntax_check(char *prompt, t_shell *shell);
 int		is_inside_quotes(char *prompt, int pos);
 int		closed_quotes(char *prompt);
 int		is_operator_char(char c);
+int		init_new_cmd(t_parser_state *state);
+int		handle_pipe_token(t_parser_state *state, t_token *tkn_current);
+int		handle_redir_token(t_token **tkn_ptr, t_redir **redir_list_ptr);
+
+
 
 
 

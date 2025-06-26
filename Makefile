@@ -92,7 +92,9 @@ SRC_PARSING = \
 	parsing/token_utils.c \
 	parsing/token_lst_utils.c \
 	parsing/token_operator.c \
+	parsing/token_check.c \
 	parsing/parsing_cmd.c \
+	parsing/parsing_cmd_utils.c \
 	parsing/parsing_redir.c \
 	parsing/expansion.c \
 	parsing/expnd_lst_utils.c \
