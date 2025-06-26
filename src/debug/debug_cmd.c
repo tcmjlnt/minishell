@@ -1,37 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.c                                            :+:      :+:    :+:   */
+/*   debug_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 16:28:58 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/10 09:04:49 by aumartin         ###   ########.fr       */
+/*   Created: 2025/06/25 21:17:26 by aumartin          #+#    #+#             */
+/*   Updated: 2025/06/25 21:23:59 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-void	debug_env(t_shell *shell)
-{
-	ft_printf("📦 DEBUG: Liste t_env (copie interne du shell)\n");
-	print_env(shell->env);
-}
-
-void	debug_env_tab(t_shell *shell)
-{
-	char	**env_tab;
-
-	env_tab = env_to_env_tab_for_execve(shell->env);
-	ft_printf("📦 DEBUG: Tableau env_tab pour execve\n");
-	print_env_tab(env_tab);
-}
-
-void	debug_path_for(char *cmd, t_shell *shell)
-{
-	ft_printf("📦 DEBUG: Recherche du path pour cmd : %s\n", cmd);
-	print_cmd_path_found(cmd, shell->env);
-}
 
 void	debug_cmd(t_cmd *cmd)
 {
@@ -66,14 +45,18 @@ void	debug_cmd_list(t_cmd *cmds)
 		cmds = cmds->next;
 	}
 }
+
 void	debug_pipe(int in_fd, int pipe_fd[2])
 {
-	printf("[PIPE DEBUG] in_fd: %d | pipe_fd[0]: %d | pipe_fd[1]: %d\n", in_fd, pipe_fd[0], pipe_fd[1]);
+	printf("[PIPE DEBUG] in_fd: %d \n", in_fd);
+	printf(" | pipe_fd[0]: %d | pipe_fd[1]: %d\n", pipe_fd[0], pipe_fd[1]);
 }
 
 void	debug_exec_external(t_cmd *cmd)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	printf("[EXTERNAL EXEC] Running: %s\n", cmd->cmd);
 	while (cmd->args[i])
 	{

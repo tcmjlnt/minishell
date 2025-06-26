@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:20:15 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/21 17:29:20 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:45:33 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,12 @@ void	apply_dup_redirections(t_cmd *cmd)
 	if (cmd->fd_in != STDIN_FILENO)
 	{
 		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-		{
-			perror("dup2 (input)");
-			exit(1);
-		}
+			error_free_gc_cmd("dup2 (input)");
 	}
 	if (cmd->fd_out != STDOUT_FILENO)
 	{
 		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-		{
-			perror("dup2 (output)");
-			exit(1);
-		}
+			error_free_gc_cmd("dup2 (output)");
 	}
 }
 
@@ -40,7 +34,6 @@ void	apply_dup_redirections(t_cmd *cmd)
 fd_in et fd_out mis -1 => permet de savoir etat aps qu'ils sont fermes
 et donc eviter de les refermer par erreur.
 */
-
 void	close_redirections(t_cmd *cmd)
 {
 	if (cmd->fd_in > 2)
@@ -55,17 +48,16 @@ void	close_redirections(t_cmd *cmd)
 	}
 }
 
-int	apply_redirections(t_cmd *cmd, t_shell *shell)
+int	apply_redirections(t_cmd *cmd)
 {
 	t_redir	*redir;
 
 	if (!cmd || !cmd->redir)
 		return (0);
 	redir = cmd->redir;
-	if (check_redirections_consistency(cmd, shell) == -1)
+	if (check_redirections_consistency(cmd) == -1)
 		return (-1);
 	apply_dup_redirections(cmd);
 	close_redirections(cmd);
 	return (0);
 }
-

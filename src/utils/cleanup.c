@@ -1,28 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_dispatcher.c                                  :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/21 13:45:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:29:07 by aumartin         ###   ########.fr       */
+/*   Created: 2025/06/26 07:54:42 by aumartin          #+#    #+#             */
+/*   Updated: 2025/06/26 15:06:53 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exec_dispatcher(t_cmd *cmd, t_shell *shell)
+void	cleanup_heredocs(t_cmd *cmd_list)
 {
-	if (!cmd)
-		return ;
-	if (handle_all_heredocs(cmd) == -1)
+	t_cmd	*cmd;
+	t_redir	*redir;
+
+	cmd = cmd_list;
+	while (cmd)
 	{
-		shell->exit_status = 1;
-		return ;
+		redir = cmd->redir;
+		while (redir)
+		{
+			if (redir->type == TOKEN_REDIRECT_HEREDOC && redir->file)
+				unlink(redir->file);
+			redir = redir->next;
+		}
+		cmd = cmd->next;
 	}
-	if (!cmd->next)
-		exec_single_cmd(cmd, shell);
-	else
-		exec_pipeline(cmd, shell);
+}
+
+void	free_and_cleanup_heredocs(t_cmd *cmd_list)
+{
+	cleanup_heredocs(cmd_list);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP);
 }

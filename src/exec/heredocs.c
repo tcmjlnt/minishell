@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:12:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:55:55 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,23 @@ char	*gen_tmp_filename(void)
 	return (filename);
 }
 
+static void	handle_eof_signal(t_redir *redir, size_t len)
+{
+	if (g_sig == 0)
+	{
+		write(2, STDIN_EOF_WARNING, ft_strlen(STDIN_EOF_WARNING));
+		write(2, STDIN_EOF_MSG, ft_strlen(STDIN_EOF_MSG));
+		write(2, redir->delim, len);
+		write(2, "')\n", 3);
+		return ;
+	}
+	if (g_sig)
+	{
+		g_sig = 0;
+		exit(SIGINT);
+	}
+}
+
 int	heredoc_childhood(t_redir *redir)
 {
 	char	*line;
@@ -40,30 +57,17 @@ int	heredoc_childhood(t_redir *redir)
 
 	fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd == -1)
-		exit(1);
+		error_free_gc_cmd("minishell : error : fd = -1");
 	len = ft_strlen(redir->delim);
 	while (1)
 	{
 		line = readline("heredoc> ");
 		if (!line)
 		{
-			if (g_sig == 0)
-			{
-				write(2, STDIN_EOF_WARNING, ft_strlen(STDIN_EOF_WARNING));
-				write(2, STDIN_EOF_MSG, ft_strlen(STDIN_EOF_MSG));
-				write(2, redir->delim, len);
-				write(2, "')\n", 3);
-				return (0);
-				//return (write(2, "')\n", 3), parse->exit_code = EXIT_EOF, -1);
-			}
-			if (g_sig)
-			{
-				// printf("hellp\n");
-				g_sig = 0;
-				exit(SIGINT);
-			}
+			handle_eof_signal(redir, len);
+			break ;
 		}
-		if (ft_strncmp(line, redir->delim, len) == 0 && line[len] == '\0') // Clio a mis le strlen la
+		if (ft_strncmp(line, redir->delim, len) == 0 && line[len] == '\0')
 		{
 			free(line);
 			break ;
@@ -72,8 +76,7 @@ int	heredoc_childhood(t_redir *redir)
 		free(line);
 	}
 	close(fd);
-	// gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP); reteste avec val si tu dois le faire maintenant que c'est isoler
-	return (0); // clio a mis exit (0)
+	return (0);
 }
 
 /*
@@ -89,32 +92,21 @@ int	handle_heredoc(t_redir *redir)
 	redir->file = gen_tmp_filename();
 	if (!redir->file)
 		return (perror("malloc name"), -1);
-	// printf("%d\n",g_sig);
 	pid = fork();
 	if (pid < 0)
 		return (perror("fork"), free(redir->file), -1);
 	if (pid == 0)
 	{
-		//install le handler special heredoc sur SIGINT(ctrl+C), pour fermer stdin
-		//ignorer SIGQUIT (^\, évite "Quit (core dumped)" dans heredoc)
 		signal(SIGINT, signal_handler_heredoc);
 		signal(SIGQUIT, SIG_IGN);
 		heredoc_childhood(redir);
-		exit (0); // clio a mis le exit(0) direcement ici mais ca devirat etre pareil
-		// moi j'avais mis mais ca deavrait etre pareil
-		// exit(handle_heredoc_child(redir)); // enfant sort avec le code d'erreur heredoc
+		exit (0);
 	}
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
-	//reinstall la gestion des signaux du shell parent cad prompt propre, ctrl+c reactive
 	init_signals();
-
-	//si l'enfant a ete killed par un SIGINT alors indiquer interruption
-	// printf("signal %d \n", status);
 	if (status)
 		return (-1);
-	//sinon tout est oki: heredoc ready, cmd peut etre lancee
-
 	return (0);
 }
 
@@ -132,10 +124,7 @@ int	handle_all_heredocs(t_cmd *cmd_list)
 			if (redir->type == TKN_HEREDOC)
 			{
 				if (handle_heredoc(redir) == -1)
-				{
-					// g_sig = SIGINT;
 					return (-1);
-				}
 			}
 			redir = redir->next;
 		}

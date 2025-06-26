@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   env_build.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 10:24:10 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:57:10 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* creation d'un nouvel element de env avec GC */
 t_env	*env_new(char *key, char *value, t_bool equal)
 {
 	t_env	*new;
 
 	new = gc_mem(GC_ALLOC, sizeof(t_env), NULL, GC_ENV);
 	if (!new)
-		return (NULL);
+		error_exit("env_new: allocation failed");
 	new->key = key;
 	new->value = value;
 	new->equal = equal;
@@ -26,10 +27,13 @@ t_env	*env_new(char *key, char *value, t_bool equal)
 	return (new);
 }
 
+/* Ajouter un element en fin de liste chainee */
 void	env_add_back(t_env **lst, t_env *new)
 {
 	t_env	*tmp;
 
+	if (!lst || !new) // check avec thomas ?
+		return ; // check avec thomas ?
 	if (!*lst)
 	{
 		*lst = new;
@@ -41,6 +45,7 @@ void	env_add_back(t_env **lst, t_env *new)
 	tmp->next = new;
 }
 
+/* parser une ligne envp ("KEY=VALUE") en élément t_env */
 static t_env	*parse_env_line(char *line)
 {
 	char	*equal;
@@ -67,6 +72,7 @@ static t_env	*parse_env_line(char *line)
 	return (env_new(key, NULL, false));
 }
 
+/* cnstruction de l'environnement a partir de envp */
 void	env_from_envp(t_shell *shell, char **envp)
 {
 	int		i;
@@ -74,7 +80,8 @@ void	env_from_envp(t_shell *shell, char **envp)
 
 	if (!envp || !*envp)
 	{
-		printf("env -i error\n"); // changer le message d'erreur
+		ft_putstr_fd(WARNING_ENV, STDERR_FILENO);
+		shell->exit_status = 1;
 		exit(1);
 		return ;
 	}
@@ -84,10 +91,11 @@ void	env_from_envp(t_shell *shell, char **envp)
 	{
 		new = parse_env_line(envp[i]);
 		if (!new)
+		{
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_ENV);
 			error_exit("alloc parse env");
+		}
 		env_add_back(&shell->env, new);
 		i++;
 	}
 }
-
-

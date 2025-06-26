@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:25:43 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/23 11:12:44 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:45:33 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,17 @@
 // SI chemin absolu ou relatif fourni directement
 static char	*check_absolute_or_relative_path(char *cmd)
 {
+	char	*copy;
+
 	if (ft_strchr(cmd, '/') != NULL)
 	{
 		if (access(cmd, X_OK) == 0)
-			return (gc_strdup(cmd, GC_CMD));
+		{
+			copy = gc_strdup(cmd, GC_CMD);
+			if (!copy)
+				error_free_gc_cmd("absolute_or_relative_path: strdup failed");
+			return (copy);
+		}
 	}
 	return (NULL);
 }

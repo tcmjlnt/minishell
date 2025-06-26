@@ -65,12 +65,13 @@ SRC_UTILS = \
 	utils/gc_utils.c \
 	utils/init_struct.c \
 	utils/functions_utils.c \
+	utils/cleanup.c \
 
 SRC_PROMPT = \
 	prompt/prompt.c \
 
 SRC_ENV = \
-	env/print.c \
+	env/print_env.c \
 	env/env_build.c \
 	env/env_tab_build.c \
 	env/env_access.c \
@@ -110,7 +111,9 @@ SRC_PARSING = \
 SRC_SIGNAL = \
 	signal/signal.c \
 
-SRC_DEBUG = debug/debug.c \
+SRC_DEBUG = \
+	debug/debug_env.c \
+	debug/debug_cmd.c \
 
 SRC_FILES = main.c $(SRC_BUILTINS) \
 			$(SRC_UTILS) $(SRC_PROMPT) \
@@ -135,6 +138,7 @@ CLEAR_LINE = \033[2K\r
 
 # Logo cool
 PRINT_LOGO = \
+	if [ "$(SILENT)" = "false" ]; then \
 	echo "   _____ __ __    ___  _      _      ___ ___   ____  ______    ___  _____"; \
 	echo "  / ___/|  |  |  /  _]| |    | |    |   |   | /    ||      |  /  _]/ ___/"; \
 	echo " (   \_ |  |  | /  [_ | |    | |    | _   _ ||  o  ||      | /  [_(   \_ "; \

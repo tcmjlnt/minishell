@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 18:32:53 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:54:34 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # define RESET "\001\033[0m\002 "
 # define STDIN_EOF_WARNING "minishell: warning: "
 # define STDIN_EOF_MSG "here-document delimited by end-of-file (wanted `"
+# define WARNING_ENV "minishell: warning: running with empty environment\n"
 # define PIPE_SYNT_ERR "minishell: syntax error near unexpected token `|'\n"
 
 /* ==========================    📚 INCLUDES    ========================== */
@@ -37,7 +38,6 @@
 // # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <errno.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <limits.h>
@@ -157,7 +157,6 @@ typedef struct s_shell
 	t_gc			gc;
 	t_env			*env;
 	char			**paths;
-	t_bool			is_cmd; // verifier car je crois que je l'utilise plus finalement
 	t_builtin		builtins[8]; // init OK
 	int				exit_status;
 	t_std_backup	std_backup; // init OK
@@ -234,29 +233,20 @@ void	print_token(t_token	*token_list);
 int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
-void	print_builtin_pipe_warning(t_cmd *cmd);
+void	free_and_cleanup_heredocs(t_cmd *cmd_list);
+void	error_free_gc_cmd(const char *message);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell);
-int		handle_all_heredocs(t_cmd *cmd_list);
-int		handle_heredoc(t_redir *redir);
 void	exec_single_cmd(t_cmd *cmd, t_shell *shell);
-int		apply_redirections(t_cmd *cmd, t_shell *shell);
-void	save_std(t_std_backup *backup);
-void	restore_std(t_std_backup *backup);
-void	exec_external_cmd(t_cmd *cmd, t_shell *shell);
-void	exec_pipeline(t_cmd *cmd, t_shell *shell);
-void	close_all_pipes(t_cmd *command);
 char	*find_command_path(char *cmd, t_env *env);
 void	print_cmd_path_found(char *cmd, t_env *env);
+int		apply_redirections(t_cmd *cmd);
+void	exec_pipeline(t_cmd *cmd, t_shell *shell);
 void	wait_for_children(t_cmd *cmds, t_shell *shell);
-void	apply_dup_redirections(t_cmd *cmd);
-void	close_redirections(t_cmd *cmd);
-t_bool	is_directory(char *file);
-t_bool	check_invalid_cmds(t_cmd *cmd, t_shell *shell);
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path);
-int		check_redirections_consistency(t_cmd *cmd, t_shell *shell);
-int		open_file(t_redir *redir, t_shell *shell);
+int		check_redirections_consistency(t_cmd *cmd);
+int		handle_all_heredocs(t_cmd *cmd_list);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);
@@ -283,9 +273,6 @@ int		ft_cd(t_shell *shell, t_cmd *cmd, int fd);
 int		ft_exit(t_shell *shell, t_cmd *cmd, int fd);
 int		handle_builtin(t_shell *shell, t_cmd *cmd, int fd);
 t_bool	is_builtin(t_shell *shell, char *cmd_name);
-t_bool	is_parent_builtin(t_cmd *cmd);
-void	print_redir(t_cmd *temp);
-
 
 /* ========================    🦄 PARSING    ======================== */
 int		parsing(char *prompt, t_cmd **cmd_list, t_shell *shell);

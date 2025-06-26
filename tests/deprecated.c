@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   deprecated.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
+<<<<<<< HEAD:src/parsing/deprecated.c
+/*   Updated: 2025/06/26 17:22:52 by aumartin         ###   ########.fr       */
+=======
 /*   Updated: 2025/06/26 18:22:30 by tjacquel         ###   ########.fr       */
+>>>>>>> main:tests/deprecated.c
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +18,63 @@
 
 // anciennes fonctions ou anciens bout de fonctions
 
+<<<<<<< HEAD:src/parsing/deprecated.c
+void	free_tcmd(t_cmd *cmd_list)
+{
+	t_cmd	*cmd_current;
+	t_cmd	*next_cmd;
+	t_redir	*current_redir;
+	t_redir	*next_redir;
+	int		j = 0;
+
+	if (!cmd_list)
+		return ;
+
+	cmd_current = cmd_list;
+
+	while(cmd_current)
+	{
+		next_cmd = cmd_current->next;
+		if (cmd_current->cmd)
+		{
+			free(cmd_current->cmd);
+			// cmd_current->cmd = NULL;
+		}
+		if (cmd_current->args)
+		{
+			j = 0;
+			while (cmd_current->args[j])
+			{
+				free (cmd_current->args[j]);
+				// cmd_current->args[j] = NULL;
+				j++;
+			}
+			free(cmd_current->args);
+			// cmd_current->args = NULL;
+		}
+		if (cmd_current->redir)
+		{
+			current_redir = cmd_current->redir;
+			while (current_redir)
+			{
+				next_redir = current_redir->next;
+				if (current_redir->file)
+				{
+					free(current_redir->file);
+					// current_redir->file = NULL;
+				}
+				free(current_redir);
+				current_redir = next_redir;
+			}
+			// cmd_current->redir = NULL;
+		}
+
+		free(cmd_current);
+		cmd_current = next_cmd;
+	}
+}
+
+=======
 int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell)
 {
 	t_token	*tkn_current;
@@ -375,6 +436,7 @@ int	quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list) // avant refact
 	return (true);
 }
 
+>>>>>>> main:tests/deprecated.c
 int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;

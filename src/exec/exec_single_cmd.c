@@ -6,8 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 17:13:04 by tjacquel         ###   ########.fr       */
-
+/*   Updated: 2025/06/26 18:28:38 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,61 +27,37 @@ void	restore_std(t_std_backup *backup)
 	{
 		dup2(backup->orig_stdin, STDIN_FILENO);
 		close(backup->orig_stdin);
+		backup->orig_stdin = -1;
 	}
 	if (backup->orig_stdout != -1)
 	{
 		dup2(backup->orig_stdout, STDOUT_FILENO);
 		close(backup->orig_stdout);
+		backup->orig_stdout = -1;
 	}
 	if (backup->orig_stderr != -1)
 	{
 		dup2(backup->orig_stderr, STDERR_FILENO);
 		close(backup->orig_stderr);
+		backup->orig_stderr = -1;
 	}
-	close(backup->orig_stdin);
-	close(backup->orig_stdout);
-	close(backup->orig_stderr);
 }
 
-t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path)
+void	single_cmd_childhood(t_cmd *cmd, t_shell *shell)
 {
-	if (!cmd->cmd)
-		return (false);
-	else if (cmd->cmd[0] == '\0')
-	{
-		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		*status = 127;
-		return (false);
-	}
-	else if (is_directory(cmd->cmd))
-	{
-		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
-		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
-		*status = 126;
-		return (false);
-	}
-	*path = find_command_path(cmd->cmd, shell->env);
-	if (!cmd->is_builtin && *path == NULL)
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(cmd->cmd, STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		*status = 127;
-		return (false);
-	}
-	return (true);
-}
+	int		exit_status;
+	char	*path;
 
-t_bool	is_directory(char *file)
-{
-	int	fd;
-
-	fd = open(file, O_DIRECTORY);
-	if (fd < 0)
-		return (false);
-	close(fd);
-	return (true);
+	exit_status = 0;
+	path = NULL;
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	if (apply_redirections(cmd) == -1)
+		exit (1);
+	if (is_valid_command(cmd, shell, &exit_status, &path))
+		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+	exit(exit_status);
 }
 
 /* single commande sans pipe */
@@ -90,15 +65,11 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 {
 	pid_t			pid;
 	t_std_backup	std_backup;
-	int	exit_status;
-	char	*path;
 
-	exit_status = 0;
-	path = NULL;
 	if (cmd->is_builtin)
 	{
 		save_std(&std_backup);
-		if (apply_redirections(cmd, shell) == -1)
+		if (apply_redirections(cmd) == -1)
 		{
 			shell->exit_status = 1;
 			restore_std(&std_backup);
@@ -111,21 +82,31 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 	{
 		pid = fork();
 		if (pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
-			// gerer les signaux ici notamment commande bloquantes cat, sleep etc
-			if (apply_redirections(cmd, shell) == -1)
-				exit (1);
-			if (is_valid_command(cmd, shell, &exit_status, &path))
-				execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
-			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
-			exit(exit_status);
-		}
+			single_cmd_childhood(cmd, shell);
 		wait_for_children(cmd, shell);
-		// signal(SIGINT, SIG_DFL);
-		// signal(SIGQUIT, SIG_DFL);
-
-		// remettre les signaux en configuration par defaut du minishell
+		free_and_cleanup_heredocs(cmd);
 	}
+}
+
+/* waitpid du ou des enfants */
+void	wait_for_children(t_cmd *cmds, t_shell *shell)
+{
+	t_cmd	*current;
+	int		status;
+
+	status = 0;
+	current = cmds;
+	while (current)
+	{
+		waitpid(current->pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_status = 128 + WTERMSIG(status);
+		current = current->next;
+	}
+	if (shell->exit_status == 130)
+		write(2, "\n", 1);
+	else if (shell->exit_status == 131)
+		write(2, "Quit (core dumped)\n", 19);
 }
