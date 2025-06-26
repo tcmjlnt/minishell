@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:20:15 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 10:39:56 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:43:31 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,12 @@ void	apply_dup_redirections(t_cmd *cmd)
 	if (cmd->fd_in != STDIN_FILENO)
 	{
 		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-		{
-			perror("dup2 (input)");
-			exit(1);
-		}
+			error_free_GC_CMD("dup2 (input)");
 	}
 	if (cmd->fd_out != STDOUT_FILENO)
 	{
 		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-		{
-			perror("dup2 (output)");
-			exit(1);
-		}
+			error_free_GC_CMD("dup2 (output)");
 	}
 }
 

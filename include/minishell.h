@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 11:52:51 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:07:32 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,6 @@ void	wait_for_children(t_cmd *cmds, t_shell *shell);
 t_bool	is_valid_command(t_cmd *cmd, t_shell *shell, int *status, char **path);
 int		check_redirections_consistency(t_cmd *cmd);
 int		handle_all_heredocs(t_cmd *cmd_list);
-void	cleanup_heredocs(t_cmd *cmd_list);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void	print_envp(char **envp);

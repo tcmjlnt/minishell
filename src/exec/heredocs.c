@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 07:51:45 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:29:46 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,23 @@ char	*gen_tmp_filename(void)
 	return (filename);
 }
 
+static void	handle_eof_signal(t_redir *redir, size_t len)
+{
+	if (g_sig == 0)
+	{
+		write(2, STDIN_EOF_WARNING, ft_strlen(STDIN_EOF_WARNING));
+		write(2, STDIN_EOF_MSG, ft_strlen(STDIN_EOF_MSG));
+		write(2, redir->delim, len);
+		write(2, "')\n", 3);
+		return (0);
+	}
+	if (g_sig)
+	{
+		g_sig = 0;
+		exit(SIGINT);
+	}
+}
+
 int	heredoc_childhood(t_redir *redir)
 {
 	char	*line;
@@ -47,19 +64,8 @@ int	heredoc_childhood(t_redir *redir)
 		line = readline("heredoc> ");
 		if (!line)
 		{
-			if (g_sig == 0)
-			{
-				write(2, STDIN_EOF_WARNING, ft_strlen(STDIN_EOF_WARNING));
-				write(2, STDIN_EOF_MSG, ft_strlen(STDIN_EOF_MSG));
-				write(2, redir->delim, len);
-				write(2, "')\n", 3);
-				return (0);
-			}
-			if (g_sig)
-			{
-				g_sig = 0;
-				exit(SIGINT);
-			}
+			handle_eof_signal(redir, len);
+			break ;
 		}
 		if (ft_strncmp(line, redir->delim, len) == 0 && line[len] == '\0')
 		{
@@ -70,7 +76,6 @@ int	heredoc_childhood(t_redir *redir)
 		free(line);
 	}
 	close(fd);
-	// gc_mem(GC_FREE_ALL, 0, NULL, GC_TMP); reteste avec val si tu dois le faire maintenant que c'est isoler
 	return (0);
 }
 
@@ -119,10 +124,7 @@ int	handle_all_heredocs(t_cmd *cmd_list)
 			if (redir->type == TOKEN_REDIRECT_HEREDOC)
 			{
 				if (handle_heredoc(redir) == -1)
-				{
-					// g_sig = SIGINT;
 					return (-1);
-				}
 			}
 			redir = redir->next;
 		}
@@ -130,24 +132,3 @@ int	handle_all_heredocs(t_cmd *cmd_list)
 	}
 	return (0);
 }
-
-void	cleanup_heredocs(t_cmd *cmd_list)
-{
-	t_cmd	*cmd;
-	t_redir	*redir;
-
-	cmd = cmd_list;
-	while (cmd)
-	{
-		redir = cmd->redir;
-		while (redir)
-		{
-			if (redir->type == TOKEN_REDIRECT_HEREDOC && redir->file)
-				unlink(redir->file);
-			redir = redir->next;
-		}
-		cmd = cmd->next;
-	}
-}
-
-

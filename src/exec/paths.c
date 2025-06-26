@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:25:43 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/25 22:12:06 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:31:03 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*check_absolute_or_relative_path(char *cmd)
 		{
 			copy = gc_strdup(cmd, GC_CMD);
 			if (!copy)
-				error_exit("check_absolute_or_relative_path: gc_strdup failed");
+				error_free_GC_CMD("absolute_or_relative_path: strdup failed");
 			return (copy);
 		}
 	}

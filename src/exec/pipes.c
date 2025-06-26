@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 11:56:28 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 15:40:35 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,8 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 	while (cmd_curr)
 	{
 		pid = fork();
-/* 		if (pid == -1) // check si verif a faire ou non avec clio ?
-		{
-			perror("fork failed");
-			close_all_pipes(cmd_list);
-			wait_for_children(cmd_list, shell);
-			shell->exit_status = 1;
-			return ;
-		} */
+		if (pid < 0)
+			error_exit("fork failed");
 		if (pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
