@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:48:27 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 01:04:25 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,20 @@ static void	apply_dup_pipeline(t_cmd *cmd)
 		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1
 			|| dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
 			error_free_gc("dup2 failed (middle cmd)");
+		// close(cmd->prev->pipe[0]);
+		// close(cmd->pipe[1]);
 	}
 	else if (cmd->next == NULL)
 	{
 		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1)
 			error_free_gc("dup2 failed (last cmd)");
+		// close(cmd->prev->pipe[0]);
 	}
 	else if (cmd->prev == NULL)
 	{
 		if (dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
 			error_free_gc("dup2 failed (first cmd)");
+		// close(cmd->pipe[1]);
 	}
 }
 
@@ -99,9 +103,11 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 	else if (cmd->is_builtin)
 	{
 		exit_status = handle_builtin(shell, cmd, STDOUT_FILENO);
+		// close_all_pipes(cmd);
 		gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 		exit (exit_status);
 	}
+	// close_all_pipes(cmd);
 	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	exit(exit_status);
 }

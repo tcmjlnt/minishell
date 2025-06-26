@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 00:38:09 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 00:45:33 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*gen_tmp_filename(void)
 	return (filename);
 }
 
-static void	handle_eof_signal(t_redir *redir, size_t len)
+static void	handle_eof_signal(t_redir *redir, size_t len, int fd)
 {
 	if (g_sig == 0)
 	{
@@ -45,6 +45,8 @@ static void	handle_eof_signal(t_redir *redir, size_t len)
 	if (g_sig)
 	{
 		g_sig = 0;
+		close(fd);
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 		exit(SIGINT);
 	}
 }
@@ -64,7 +66,7 @@ int	heredoc_childhood(t_redir *redir)
 		line = readline("heredoc> ");
 		if (!line)
 		{
-			handle_eof_signal(redir, len);
+			handle_eof_signal(redir, len, fd);
 			break ;
 		}
 		if (ft_strncmp(line, redir->delim, len) == 0 && line[len] == '\0')
