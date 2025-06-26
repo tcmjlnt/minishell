@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 14:17:01 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 16:28:18 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/26 16:58:27 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,8 @@ static int	handle_special_cases(t_cmd *cmd)
 	return (0);
 }
 
-/* si repertoire courrant a ette supprime
+/* si repertoire courant a ette supprime
 on recup l'ancien ou par defaut aller à /   */
-
 static int	handle_deleted_cwd(t_shell *shell)
 {
 	char	*cwd;
@@ -89,9 +88,8 @@ int	ft_cd(t_shell *shell, t_cmd *cmd, int fd)
 	if (chdir(cmd->args[1]) != 0)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		perror(cmd->args[0]);
 		free(old_pwd);
-		return (1);
+		return (perror(cmd->args[0]), 1);
 	}
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
