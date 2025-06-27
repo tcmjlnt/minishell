@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:43:41 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 11:38:38 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,7 @@ void	init_shell(void);
 void	free_and_cleanup_heredocs(t_cmd *cmd_list);
 void	error_free_gc(const char *message);
 void	print_redir(t_cmd *temp);
+void	error_free_exit(const char *message);
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell);

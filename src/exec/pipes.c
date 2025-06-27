@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 01:04:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 11:27:22 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,20 +115,19 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 {
 	t_cmd	*cmd_curr;
-	pid_t	pid;
 
 	cmd_curr = cmd_list;
 	if (create_pipes(cmd_list) == -1)
 		error_free_gc("create_pipes failed");
 	while (cmd_curr)
 	{
-		pid = fork();
-		if (pid < 0)
+		cmd_curr->pid = fork();
+		if (cmd_curr->pid < 0)
 		{
 			shell->exit_status = 1;
 			error_free_gc("fork failed");
 		}
-		if (pid == 0)
+		if (cmd_curr->pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);

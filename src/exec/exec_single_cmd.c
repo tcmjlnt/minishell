@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:57:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 01:29:59 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 11:24:17 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	exec_single_cmd(t_cmd *cmd, t_shell *shell)
 {
 	pid_t			pid;
 
+	pid = cmd->pid;
 	if (cmd->is_builtin)
 	{
 		save_std(&shell->std_backup);
@@ -104,10 +105,13 @@ void	wait_for_children(t_cmd *cmds, t_shell *shell)
 	while (current)
 	{
 		waitpid(current->pid, &status, 0);
-		if (WIFEXITED(status))
-			shell->exit_status = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			shell->exit_status = 128 + WTERMSIG(status);
+		if (!current->next)
+		{
+			if (WIFEXITED(status))
+				shell->exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				shell->exit_status = 128 + WTERMSIG(status);
+		}
 		current = current->next;
 	}
 	if (shell->exit_status == 130)
