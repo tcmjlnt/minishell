@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:37:56 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # define PIPE_SYNT_ERR "minishell: syntax error near unexpected token `|'\n"
 # define TKN_SYNT_ERR "minishell: syntax error near unexpected token `%c'\n"
 # define NWL_SYNT_ERR "minishell: syntax error near unexpected token `newline'\n"
-
 
 /* ==========================    📚 INCLUDES    ========================== */
 
@@ -202,7 +201,7 @@ typedef struct s_quote_state
 	size_t				len;
 	t_bool				in_single;
 	t_bool				in_double;
-}	t_quote_state;
+}						t_quote_state;
 
 typedef struct s_parser_state
 {
