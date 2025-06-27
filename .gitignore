@@ -3,3 +3,4 @@ objs
 /lib/*.a
 minishell
 /minishell_tester
+tests

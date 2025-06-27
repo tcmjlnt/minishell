@@ -66,6 +66,7 @@ SRC_UTILS = \
 	utils/init_struct.c \
 	utils/functions_utils.c \
 	utils/cleanup.c \
+	utils/gc_utils2.c \
 
 SRC_PROMPT = \
 	prompt/prompt.c \
