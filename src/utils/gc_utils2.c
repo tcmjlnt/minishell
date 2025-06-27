@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils2.c                                           :+:      :+:    :+:   */
+/*   gc_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:05:24 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 19:06:44 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:20:59 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*gc_itoa(int n, t_gc_type type)
 	size = count_size((long) n);
 	str = gc_mem(GC_ALLOC, (size + 1), NULL, type);
 	if (str == NULL)
-		return (NULL);
+		perror_free_gc("minishell: gc_itoa malloc failure\n");
 	nb = (long) n;
 	is_negative = 0;
 	if (nb < 0)

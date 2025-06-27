@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 13:16:06 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:17:46 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*fill_env_tab(t_env *entry)
 	len = ft_strlen(entry->key) + 1 + ft_strlen(entry->value) + 1;
 	line = gc_mem(GC_ALLOC, len, NULL, GC_CMD);
 	if (!line)
-		perror_free_gc("fill_env_tab: allocation failed");
+		perror_free_gc("minishell: fill_env_tab: allocation failed\n");
 	ft_strlcpy(line, entry->key, len);
 	ft_strlcat(line, "=", len);
 	ft_strlcat(line, entry->value, len);
