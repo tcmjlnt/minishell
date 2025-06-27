@@ -6,24 +6,25 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 15:27:22 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 01:17:12 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:16:59 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // Ajoute un noeud en tete de liste GC
-static void	gc_add_node(t_gc *gc, void *ptr, t_gc_type type)
+static int	gc_add_node(t_gc *gc, void *ptr, t_gc_type type)
 {
 	t_gc_node	*new;
 
 	new = ft_calloc(1, sizeof(t_gc_node));
 	if (!new)
-		return ;
+		return (-1);
 	new->ptr = ptr;
 	new->type = type;
 	new->next = gc->head;
 	gc->head = new;
+	return (1);
 }
 
 // Alloue avec ft_calloc et enregistre
@@ -34,7 +35,11 @@ static void	*gc_alloc(t_gc *gc, size_t size, t_gc_type type)
 	ptr = ft_calloc(1, size);
 	if (!ptr)
 		return (NULL);
-	gc_add_node(gc, ptr, type);
+	if (gc_add_node(gc, ptr, type) == -1)
+	{
+		free (ptr);
+		return (NULL);
+	}
 	return (ptr);
 }
 
@@ -70,7 +75,6 @@ static void	gc_free_all(t_gc *gc, t_gc_type type)
 	t_gc_node	*tmp;
 	t_gc_node	*prev;
 
-	// si tu n'as pas de !gc est ce quil ne faut pas sortir ?
 	curr = gc->head;
 	prev = NULL;
 	while (curr)

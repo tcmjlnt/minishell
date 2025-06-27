@@ -6,19 +6,18 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 14:32:35 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 15:10:52 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:51:42 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+/* malloc failure check happens inside ft_lstnewxpnd and gc_strndup*/
 t_xpnd	*create_filled_xpnd(char *src, size_t n, t_bool check, t_xpnd *q_curr)
 {
 	t_xpnd	*new_xpnd;
 
 	new_xpnd = ft_lstnewxpnd();
-	if (!new_xpnd)
-		return (NULL);
 	new_xpnd->substr = gc_strndup(src, n, GC_TKN);
 	new_xpnd->xpnd_check = check;
 	new_xpnd->in_single = q_curr->in_single;
