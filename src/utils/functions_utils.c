@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 19:30:13 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*gc_strndup_noquotes(char *src, size_t n, t_gc_type type)
 	len_noquotes = ft_strnlen_noquotes(src, n);
 	dest = gc_mem(GC_ALLOC, len_noquotes + 1, NULL, type);
 	if (!dest)
-		error_free_gc("gc_strndup_noquotes malloc failure\n");
+		perror_free_gc("gc_strndup_noquotes malloc failure\n");
 	st.i = 0;
 	st.len = 0;
 	st.in_single = 0;

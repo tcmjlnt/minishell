@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 16:20:15 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:41:32 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ void	apply_dup_redirections(t_cmd *cmd)
 	if (cmd->fd_in != STDIN_FILENO)
 	{
 		if (dup2(cmd->fd_in, STDIN_FILENO) == -1)
-			error_free_gc("dup2 (input)");
+			perror_free_gc("dup2 (input)");
 	}
 	if (cmd->fd_out != STDOUT_FILENO)
 	{
 		if (dup2(cmd->fd_out, STDOUT_FILENO) == -1)
-			error_free_gc("dup2 (output)");
+			perror_free_gc("dup2 (output)");
 	}
 }
 

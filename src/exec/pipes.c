@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 16:37:53 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,17 @@ static void	apply_dup_pipeline(t_cmd *cmd)
 	{
 		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1
 			|| dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
-			error_free_gc("dup2 failed (middle cmd)");
+			perror_free_gc("dup2 failed (middle cmd)");
 	}
 	else if (cmd->next == NULL)
 	{
 		if (dup2(cmd->prev->pipe[0], STDIN_FILENO) == -1)
-			error_free_gc("dup2 failed (last cmd)");
+			perror_free_gc("dup2 failed (last cmd)");
 	}
 	else if (cmd->prev == NULL)
 	{
 		if (dup2(cmd->pipe[1], STDOUT_FILENO) == -1)
-			error_free_gc("dup2 failed (first cmd)");
+			perror_free_gc("dup2 failed (first cmd)");
 	}
 }
 
@@ -97,7 +97,7 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 	if (!cmd->is_builtin && is_valid_command(cmd, shell, &exit_status, &path))
 	{
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));
-		error_free_gc("execve failed");
+		perror_free_gc("execve failed");
 	}
 	else if (cmd->is_builtin)
 	{
@@ -115,14 +115,14 @@ void	exec_pipeline(t_cmd *cmd_list, t_shell *shell)
 
 	cmd_curr = cmd_list;
 	if (create_pipes(cmd_list) == -1)
-		error_free_gc("create_pipes failed");
+		perror_free_gc("create_pipes failed");
 	while (cmd_curr)
 	{
 		cmd_curr->pid = fork();
 		if (cmd_curr->pid < 0)
 		{
 			shell->exit_status = 1;
-			error_free_gc("fork failed");
+			perror_free_gc("fork failed");
 		}
 		if (cmd_curr->pid == 0)
 		{

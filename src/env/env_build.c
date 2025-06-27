@@ -19,7 +19,7 @@ t_env	*env_new(char *key, char *value, t_bool equal)
 
 	new = gc_mem(GC_ALLOC, sizeof(t_env), NULL, GC_ENV);
 	if (!new)
-		error_free_gc("env_new: allocation failed");
+		perror_free_gc("minishell: env_new: allocation failed\n");
 	new->key = key;
 	new->value = value;
 	new->equal = equal;
@@ -59,17 +59,17 @@ static t_env	*parse_env_line(char *line)
 		key_len = equal - line;
 		key = gc_mem(GC_ALLOC, key_len + 1, NULL, GC_ENV);
 		if (!key)
-			error_free_gc("key alloc failure\n");
+			perror_free_gc("minishell: key alloc failure\n");
 		val = gc_mem(GC_ALLOC, ft_strlen(equal + 1) + 1, NULL, GC_ENV);
 		if (!val)
-			error_free_gc("value alloc failure\n");
+			perror_free_gc("minishell: value alloc failure\n");
 		ft_strlcpy(key, line, key_len + 1);
 		ft_strlcpy(val, equal + 1, ft_strlen(equal + 1) + 1);
 		return (env_new(key, val, true));
 	}
 	key = gc_mem(GC_ALLOC, ft_strlen(line) + 1, NULL, GC_ENV);
 	if (!key)
-		error_free_gc("alloc key (no equal)");
+		perror_free_gc("minishell: alloc key failure\n");
 	ft_strlcpy(key, line, ft_strlen(line) + 1);
 	return (env_new(key, NULL, false));
 }

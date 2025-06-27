@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:36:45 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 16:10:40 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:11:37 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,11 @@ t_cmd	*ft_lstnewcmd(void)
 
 	new_cmd = gc_mem(GC_ALLOC, sizeof(t_cmd), NULL, GC_CMD);
 	if (!new_cmd)
-		return (NULL);
+		perror_free_gc("ft_lstnewcmd malloc failure\n");
 	new_cmd->args = gc_mem(GC_ALLOC, (sizeof(char *) * (MAX_ARGS + 1)),
 			NULL, GC_CMD);
 	if (!new_cmd->args)
-	{
-		return (NULL);
-	}
+		perror_free_gc("ft_lstnewcmd malloc failure\n");
 	new_cmd->cmd = NULL;
 	new_cmd->args[0] = NULL;
 	new_cmd->fd_in = -1;

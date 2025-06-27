@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 14:32:56 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 14:32:59 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:10:18 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 	{
 		temp_join = gc_strjoin(res, xpnd_curr->str_to_join, GC_TKN);
 		if (!temp_join)
-			return (false);
+			perror_free_gc("minishell: gc_strjoin malloc failure\n");
 		res = temp_join;
 		xpnd_curr = xpnd_curr->next;
 	}

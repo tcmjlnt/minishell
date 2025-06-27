@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 20:16:33 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 # define STDIN_EOF_MSG "here-document delimited by end-of-file (wanted `"
 # define WARNING_ENV "minishell: warning: running with empty environment\n"
 # define PIPE_SYNT_ERR "minishell: syntax error near unexpected token `|'\n"
+# define TKN_SYNT_ERR "minishell: syntax error near unexpected token `%c'\n"
+# define NWL_SYNT_ERR "minishell: syntax error near unexpected token `newline'\n"
+
 
 /* ==========================    📚 INCLUDES    ========================== */
 
@@ -234,7 +237,7 @@ void					print_token(t_token *token_list);
 t_shell					*get_shell(void);
 void					init_shell(void);
 void					free_and_cleanup_heredocs(t_cmd *cmd_list);
-void					error_free_gc(const char *message);
+void					perror_free_gc(const char *message);
 void					print_redir(t_cmd *temp);
 void					free_gc_exit(void);
 

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:24:49 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 18:32:22 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:15:50 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	set_command_name(t_parser_state *state, char *value)
 {
 	state->cmd_current->cmd = gc_strdup(value, GC_CMD);
 	if (!state->cmd_current->cmd)
-		return (false);
+		perror_free_gc("gc_strdup malloc failure\n");
 	state->cmd_current->is_builtin = is_builtin(state->shell,
 			state->cmd_current->cmd);
 	return (true);
@@ -25,10 +25,7 @@ static int	set_command_name(t_parser_state *state, char *value)
 static int	handle_word_token(t_token *tkn_current, t_parser_state *state)
 {
 	if (state->arg_idx >= 255)
-	{
-		ft_putstr_fd("minishell: too many arguments\n", 2);
-		return (false);
-	}
+		perror_free_gc("minishell: too many arguments in input call\n");
 	state->cmd_current->args[state->arg_idx]
 		= gc_strdup(tkn_current->token_value, GC_CMD);
 	if (!state->cmd_current->args[state->arg_idx])

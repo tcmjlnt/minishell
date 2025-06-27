@@ -6,11 +6,18 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 18:05:29 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 18:28:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 21:49:40 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static void	print_syntax_err(const char *s)
+{
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
+	ft_putstr_fd((char *)s, 2);
+	ft_putstr_fd("'\n", 2);
+}
 
 static const char	*token_type_string(t_token_type token_type)
 {
@@ -35,21 +42,19 @@ static int	process_check_tkn(t_token *temp)
 		|| (is_operator_token(temp) && temp->next
 			&& temp->next->token_type == TKN_PIPE))
 	{
-		printf("minishell: syntax error near unexpected token `%s'\n",
-			token_type_string(temp->next->token_type));
+		print_syntax_err(token_type_string(temp->next->token_type));
 		return (false);
 	}
 	else if (is_operator_token(temp) && temp->next
 		&& is_operator_token(temp->next) && temp->next->next
 		&& is_operator_token(temp->next->next))
 	{
-		printf("minishell: syntax error near unexpected token `%s'\n",
-			token_type_string(temp->next->token_type));
+		print_syntax_err(token_type_string(temp->next->token_type));
 		return (false);
 	}
 	else if (is_operator_token(temp) && !temp->next)
 	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
+		ft_putstr_fd(NWL_SYNT_ERR, 2);
 		return (false);
 	}
 	return (true);

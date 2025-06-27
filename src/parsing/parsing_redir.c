@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:53:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 17:53:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:14:47 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_redir	*ft_lstnewredir(void)
 
 	new_redir = gc_mem(GC_ALLOC, sizeof(t_redir), NULL, GC_CMD);
 	if (!new_redir)
-		return (NULL);
+		perror_free_gc("ft_lstnewredir malloc failure\n");
 	new_redir->file = NULL;
 	new_redir->delim = NULL;
 	new_redir->type = -666;
@@ -59,7 +59,7 @@ int	fill_redir(t_redir **redir_list, t_token *token)
 
 	current_redir = ft_lstnewredir();
 	if (!current_redir)
-		return (false);
+		perror_free_gc("ft_lstnewredir malloc failure\n");
 	if (token->prev && token->prev->token_type != TKN_HEREDOC)
 	{
 		current_redir->file = gc_strdup(token->token_value, GC_CMD);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 16:26:25 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	heredoc_childhood(t_redir *redir)
 
 	fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd == -1)
-		error_free_gc("minishell : error : fd = -1");
+		perror_free_gc("minishell : error : fd = -1");
 	while (1)
 	{
 		line = readline("heredoc> ");
@@ -92,10 +92,10 @@ int	handle_heredoc(t_redir *redir)
 
 	redir->file = gen_tmp_filename();
 	if (!redir->file)
-		error_free_gc("");
+		perror_free_gc("");
 	pid = fork();
 	if (pid < 0)
-		error_free_gc("");
+		perror_free_gc("");
 	if (pid == 0)
 	{
 		signal(SIGINT, signal_handler_heredoc);
