@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_unset.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 17:23:52 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 18:57:59 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 21:08:47 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static void	free_env_node(t_env *node)
-{
-	if (!node)
-		return ;
-	free(node->key);
-	free(node->value);
-	free(node);
-}
 
 static void	del_env_node(t_env **env_list, const char *key)
 {
@@ -32,7 +23,7 @@ static void	del_env_node(t_env **env_list, const char *key)
 	if (ft_strcmp(curr_node->key, key) == 0)
 	{
 		*env_list = curr_node->next;
-		return (free_env_node(curr_node));
+		return ;
 	}
 	prev_node = curr_node;
 	curr_node = curr_node->next;
@@ -41,7 +32,7 @@ static void	del_env_node(t_env **env_list, const char *key)
 		if (ft_strcmp(curr_node->key, key) == 0)
 		{
 			prev_node->next = curr_node->next;
-			return (free_env_node(curr_node));
+			return ;
 		}
 		prev_node = curr_node;
 		curr_node = curr_node->next;
@@ -62,6 +53,5 @@ int	ft_unset(t_shell *shell, t_cmd *cmd, int fd)
 			i++;
 		}
 	}
-	shell->exit_status = 0;
 	return (0);
 }
