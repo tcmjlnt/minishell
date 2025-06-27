@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 16:25:25 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:25:12 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:02:58 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_shell	*get_shell(void)
 }
 
 /* tableau d'objets pour tableau de func KEY VALEUR voir ds tests funcptr.c */
-
+// NULL de fin pour boucle cond while (builtins[i].name)
 static void	get_builtins(t_builtin	*builtins)
 {
 	builtins[0] = (t_builtin){"pwd", ft_pwd};
@@ -30,7 +30,7 @@ static void	get_builtins(t_builtin	*builtins)
 	builtins[4] = (t_builtin){"exit", ft_exit};
 	builtins[5] = (t_builtin){"export", ft_export};
 	builtins[6] = (t_builtin){"unset", ft_unset};
-	builtins[7] = (t_builtin){NULL, NULL}; // NULL de fin pour boucle cond while (builtins[i].name)
+	builtins[7] = (t_builtin){NULL, NULL};
 }
 
 void	init_shell(void)
