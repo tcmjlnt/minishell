@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 12:13:51 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:48:45 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	if (!handle_expansion(&tkn_list, &tkn_xpnd_list, shell))
 		return (false);
 	printf ("------------- POST EXPAND TOKENS\n");
-	print_token(tkn_list);
+	print_token(tkn_xpnd_list);
 	if (!parse_tokens(cmd_list, &tkn_xpnd_list, shell))
 		return (false);
 	return (1);

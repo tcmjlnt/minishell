@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 14:33:13 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 12:18:15 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:41:37 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,23 @@ int	scnd_segmentation_loop(t_xpnd *xpnd_quotes_list, t_xpnd **xpnd_list,
 	return (true);
 }
 
-int	handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current,
-								t_xpnd **xpnd_list, t_shell *shell)
+static int	handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current,
+								t_xpnd **xpnd_list, t_shell *shell, int *i)
 {
 	if (!handle_key_value(xpnd_list, shell))
+	{
+		printf("je sors a handle_key_value\n");
 		return (false);
+	}
+	printf("-------------------- AFTER HANDLE KEY VALUE TOKEN[%d] ---------------------\n", *i);
+	printf_xpnd(xpnd_list);
 	if (!handle_dollarsign_before_quotes(xpnd_list, tkn_current))
 		return (false);
 	if (!join_xpnd(xpnd_list, tkn_xpnd_list, tkn_current))
+	{
+		printf("je sors a join_xpnd\n");
 		return (false);
+	}
 	return (true);
 }
 
@@ -104,10 +112,10 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list,
 			return (false);
 		}
 		printf("-------------------- AFTER SCND SEGMENTATION TOKEN[%d] ---------------------\n", i);
-		printf_xpnd(&xpnd_quotes_list);
+		printf_xpnd(&xpnd_list);
 
 		if (!handle_post_segmentation(tkn_xpnd_list, tkn_current, &xpnd_list,
-				shell))
+				shell, &i))
 		{
 			printf("je sors a la handle_post_segmentation\n");
 			return (false);
