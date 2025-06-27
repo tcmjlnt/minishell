@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   functions_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/21 16:26:24 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:44:34 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../..//include/minishell.h"
+#include "../../include/minishell.h"
 
 size_t	ft_strnlen_noquotes(char *src, size_t n)
 {

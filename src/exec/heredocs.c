@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredocs.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 12:53:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 00:45:33 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:26:25 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,20 @@ int	heredoc_childhood(t_redir *redir)
 {
 	char	*line;
 	int		fd;
-	size_t	len;
 
 	fd = open(redir->file, O_CREAT | O_WRONLY | O_TRUNC, 0600);
 	if (fd == -1)
 		error_free_gc("minishell : error : fd = -1");
-	len = ft_strlen(redir->delim);
 	while (1)
 	{
 		line = readline("heredoc> ");
 		if (!line)
 		{
-			handle_eof_signal(redir, len, fd);
+			handle_eof_signal(redir, ft_strlen(redir->delim), fd);
 			break ;
 		}
-		if (ft_strncmp(line, redir->delim, len) == 0 && line[len] == '\0')
+		if (ft_strncmp(line, redir->delim, ft_strlen(redir->delim)) == 0
+			&& line[ft_strlen(redir->delim)] == '\0')
 		{
 			free(line);
 			break ;
