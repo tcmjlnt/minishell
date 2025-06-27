@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 18:50:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:57:16 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ int						ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int						ft_echo(t_shell *shell, t_cmd *cmd, int fd);
 int						ft_export(t_shell *shell, t_cmd *cmd, int fd);
 void					print_env_export(t_env *env);
+int						is_valid_identifier(char *arg);
 t_env					*check_existing_key(t_shell *shell, char *key);
 int						ft_unset(t_shell *shell, t_cmd *cmd, int fd);
 int						ft_cd(t_shell *shell, t_cmd *cmd, int fd);
