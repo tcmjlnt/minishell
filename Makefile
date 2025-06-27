@@ -188,7 +188,6 @@ $(NAME): $(OBJS) $(LIB)
 	@echo "🚀 Compilation de $(NAME)..."
 	@$(CC) $(CFLAGS) $(OBJS) $(LINKER) -o $(NAME) \
 	&& echo "✅ $(NAME) a été créé avec succès (✔)" \
-	|| { echo "❌ Erreur : Compilation de $(NAME) échouée (✘)"; exit 1; }
 
 # Nettoyage
 clean:
