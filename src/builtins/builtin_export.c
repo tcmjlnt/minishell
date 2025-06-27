@@ -6,23 +6,11 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 18:45:58 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:56:45 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	is_valid_identifier(char *arg)
-{
-	if (!arg || !arg[0] || ft_isdigit(arg[0]) || arg[0] == '=')
-	{
-		write(2, "minishell: export: `", 20);
-		write(2, arg, ft_strlen(arg));
-		write(2, "': not a valid identifier\n", 26);
-		return (false);
-	}
-	return (true);
-}
 
 size_t	check_key_export(char *arg)
 {
@@ -84,8 +72,6 @@ int	arg_to_env(t_shell *shell, char *arg, size_t n)
 	else
 	{
 		env_new_node = env_new(key, value, true);
-		if (!env_new_node)
-			return (false);
 		env_add_back((t_env **)&shell->env, env_new_node);
 	}
 	return (true);
