@@ -6,13 +6,89 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 17:17:36 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:10:33 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 // anciennes fonctions ou anciens bout de fonctions
+
+char	*gc_strndup_noquotes(char *src, size_t n, t_gc_type type)
+{
+	char		*dest;
+	size_t		i;
+	size_t		j;
+	size_t		len_noquotes;
+	int	in_single = 0;
+	int	in_double = 0;
+
+	len_noquotes = ft_strnlen_noquotes(src, n);
+	// dest = malloc(sizeof(char) * (len_noquotes + 1));
+	dest = gc_mem(GC_ALLOC, len_noquotes + 1, NULL, type);
+	if (!dest)
+		return(NULL);
+	i = 0;
+	j = 0;
+	while (i < n && src[i])
+	{
+		if (is_quote(src[i]))
+		{
+			if (src[i] == '\'' && !in_double) // je recontre une S_QUOTE et je NE suis PAS dans une D_QUOTE
+				in_single = !in_single; // toggle in_single state
+			else if (src[i] == '\"' && !in_single) // je rencontre une D_QUOTE et je NE suis PAS dans une S_QUOTE
+				in_double = !in_double; // toggle in_double state
+			else if (src[i] == '\"' && in_single) // je rencontre une D_QUOTE et je suis dans une S_QUOTE
+				dest[j++] = src[i]; // pour gagner 3 ligne de code { j++}
+			else if (src[i] == '\'' && in_double) // je rencontre une S_QUOTE et je suis dans une D_QUOTE
+				dest[j++] = src[i];
+			i++;
+		}
+		else
+		{
+			if (j < len_noquotes)
+			{
+				dest[j] = src[i];
+				j++;
+			}
+			i++;
+		}
+	}
+	dest[j] = '\0';
+	return (dest);
+}
+
+size_t	ft_strnlen_noquotes(char *src, size_t n)
+{
+	size_t	i;
+	size_t	j;
+	int	in_single = 0;
+	int	in_double = 0;
+
+	i = 0;
+	j = 0;
+	while (src[i] && i < n)
+	{
+		if (is_quote(src[i]))
+		{
+			if (src[i] == '\'' && !in_double)
+				in_single = !in_single;
+			else if (src[i] == '\"' && !in_single)
+				in_double = !in_double;
+			else if (src[i] == '\"' && in_single)
+				j++;
+			else if (src[i] == '\'' && in_double)
+				j++;
+			i++;
+		}
+		else
+		{
+			j++;
+			i++;
+		}
+	}
+	return (j);
+}
 
 /* void	ft_prompt(t_shell *shell)
 {
