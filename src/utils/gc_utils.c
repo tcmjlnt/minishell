@@ -6,7 +6,7 @@
 /*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:42:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 19:08:00 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 21:37:21 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*gc_strjoin(char const *s1, char const *s2, t_gc_type type)
 	len_s2 = ft_strlen(s2);
 	join = gc_mem(GC_ALLOC, (len_s1 + len_s2 + 1) * sizeof(char), NULL, type);
 	if (!join)
-		return (error_exit("gc_strjoin: allocation failed"), NULL);
+		return (error_exit("minishell: gc_strjoin: allocation failed"), NULL);
 	ft_strlcpy(join, s1, (len_s1 + 1));
 	ft_strlcat(join, s2, len_s1 + len_s2 + 1);
 	return (join);

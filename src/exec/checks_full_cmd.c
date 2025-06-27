@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checks_full_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 10:07:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 18:00:39 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 21:35:35 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ static int	open_file(t_redir *redir)
 	else if (redir->type == TKN_APPEND)
 		fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		perror(redir->file);
+	}
 	return (fd);
 }
 
