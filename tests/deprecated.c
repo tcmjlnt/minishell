@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   deprecated.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 16:00:22 by tjacquel          #+#    #+#             */
-<<<<<<< HEAD:src/parsing/deprecated.c
-/*   Updated: 2025/06/26 17:22:52 by aumartin         ###   ########.fr       */
-=======
-/*   Updated: 2025/06/26 18:22:30 by tjacquel         ###   ########.fr       */
->>>>>>> main:tests/deprecated.c
+/*   Updated: 2025/06/27 17:17:36 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +14,57 @@
 
 // anciennes fonctions ou anciens bout de fonctions
 
-<<<<<<< HEAD:src/parsing/deprecated.c
+/* void	ft_prompt(t_shell *shell)
+{
+	char		*prompt;
+	t_cmd		*cmd_list;
+	int			res;
+
+	init_signals();
+	while (1)
+	{
+		cmd_list = NULL;
+		prompt = readline(MAGENTA "minishell:" RESET);
+		if (g_sig == SIGINT)
+		{
+			shell->exit_status = 130;
+			g_sig = 0;
+		}
+		if (!prompt)
+		{
+			res = shell->exit_status;
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+			rl_clear_history();
+			ft_putstr_fd("exit\n", 2);
+			exit(res);
+		}
+		if (*prompt)
+		{
+			add_history(prompt);
+			if (!parsing(prompt, &cmd_list, shell))
+			{
+				shell->exit_status = 2;
+				free(prompt);
+				gc_mem(GC_FREE_ALL, 0, NULL, GC_TKN);
+				gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+				cmd_list = NULL;
+				continue ;
+			}
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_TKN);
+			set_signals_exec();
+			exec_dispatcher(cmd_list, shell);
+			if (g_sig == SIGINT)
+			{
+				shell->exit_status = 130;
+				g_sig = 0;
+			}
+			set_signals_interactive();
+			gc_mem(GC_FREE_ALL, 0, NULL, GC_CMD);
+		}
+		free(prompt);
+	}
+} */
+
 void	free_tcmd(t_cmd *cmd_list)
 {
 	t_cmd	*cmd_current;
@@ -74,7 +120,6 @@ void	free_tcmd(t_cmd *cmd_list)
 	}
 }
 
-=======
 int	parse_tokens(t_cmd **cmd_list_head, t_token **tkn_list, t_shell *shell)
 {
 	t_token	*tkn_current;
@@ -436,7 +481,6 @@ int	quotes_first_segmentation(char *tkn_raw, t_xpnd **xpnd_list) // avant refact
 	return (true);
 }
 
->>>>>>> main:tests/deprecated.c
 int	join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current)
 {
 	t_xpnd	*xpnd_curr;

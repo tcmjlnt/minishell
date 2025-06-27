@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 16:08:59 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:30:43 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 	if (!first_syntax_check(prompt, shell))
 		return (false);
 	if (!tokenize_prompt(prompt, &tkn_list))
-		return (false);
+		return (shell->exit_status = 0, false);
 	if (!check_token(&tkn_list, shell))
-		return (false);
+		return (shell->exit_status = 2, false);
 	if (!handle_expansion(&tkn_list, &tkn_xpnd_list, shell))
-		return (false);
+		return (shell->exit_status = 0, false);
 	if (!parse_tokens(cmd_list, &tkn_xpnd_list, shell))
-		return (false);
+		return (shell->exit_status = 0, false);
 	return (1);
 }
