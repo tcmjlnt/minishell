@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 18:45:58 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:55:16 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ int	arg_to_env(t_shell *shell, char *arg, size_t n)
 	else
 	{
 		env_new_node = env_new(key, value, true);
-		if (!env_new_node)
-			return (false);
 		env_add_back((t_env **)&shell->env, env_new_node);
 	}
 	return (true);
