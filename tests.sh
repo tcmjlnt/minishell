@@ -2,7 +2,7 @@
 
 # === CONFIGURATION ===
 MINISHELL=./minishell
-BASH=/bin/bash
+BASH=$(which bash)
 COMMANDS_FILE=commands_test.txt
 MINISHELL_OUT=minishell_output.txt
 BASH_OUT=bash_output.txt
@@ -24,7 +24,7 @@ done < "$COMMANDS_FILE"
 echo "Executing commands with Bash..." >> $BASH_OUT
 while IFS= read -r line || [[ -n "$line" ]]; do
   echo "$ $line" >> $BASH_OUT
-  echo "$line" | $BASH >> $BASH_OUT 2>&1
+  echo "$line" | $BASH --posix >> $BASH_OUT 2>&1 
   echo "----------------" >> $BASH_OUT
 done < "$COMMANDS_FILE"
 
