@@ -110,6 +110,7 @@ SRC_PARSING = \
 
 SRC_SIGNAL = \
 	signal/signal.c \
+	signal/signal_helper.c \
 
 SRC_DEBUG = \
 	debug/debug_env.c \
