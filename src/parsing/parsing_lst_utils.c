@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:36:45 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 18:04:18 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:10:40 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new)
 	}
 }
 
-void	print_args(t_cmd *cmd)
+/* void	print_args(t_cmd *cmd)
 {
 	int		i ;
 	int		j;
@@ -83,8 +83,11 @@ void	print_args(t_cmd *cmd)
 		if (temp->args)
 		{
 			j = 0;
-			while (temp->args[j++])
+			while (temp->args[j])
+			{
 				printf("arg[%d]: `%s`\n", j, temp->args[j]);
+				j++;
+			}
 		}
 		if (temp->redir)
 			print_redir(temp);
@@ -92,4 +95,4 @@ void	print_args(t_cmd *cmd)
 		temp = temp->next;
 	}
 	printf("----------------- END OF COMMAND LIST -----------------\n");
-}
+} */

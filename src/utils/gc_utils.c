@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gc_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 09:42:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 10:32:15 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:42:46 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*gc_strndup(char *src, size_t n, t_gc_type type)
 
 	dest = gc_mem(GC_ALLOC, n + 1, NULL, type);
 	if (!dest)
-		return (NULL);
+		error_free_gc("gc_strndup malloc failure\n");
 	i = 0;
 	while (i < n && src[i])
 	{

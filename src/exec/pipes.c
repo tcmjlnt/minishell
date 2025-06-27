@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 14:56:38 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 01:04:25 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 15:56:08 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,10 @@ void	pipeline_childhood(t_cmd *cmd, t_shell *shell)
 	apply_dup_pipeline(cmd);
 	close_all_pipes(cmd);
 	if (apply_redirections(cmd) == -1)
-		error_free_gc("apply redir in pipeline failed");
+	{
+		gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+		exit (1);
+	}
 	if (!cmd->is_builtin && is_valid_command(cmd, shell, &exit_status, &path))
 	{
 		execve(path, cmd->args, env_to_env_tab_for_execve(shell->env));

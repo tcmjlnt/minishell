@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 14:32:48 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 14:32:50 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:45:24 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_token	*ft_lstnewtoken_xpnd(void)
 
 	new_token = gc_mem(GC_ALLOC, sizeof(t_token), NULL, GC_TKN);
 	if (!new_token)
-		return (NULL);
+		error_free_gc("ft_lstnewtoken_xpnd alloc failure.\n");
 	new_token->token_type = -1;
 	new_token->token_raw = NULL;
 	new_token->token_value = NULL;
@@ -59,7 +59,7 @@ t_xpnd	*ft_lstnewxpnd(void)
 
 	new_xpnd = gc_mem(GC_ALLOC, sizeof(t_xpnd), NULL, GC_TKN);
 	if (!new_xpnd)
-		return (NULL);
+		error_free_gc("ft_lstnewxpnd alloc failure.\n");
 	new_xpnd->substr = NULL;
 	new_xpnd->in_double = false;
 	new_xpnd->in_single = false;

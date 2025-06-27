@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:43:41 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:10:49 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,6 @@ t_cmd	*ft_lstnewcmd(void);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *new);
 int		is_inside_squotes(char *token_raw);
 int		is_inside_dquotes(char *token_raw);
-void	print_args(t_cmd *cmd);
 int		is_redir_operator(t_token_type token_type);
 int		fill_redir(t_redir **redir, t_token *token);
 int		is_inside_dquotes(char *token_raw);
@@ -332,8 +331,8 @@ int		heredoc_delim_check(t_token *tkn_curr);
 int		redir_prev_tkn_check(t_token *tkn_curr);
 void	printf_xpnd(t_xpnd **xpnd_list);
 int		trailing_dollar_count(char *str);
-int		handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current,
-			t_xpnd **xpnd_list, t_shell *shell);
+// int		handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current,
+// 			t_xpnd **xpnd_list, t_shell *shell);
 int		handle_dollarsign_before_quotes(t_xpnd **xpnd_list, t_token *tkn_current);
 int		process_trailing_dollar_loop(t_xpnd *xpnd_curr, t_token *tkn_current);
 int		join_xpnd(t_xpnd **xpnd_list, t_token **tkn_xpnd_list, t_token *tkn_current);
@@ -348,6 +347,10 @@ t_xpnd	*create_filled_xpnd(char *src, size_t n, t_bool check,
 									t_xpnd *q_curr);
 int		scnd_segmentation(t_xpnd *xpnd_quotes_curr, t_xpnd **xpnd_list,
 						t_token *tkn_current);
+int	create_variable_segment(char *sub, t_dq_state *st,
+								t_xpnd **list, t_xpnd *q_curr);
+int	create_text_before_var(char *sub, t_dq_state *st,
+								t_xpnd **list, t_xpnd *q_curr);
 
 
 

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 14:33:13 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 15:08:20 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:10:09 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,17 @@ int	scnd_segmentation_loop(t_xpnd *xpnd_quotes_list, t_xpnd **xpnd_list,
 	return (true);
 }
 
-int	handle_post_segmentation(t_token **tkn_xpnd_list, t_token *tkn_current,
-								t_xpnd **xpnd_list, t_shell *shell)
+static int	handle_post_segmentation(t_token **tkn_xpnd_list,
+		t_token *tkn_current, t_xpnd **xpnd_list, t_shell *shell)
 {
 	if (!handle_key_value(xpnd_list, shell))
 		return (false);
 	if (!handle_dollarsign_before_quotes(xpnd_list, tkn_current))
 		return (false);
 	if (!join_xpnd(xpnd_list, tkn_xpnd_list, tkn_current))
+	{
 		return (false);
+	}
 	return (true);
 }
 
