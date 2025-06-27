@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 15:17:55 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/24 10:01:41 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:26:45 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,7 +323,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		}
 		ft_lstadd_back_token(&tkn_list, token);
 	}
-	// print_token(tkn_list);
+	print_token(tkn_list);
 
 
 	if (!check_token(&tkn_list))
@@ -334,8 +334,8 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 
 	handle_expansion(&tkn_list, &tkn_xpnd_list, shell);
 
-	// printf("-------------------- TOKENS AFTER EXPANSION -----------------\n");
-	// print_token(tkn_xpnd_list);
+	printf("-------------------- TOKENS AFTER EXPANSION -----------------\n");
+	print_token(tkn_xpnd_list);
 
 	// IMPLEMENTER POST EXPANSION TOKEN_CHECK ??
 
@@ -345,7 +345,7 @@ int	parsing(char *prompt, t_cmd **cmd_list, t_shell *shell)
 		return (false);
 	}
 
-	// print_args(*cmd_list);
+	print_args(*cmd_list);
 	// handle_expansion(&cmd_list, &tkn_list, shell);
 	// expand
 	// redirections --> penser a creer un liste chainee pour les redirections

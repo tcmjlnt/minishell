@@ -3,3 +3,4 @@ objs
 /lib/*.a
 minishell
 /tests/tester_cmassol/minishell_tester_modif/test_files/invalid_permission
+/minishell_tester_modif
