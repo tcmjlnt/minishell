@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_build.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 22:17:18 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 21:36:57 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	env_from_envp(t_shell *shell, char **envp)
 		if (!new)
 		{
 			gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
-			error_exit("alloc parse env failure\n");
+			error_exit("minishell: alloc parse env failure\n");
 		}
 		env_add_back(&shell->env, new);
 		i++;

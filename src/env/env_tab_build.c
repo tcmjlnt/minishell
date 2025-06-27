@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   env_tab_build.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 13:16:06 by aumartin          #+#    #+#             */
 /*   Updated: 2025/06/27 22:17:46 by tjacquel         ###   ########.fr       */
@@ -57,7 +57,7 @@ char	**env_to_env_tab_for_execve(t_env *env)
 	count = count_env_tab(env);
 	env_tab = gc_mem(GC_ALLOC, sizeof(char *) * (count + 1), NULL, GC_CMD);
 	if (!env_tab)
-		error_exit("env_to_env_tab_for_execve: alloc failed");
+		error_exit("minishell: env_to_env_tab_for_execve: alloc failed");
 	i = 0;
 	while (env)
 	{

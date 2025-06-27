@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:25:43 by aumartin          #+#    #+#             */
 /*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
@@ -64,7 +64,17 @@ void	print_cmd_path_found(char *cmd, t_env *env)
 
 	path = find_command_path(cmd, env);
 	if (path)
-		printf("Commande '%s' found: %s\n", cmd, path);
+	{
+		ft_putstr_fd("Commande '", STDOUT_FILENO);
+		ft_putstr_fd(cmd, STDOUT_FILENO);
+		ft_putstr_fd("' found: ", STDOUT_FILENO);
+		ft_putstr_fd(path, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+	}
 	else
-		printf("Commande '%s' not found.\n", cmd);
+	{
+		ft_putstr_fd("Commande '", STDOUT_FILENO);
+		ft_putstr_fd(cmd, STDOUT_FILENO);
+		ft_putstr_fd("' not found.\n", STDOUT_FILENO);
+	}
 }
