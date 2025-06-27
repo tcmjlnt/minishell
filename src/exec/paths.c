@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 11:25:43 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:41:32 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*check_absolute_or_relative_path(char *cmd)
 		{
 			copy = gc_strdup(cmd, GC_CMD);
 			if (!copy)
-				error_free_gc("absolute_or_relative_path: strdup failed");
+				perror_free_gc("absolute_or_relative_path: strdup failed");
 			return (copy);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:40:28 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 12:48:55 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 22:06:41 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_token	*ft_lstnewtoken(char *prompt, int n, t_token_type token_type)
 
 	new_token = gc_mem(GC_ALLOC, sizeof(t_token), NULL, GC_TKN);
 	if (!new_token)
-		return (NULL);
+		perror_free_gc("ft_lstnewtoken malloc failure\n");
 	new_token->token_type = token_type;
 	if (token_type != TKN_WORD)
 		new_token->token_value = gc_strndup(prompt, n, GC_TKN);

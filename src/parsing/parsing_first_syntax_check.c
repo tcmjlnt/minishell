@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:42:29 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 17:43:01 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 21:21:24 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	first_syntax_check(char *prompt, t_shell *shell)
 {
 	if (!closed_quotes(prompt))
 	{
-		printf("Unclosed quotes\n");
+		ft_putstr_fd("minishell: syntax error: open quotes\n", 2);
 		shell->exit_status = 2;
 		return (false);
 	}
