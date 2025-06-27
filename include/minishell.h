@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 18:50:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:13:00 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,14 @@ typedef struct s_dq_state
 	size_t				strlen;
 }						t_dq_state;
 
+typedef struct s_quote_state
+{
+	size_t				i;
+	size_t				len;
+	t_bool				in_single;
+	t_bool				in_double;
+}	t_quote_state;
+
 typedef struct s_parser_state
 {
 	t_cmd				**cmd_list_head;
@@ -264,6 +272,7 @@ int						ft_env(t_shell *shell, t_cmd *cmd, int fd);
 int						ft_echo(t_shell *shell, t_cmd *cmd, int fd);
 int						ft_export(t_shell *shell, t_cmd *cmd, int fd);
 void					print_env_export(t_env *env);
+int						is_valid_identifier(char *arg);
 t_env					*check_existing_key(t_shell *shell, char *key);
 int						ft_unset(t_shell *shell, t_cmd *cmd, int fd);
 int						ft_cd(t_shell *shell, t_cmd *cmd, int fd);

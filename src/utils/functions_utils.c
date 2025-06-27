@@ -3,106 +3,76 @@
 /*                                                        :::      ::::::::   */
 /*   functions_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 15:24:30 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 16:44:34 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:30:13 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+static void	update_quote_len_state(char c, t_quote_state *st)
+{
+	if (c == '\'' && !st->in_double)
+		st->in_single = !st->in_single;
+	else if (c == '\"' && !st->in_single)
+		st->in_double = !st->in_double;
+	else
+		st->len++;
+}
+
 size_t	ft_strnlen_noquotes(char *src, size_t n)
 {
-	size_t	i;
-	size_t	j;
-	int	in_single = 0;
-	int	in_double = 0;
+	t_quote_state	st;
 
-	i = 0;
-	j = 0;
-	while (src[i] && i < n)
+	st.i = 0;
+	st.len = 0;
+	st.in_single = 0;
+	st.in_double = 0;
+	while (st.i < n && src[st.i])
 	{
-
-		if (is_quote(src[i]))
-		{
-			if (src[i] == '\'' && !in_double) // je recontre une S_QUOTE et je NE suis PAS dans une D_QUOTE
-				in_single = !in_single; // toggle in_single state
-			else if (src[i] == '\"' && !in_single) // je rencontre une D_QUOTE et je NE suis PAS dans une S_QUOTE
-				in_double = !in_double; // toggle in_double state
-			else if (src[i] == '\"' && in_single) // je rencontre une D_QUOTE et je suis dans une S_QUOTE
-				j++;
-			else if (src[i] == '\'' && in_double) // je rencontre une S_QUOTE et je suis dans une D_QUOTE
-				j++;
-			i++;
-		}
+		if (is_quote(src[st.i]))
+			update_quote_len_state(src[st.i], &st);
 		else
-		{
-			j++;
-			i++;
-		}
+			st.len++;
+		st.i++;
 	}
-	return (j);
+	return (st.len);
+}
+
+static void	update_copy_state(char c, t_quote_state *st, char *dest)
+{
+	if (c == '\'' && !st->in_double)
+		st->in_single = !st->in_single;
+	else if (c == '\"' && !st->in_single)
+		st->in_double = !st->in_double;
+	else
+		dest[st->len++] = c;
 }
 
 char	*gc_strndup_noquotes(char *src, size_t n, t_gc_type type)
 {
-	char		*dest;
-	size_t		i;
-	size_t		j;
-	size_t		len_noquotes;
-	int	in_single = 0;
-	int	in_double = 0;
+	char			*dest;
+	t_quote_state	st;
+	size_t			len_noquotes;
 
 	len_noquotes = ft_strnlen_noquotes(src, n);
-	// dest = malloc(sizeof(char) * (len_noquotes + 1));
 	dest = gc_mem(GC_ALLOC, len_noquotes + 1, NULL, type);
 	if (!dest)
-		return(NULL);
-	i = 0;
-	j = 0;
-	while (i < n && src[i])
+		error_free_gc("gc_strndup_noquotes malloc failure\n");
+	st.i = 0;
+	st.len = 0;
+	st.in_single = 0;
+	st.in_double = 0;
+	while (st.i < n && src[st.i])
 	{
-		if (is_quote(src[i]))
-		{
-			if (src[i] == '\'' && !in_double) // je recontre une S_QUOTE et je NE suis PAS dans une D_QUOTE
-				in_single = !in_single; // toggle in_single state
-			else if (src[i] == '\"' && !in_single) // je rencontre une D_QUOTE et je NE suis PAS dans une S_QUOTE
-				in_double = !in_double; // toggle in_double state
-			else if (src[i] == '\"' && in_single) // je rencontre une D_QUOTE et je suis dans une S_QUOTE
-				dest[j++] = src[i]; // pour gagner 3 ligne de code { j++}
-			else if (src[i] == '\'' && in_double) // je rencontre une S_QUOTE et je suis dans une D_QUOTE
-				dest[j++] = src[i];
-			i++;
-		}
+		if (is_quote(src[st.i]))
+			update_copy_state(src[st.i], &st, dest);
 		else
-		{
-			if (j < len_noquotes)
-			{
-				dest[j] = src[i];
-				j++;
-			}
-			i++;
-		}
+			dest[st.len++] = src[st.i];
+		st.i++;
 	}
-	dest[j] = '\0';
-	return (dest);
-}
-
-char	*ft_strndup(char *src, size_t n)
-{
-	char	*dest;
-	size_t		i;
-
-	dest = malloc(sizeof(char) * (n + 1));
-	if (!dest)
-		return(NULL);
-	i = 0;
-	while (i < n && src[i])
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
+	dest[st.len] = '\0';
 	return (dest);
 }

@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:37:06 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 10:20:21 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:56:23 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ int	ft_env(t_shell *shell, t_cmd *cmd, int fd)
 	t_env	*curr;
 
 	(void) cmd;
-	// proteger si !shell->env ?
-	// proteger si ac != 1
 	curr = shell->env;
 	while (curr)
 	{
