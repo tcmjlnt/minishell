@@ -6,23 +6,11 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:15:31 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 19:34:21 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:45:58 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	print_env_export(t_env *env)
-{
-	while (env)
-	{
-		printf("export %s=", env->key);
-		if (env->value)
-			printf("\"%s\"", env->value);
-		printf("\n");
-		env = env->next;
-	}
-}
 
 static int	is_valid_identifier(char *arg)
 {
@@ -115,10 +103,7 @@ int	export_args(t_shell *shell, t_cmd *cmd)
 	while (cmd->args[i])
 	{
 		if (!check_key_export(cmd->args[i]))
-		{
-			// shell->exit_status = 1;
 			res = false;
-		}
 		else
 		{
 			j = check_key_export(cmd->args[i]);
