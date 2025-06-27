@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 14:33:13 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 15:08:20 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:18:15 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list,
 	if (!tkn_list || !(*tkn_list))
 		return (false);
 	tkn_current = *tkn_list;
+	int i =0;
 	while (tkn_current)
 	{
 		xpnd_quotes_list = NULL;
@@ -95,11 +96,23 @@ int	handle_expansion(t_token **tkn_list, t_token **tkn_xpnd_list,
 		if (!quotes_first_segmentation(tkn_current->token_raw,
 				&xpnd_quotes_list))
 			return (false);
+		printf("-------------------- AFTER FIRST SEGMENTATION TOKEN[%d]----------------------\n", i);
+		printf_xpnd(&xpnd_quotes_list);
 		if (!scnd_segmentation_loop(xpnd_quotes_list, &xpnd_list, tkn_current))
+		{
+			printf("je sors a la sncd_segmentation_loop\n");
 			return (false);
+		}
+		printf("-------------------- AFTER SCND SEGMENTATION TOKEN[%d] ---------------------\n", i);
+		printf_xpnd(&xpnd_quotes_list);
+
 		if (!handle_post_segmentation(tkn_xpnd_list, tkn_current, &xpnd_list,
 				shell))
+		{
+			printf("je sors a la handle_post_segmentation\n");
 			return (false);
+		}
+		i++;
 		tkn_current = tkn_current->next;
 	}
 	return (true);

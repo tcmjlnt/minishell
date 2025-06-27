@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 17:36:45 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/26 18:04:18 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 12:15:54 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,11 @@ void	print_args(t_cmd *cmd)
 		if (temp->args)
 		{
 			j = 0;
-			while (temp->args[j++])
+			while (temp->args[j])
+			{
 				printf("arg[%d]: `%s`\n", j, temp->args[j]);
+				j++;
+			}
 		}
 		if (temp->redir)
 			print_redir(temp);
