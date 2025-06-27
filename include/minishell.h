@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 16:10:49 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:19:05 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,12 +229,13 @@ size_t	ft_strnlen_noquotes(char *src, size_t n);
 char	*ft_strndup(char *src, size_t n);
 t_token	*ft_lstnew_token(char *value, int type, int node_num);
 void	print_token(t_token	*token_list);
-int		get_exit_status(int status);
 t_shell	*get_shell(void);
 void	init_shell(void);
 void	free_and_cleanup_heredocs(t_cmd *cmd_list);
 void	error_free_gc(const char *message);
 void	print_redir(t_cmd *temp);
+void	free_gc_exit(void);
+
 
 /* ===========================    🚀 EXECUTION    =========================== */
 void	exec_dispatcher(t_cmd *cmd, t_shell *shell);

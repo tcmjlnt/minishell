@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 10:22:26 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:53:34 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:16:19 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,10 @@ void	update_env_value(t_env *env, const char *key, const char *new_value)
 	{
 		if (ft_strcmp(env->key, key) == 0)
 		{
-			if (env->value) // check ici si c'est mieux comme ca
+			if (env->value)
 				gc_mem(GC_FREE_ONE, 0, env->value, GC_ENV);
 			env->equal = true;
 			env->value = gc_strdup(new_value, GC_ENV);
-			if (!env->value)
-				// malloc failure
 			return ;
 		}
 		env = env->next;

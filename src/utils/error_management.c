@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 18:33:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 16:04:48 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:11:10 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,8 @@ void	error_free_gc(const char *message)
 	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	error_exit(message);
 }
-
-// a implemnter ??
-int	get_exit_status(int status)
+void	free_gc_exit(void)
 {
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
+	exit(EXIT_FAILURE);
 }

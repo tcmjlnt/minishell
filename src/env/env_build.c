@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:56:02 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 01:23:59 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:33:10 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env	*env_new(char *key, char *value, t_bool equal)
 
 	new = gc_mem(GC_ALLOC, sizeof(t_env), NULL, GC_ENV);
 	if (!new)
-		error_exit("env_new: allocation failed"); // free GC_NONE egalement ? malloc protection
+		error_free_gc("env_new: allocation failed");
 	new->key = key;
 	new->value = value;
 	new->equal = equal;
@@ -32,8 +32,8 @@ void	env_add_back(t_env **lst, t_env *new)
 {
 	t_env	*tmp;
 
-	if (!lst || !new) // check avec thomas ?
-		return ; // check avec thomas ?
+	if (!lst || !new)
+		return ;
 	if (!*lst)
 	{
 		*lst = new;
@@ -58,9 +58,11 @@ static t_env	*parse_env_line(char *line)
 	{
 		key_len = equal - line;
 		key = gc_mem(GC_ALLOC, key_len + 1, NULL, GC_ENV);
+		if (!key)
+			error_free_gc("key alloc failure\n");
 		val = gc_mem(GC_ALLOC, ft_strlen(equal + 1) + 1, NULL, GC_ENV);
-		if (!key || !val)
-			error_free_gc("alloc key ou value");
+		if (!val)
+			error_free_gc("value alloc failure\n");
 		ft_strlcpy(key, line, key_len + 1);
 		ft_strlcpy(val, equal + 1, ft_strlen(equal + 1) + 1);
 		return (env_new(key, val, true));
@@ -78,15 +80,6 @@ void	env_from_envp(t_shell *shell, char **envp)
 	int		i;
 	t_env	*new;
 
-	if (!envp || !*envp)
-	{
-		ft_putstr_fd(WARNING_ENV, STDERR_FILENO);
-		shell->exit_status = 1; // ca sert a quoi du coup ?
-		// il faut free tout en GC_NONE ? --> error_free_gc
-		// on est dans le cas d'un env -i par exemple, donc est ce quil y a de la memoire deja allouee? auquel cas pas besoin de free ?
-		exit(1);
-		return ;
-	}
 	shell->env = NULL;
 	i = 0;
 	while (envp[i])
