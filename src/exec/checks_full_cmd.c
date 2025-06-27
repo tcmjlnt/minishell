@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checks_full_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
+/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 10:07:36 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 16:36:02 by aumartin         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:00:39 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,27 @@ static int	open_file(t_redir *redir)
 	return (fd);
 }
 
+static int	process_redir_consistency(t_cmd *cmd, t_redir *redir)
+{
+	if (redir->type == TKN_IN || redir->type == TKN_HEREDOC)
+	{
+		if (cmd->fd_in != STDIN_FILENO)
+			close(cmd->fd_in);
+		cmd->fd_in = open_file(redir);
+		if (cmd->fd_in == -1)
+			return (-1);
+	}
+	else if (redir->type == TKN_OUT || redir->type == TKN_APPEND)
+	{
+		if (cmd->fd_out != STDOUT_FILENO)
+			close(cmd->fd_out);
+		cmd->fd_out = open_file(redir);
+		if (cmd->fd_out == -1)
+			return (-1);
+	}
+	return (0);
+}
+
 int	check_redirections_consistency(t_cmd *cmd)
 {
 	t_redir	*redir_list;
@@ -39,22 +60,8 @@ int	check_redirections_consistency(t_cmd *cmd)
 	cmd->fd_out = STDOUT_FILENO;
 	while (redir_list)
 	{
-		if (redir_list->type == TKN_IN || redir_list->type == TKN_HEREDOC)
-		{
-			if (cmd->fd_in != STDIN_FILENO)
-				close(cmd->fd_in);
-			cmd->fd_in = open_file(redir_list);
-			if (cmd->fd_in == -1)
-				return (-1);
-		}
-		else if (redir_list->type == TKN_OUT || redir_list->type == TKN_APPEND)
-		{
-			if (cmd->fd_out != STDOUT_FILENO)
-				close(cmd->fd_out);
-			cmd->fd_out = open_file(redir_list);
-			if (cmd->fd_out == -1)
-				return (-1);
-		}
+		if (process_redir_consistency(cmd, redir_list) == -1)
+			return (-1);
 		redir_list = redir_list->next;
 	}
 	return (0);
