@@ -129,7 +129,6 @@ $hellhess
 "ls" "-l" "|" "grep" "a.out"
 export ls-l="ls -l"
 echo dudde | $EMPTY
-unset USER
 /bin/ls /
 /bin/ls /doesnotexist
 /bin/echo Hello

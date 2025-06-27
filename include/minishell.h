@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 11:47:04 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/27 18:50:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:00:13 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ t_bool					is_valid_command(t_cmd *cmd, t_shell *shell,
 int						check_redirections_consistency(t_cmd *cmd);
 int						handle_all_heredocs(t_cmd *cmd_list);
 void					restore_std(t_std_backup *backup);
+t_bool					is_directory(char *file);
 
 /* ========================    🌱 ENVIRONNEMENT    ======================== */
 void					print_envp(char **envp);

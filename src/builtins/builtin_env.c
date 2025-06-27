@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aumartin <aumartin@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 11:37:06 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/24 10:20:21 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 20:08:34 by aumartin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,41 @@ Les variables créées via VAR=value sans export ne sont pas visibles dans env.
 
 #include "../../include/minishell.h"
 
+static int	handle_env_options(t_shell *shell, t_cmd *cmd)
+{
+	if (!cmd->args[1])
+		return (0);
+	if (is_directory(cmd->args[1]))
+	{
+		ft_putstr_fd("env: '", STDERR_FILENO);
+		ft_putstr_fd(cmd->args[1], STDERR_FILENO);
+		ft_putstr_fd("': Is a directory\n", STDERR_FILENO);
+		shell->exit_status = 126;
+		return (126);
+	}
+	if (cmd->args[1][0] == '\0')
+	{
+		ft_putstr_fd("env: '", STDERR_FILENO);
+		ft_putstr_fd("': command not found\n", STDERR_FILENO);
+		shell->exit_status = 127;
+		return (127);
+	}
+	ft_putstr_fd("env: '", STDERR_FILENO);
+	ft_putstr_fd(cmd->args[1], STDERR_FILENO);
+	ft_putstr_fd("': No such file or directory\n", STDERR_FILENO);
+	shell->exit_status = 127;
+	return (127);
+}
+
 int	ft_env(t_shell *shell, t_cmd *cmd, int fd)
 {
 	t_env	*curr;
+	int		result;
 
 	(void) cmd;
-	// proteger si !shell->env ?
-	// proteger si ac != 1
+	result = handle_env_options(shell, cmd);
+	if (result != 0)
+		return (result);
 	curr = shell->env;
 	while (curr)
 	{
@@ -50,6 +78,5 @@ int	ft_env(t_shell *shell, t_cmd *cmd, int fd)
 		}
 		curr = curr->next;
 	}
-	shell->exit_status = 0;
 	return (0);
 }
