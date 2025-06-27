@@ -6,7 +6,7 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/07 18:33:46 by aumartin          #+#    #+#             */
-/*   Updated: 2025/06/26 20:44:01 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:04:48 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	error_exit(const char *message)
 
 void	error_free_gc(const char *message)
 {
-	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE); // GC_NONE ou GC_CMD
+	gc_mem(GC_FREE_ALL, 0, NULL, GC_NONE);
 	error_exit(message);
 }
 

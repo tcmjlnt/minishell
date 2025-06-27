@@ -6,45 +6,11 @@
 /*   By: tjacquel <tjacquel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 14:33:03 by tjacquel          #+#    #+#             */
-/*   Updated: 2025/06/27 15:10:29 by tjacquel         ###   ########.fr       */
+/*   Updated: 2025/06/27 16:08:40 by tjacquel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	create_text_before_var(char *sub, t_dq_state *st,
-								t_xpnd **list, t_xpnd *q_curr)
-{
-	t_xpnd	*new_xpnd;
-
-	if (st->i > st->start)
-	{
-		new_xpnd = create_filled_xpnd(sub + st->start, st->i - st->start,
-				false, q_curr);
-		ft_lstadd_back_xpnd(list, new_xpnd);
-	}
-	st->start = ++st->i;
-	return (true);
-}
-
-static int	create_variable_segment(char *sub, t_dq_state *st,
-								t_xpnd **list, t_xpnd *q_curr)
-{
-	t_xpnd	*new_xpnd;
-
-	if (sub[st->i] == '?' || sub[st->i] == '$' || ft_isdigit(sub[st->i]))
-		st->i++;
-	else
-	{
-		while (st->i < st->strlen - 1 && is_valid_keychar(sub[st->i]))
-			st->i++;
-	}
-	new_xpnd = create_filled_xpnd(sub + st->start, st->i - st->start, true,
-			q_curr);
-	ft_lstadd_back_xpnd(list, new_xpnd);
-	st->start = st->i;
-	return (true);
-}
 
 static int	handle_dquote_variable(char *sub, t_dq_state *st,
 								t_xpnd **list, t_xpnd *q_curr)
@@ -116,17 +82,3 @@ int	dquotes_scnd_segmentation(char *substr, t_xpnd *xpnd_quotes_curr,
 	handle_final_segment(substr, &st, xpnd_list, xpnd_quotes_curr);
 	return (true);
 }
-
-	// if (st.strlen <= 2)
-	// {
-	// 	new_xpnd = create_filled_xpnd("", 0, false, xpnd_quotes_curr);
-	// 	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-	// 	return (true);
-	// }
-
-	// 	if (st.i > st.start)
-	// {
-	// 	new_xpnd = create_filled_xpnd(substr + st.start, st.i - st.start,
-	// 			false, xpnd_quotes_curr);
-	// 	ft_lstadd_back_xpnd(xpnd_list, new_xpnd);
-	// }
